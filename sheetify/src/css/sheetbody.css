@@ -1,0 +1,38 @@
+.sheetbody {
+    width: 100%;
+}
+
+.section {
+    display: flex;
+    flex-flow: row wrap;
+}
+
+.bar {
+    display: flex;
+    background: yellow;
+    width: 50%;
+    margin: 0;
+    padding: 5px 0;
+    animation: slide-in 0.5s ease-out;
+}
+
+@keyframes slide-in {
+    0% {
+        width: 0;
+    }
+    100% {
+        width: 50%;
+    }
+}
+
+.bar-block {
+    display: flex;
+    text-transform: capitalize;
+}
+
+.add-bar {
+    display: flex;
+    width: 100%;
+    background: green;
+    height: 100px;
+}

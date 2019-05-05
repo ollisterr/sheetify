@@ -1,0 +1,30 @@
+@import url('https://fonts.googleapis.com/css?family=Gaegu:400,700');
+
+html, body {
+    width: 100vw;
+    padding: 0px;
+    margin: 0px;
+    border: none;
+    font-family: 'Gaegu', sans-serif;
+    font-size: 1.5rem;
+}
+
+textarea, select, input, button { 
+    outline: none;
+}
+
+input {
+    width: 100%;
+    max-width: 500px;
+    font-size: inherit;
+    font-family: inherit;
+
+    border-radius: 5px;
+    border: none;
+}
+
+.App {
+    margin: 0 auto;
+    width: 100%;
+    max-width: 1000px;
+}
