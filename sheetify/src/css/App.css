@@ -6,7 +6,7 @@ html, body {
     margin: 0px;
     border: none;
     font-family: 'Gaegu', sans-serif;
-    font-size: 1.5rem;
+    font-size: 3vh;
 }
 
 textarea, select, input, button { 
@@ -25,6 +25,6 @@ input {
 
 .App {
     margin: 0 auto;
-    width: 100%;
+    width: 95%;
     max-width: 1000px;
 }

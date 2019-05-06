@@ -37,6 +37,8 @@
 }
 
 #basic-info {
+    display: flex;
+    justify-content: space-between;
     width: 100%;
     font-size: 1.0rem;
 }
@@ -44,7 +46,6 @@
 .conf-attribute {
     color: grey;
     width: auto;
-    padding: 0px 40px;
     display: inline-block;
 }
 
