@@ -1,11 +1,32 @@
-const timeSignature = {
-    first: 4,
-    second: 4,
-}
+import React, {createContext, useReducer} from "react";
 
-function setTimeSignature(f, s) {
-    timeSignature.first = f;
-    timeSignature.second = s;
-}
+export const SheetContext = createContext();
 
-export { timeSignature, setTimeSignature };
+export const reducer = (state, action) => {
+	switch (action.type) {
+	case "setTimeSignature":
+		return {
+			...state,
+			timeSignature: action.newTimeSignature
+		};
+	case "writeSheet":
+		return {
+			...state,
+			sheetData: action.newSheetData
+		};
+          
+	default:
+		return state;
+	}
+};
+
+export const initialState = {
+	timeSignature: [4, 4],
+	sheetData: [[["", "", "", ""]]]
+};
+
+export const ContextProvider = ({children}) => (
+	<SheetContext.Provider value={useReducer(reducer, initialState)}>
+		{children}
+	</SheetContext.Provider>
+);
