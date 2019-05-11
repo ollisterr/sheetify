@@ -1,14 +1,15 @@
-import React from "react";
+import React, { useContext, useEffect } from "react";
 import "./css/App.css";
-import { ContextProvider } from "./state.js";
+import { ContextProvider, SheetContext, reducer, initialState } from "./state.js";
 import SheetSpecification from "./specs.js";
 import SheetBody from "./sheetbody.js";
 import "html2canvas";
 
 const App = () => {
+	console.log("Running");
 	return (
 		<div className="App">
-			<ContextProvider>
+			<ContextProvider initialState={initialState} reducer={reducer}>
 				<SheetSpecification />
 				<SheetBody />
 			</ContextProvider>
@@ -16,4 +17,7 @@ const App = () => {
 	);
 };
 
+/*
+
+*/
 export default App;

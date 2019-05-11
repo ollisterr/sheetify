@@ -1,16 +1,17 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
+import { SheetContext, emptySection } from "./state.js";
 import { Section } from "./section.js";
 import "./css/sheetbody.css";
 
 
 const SheetBody = () => {
-	const [sections, addSection] = useState([<Section key="1" />]);
+	const [{ sheetData }, dispatch] = useContext(SheetContext);
 	const [print, setPrint] = useState("No print");
 
 	function printAll() {
 		var output = "";
-		sections.foreach((section, i) => {
-			section.props.bars.foreach(a => {
+		sheetData.foreach((section, i) => {
+			section.foreach(a => {
 				output += i + " | " + a.props.content.join(", ") + " |\n";
 			});
 		});
@@ -19,9 +20,14 @@ const SheetBody = () => {
 
 	return (
 		<div className="sheetbody">
-			{ sections }
+			{ sheetData.map((section, i) => (<Section key={i} sectionID={i} />)) }
 			<div className="control-bar">
-				<div className="add-section" onClick={ () => { addSection([...sections, <Section key={sections.length + 1}/>]); }}>Add</div>
+				<div className="add-section" 
+					onClick={ 
+						() => {
+							dispatch({type: "setSheetData", newSheetData: [...sheetData, emptySection]});
+						} }
+				>Add</div>
 				<div className="print" onClick={ printAll }>Print</div>
 			</div>
 			{ print }

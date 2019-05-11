@@ -1,42 +1,51 @@
-import React, { useState, useEffect } from "react";
+import React, { useContext, useEffect } from "react";
+import { SheetContext } from "./state.js";
 import "./css/sheetbody.css";
 
-export const Bar = ({ id, removeBar }) => {  
-	const [content, setContent] = useState(["", "", "", ""]);  
-	useEffect(() => {
-		console.log(content);
-	});
+export const Bar = ({ sectionID, barID }) => {  
+	const [{ sheetData }, dispatch] = useContext(SheetContext);
+
 	return (
 		<div className="bar">
 			<div className="bar-controls">
 				<div className="add-bar-inbetween">+</div>
-				<div className="remove-bar" onClick={ () => { removeBar(id); } }>-</div>
+				<div className="remove-bar" onClick={ 
+					() => {
+						sheetData[sectionID] = sheetData[sectionID].filter((_, i) => i !== barID);
+						dispatch({type: "setSheetData", newSheetData: sheetData});
+					} 
+				}>-</div>
 			</div>
+            
+		</div>
+	);
+};
+
+/*
+
 			<div className="bar-content">
-				{ id }
-				{ content.map((chord, i) => {
+				{ barID }
+				{ sheetData[sectionID][barID].map((chord, i) => {
 					return (
 						<input  value={chord} 
-							key={[i, i]} 
+							key={(sectionID, barID)} 
 							onChange={ e => {
-								const newContent = content.slice(0);
-								newContent[i] = e.target.value; 
-								setContent(newContent);
+								sheetData[sectionID][barID][i] = e.target.value; 
+								dispatch({type: "setSheetData", newSheetData: sheetData});
 							} }
 							className="bar-block" 
 						/>
 					);
 				}) }
-			</div>
-		</div>
-	);
-};
+            </div>
+            */
 
-export const BarList = ({ bars, removeBar }) => {
+export const BarList = ({ sectionID }) => {
+	const [{ sheetData }, dispatch] = useContext(SheetContext);
 	return (
         <>
-            { bars.map((_, i) => {
-            	return ( <Bar key={i} id={i} bars={bars} removeBar={() => { removeBar(i); }} /> );
+            { sheetData[sectionID].map((_, i) => {
+            	return ( <Bar key={i} id={i} /> );
             }) }
         </>
 	);

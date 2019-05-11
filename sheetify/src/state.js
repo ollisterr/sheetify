@@ -9,23 +9,27 @@ export const reducer = (state, action) => {
 			...state,
 			timeSignature: action.newTimeSignature
 		};
-	case "writeSheet":
+	case "setSheetData":
 		return {
 			...state,
 			sheetData: action.newSheetData
 		};
-          
+        
 	default:
 		return state;
 	}
 };
 
+
+export const emptyBar = ["", "", "", ""];
+export const emptySection = [emptyBar];
+
 export const initialState = {
 	timeSignature: [4, 4],
-	sheetData: [[["", "", "", ""]]]
+	sheetData: [emptySection]
 };
 
-export const ContextProvider = ({children}) => (
+export const ContextProvider = ({reducer, initialState, children}) => (
 	<SheetContext.Provider value={useReducer(reducer, initialState)}>
 		{children}
 	</SheetContext.Provider>
