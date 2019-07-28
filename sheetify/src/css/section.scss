@@ -122,25 +122,24 @@
   .section-tag {
     padding: 5px 10px;
     display: block;
-    max-width: 200px;
+    width: auto;
     margin-right: 6px;
     border: solid 2px lightgrey;
     border-radius: 0;
     opacity: 0;
     color: lightgrey;
     font-weight: bold;
-    transition: color 0.2s, background-color 0.2s, opacity 0.2s;
+    transition: color 0.2s, background-color 0.1s, opacity 0.2s;
     cursor: pointer;
 
     &:hover {
       color: white;
       background-color: lightgrey;
     }
+  }
 
-    &:focus {
-      order: -1;
-      opacity: 1;
-    }
+  input:focus + .section-tag {
+    opacity: 1;
   }
 
   .selected {

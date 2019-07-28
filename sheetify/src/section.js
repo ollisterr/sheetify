@@ -25,11 +25,13 @@ export const Bar = ({ sectionID, barID }) => {
 
   function removeBar() {
     const bars = sheetData.sections[sectionID].bars;
-    sheetData.sections[sectionID].bars = bars
-      .slice(0, barID)
-      .concat(bars.slice(barID + 1, bars.length));
-    dispatch({ type: "setSheetData", newSheetData: sheetData });
-    console.log("Removing: " + sectionID + " | " + barID);
+    if (bars.length > 1) {
+      sheetData.sections[sectionID].bars = bars
+        .slice(0, barID)
+        .concat(bars.slice(barID + 1, bars.length));
+      dispatch({ type: "setSheetData", newSheetData: sheetData });
+      console.log("Removing: " + sectionID + " | " + barID);
+    }
   }
 
   return (
@@ -110,7 +112,7 @@ export const Section = ({ sectionID }) => {
           className={
             "section-tag " +
             (!sectionTags.includes(sheetData.sections[sectionID].name) &&
-              sheetData.sections[sectionID].name !== undefined &&
+              !!sheetData.sections[sectionID].name &&
               "selected")
           }
           placeholder="Section name"
