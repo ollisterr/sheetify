@@ -3,10 +3,20 @@ import { SheetContext } from "./state.js";
 import { Section } from "./section.js";
 import "./css/sheetbody.css";
 
-
 const SheetBody = () => {
   const [{ sheetData }, dispatch] = useContext(SheetContext);
   const [print, setPrint] = useState("No print");
+
+  function addSection() {
+    sheetData.sections = [
+      ...sheetData.sections,
+      { bars: [{ bar: ["", "", "", ""] }] }
+    ];
+    dispatch({
+      type: "setSheetData",
+      newSheetData: sheetData
+    });
+  }
 
   function printAll() {
     var output = "";
@@ -20,17 +30,18 @@ const SheetBody = () => {
 
   return (
     <div className="sheetbody">
-      { sheetData.map((section, i) => (<Section key={i} sectionID={i} />)) }
+      {sheetData.sections.map((section, i) => (
+        <Section key={i} sectionID={i} />
+      ))}
       <div className="control-bar">
-        <div className="add-section" 
-          onClick={ 
-            () => {
-              dispatch({type: "setSheetData", newSheetData: [...sheetData, [["", "", "", ""]]]});
-            } }
-        >Add</div>
-        <div className="print" onClick={ printAll }>Print</div>
+        <div className="add-section" onClick={addSection}>
+          Add
+        </div>
+        <div className="print" onClick={printAll}>
+          Print
+        </div>
       </div>
-      { print }
+      {print}
     </div>
   );
 };
