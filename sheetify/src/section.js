@@ -1,6 +1,8 @@
 import React, { useContext } from "react";
 import { SheetContext } from "./state.js";
-import "./css/sheetbody.css";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faPlus, faMinus } from "@fortawesome/free-solid-svg-icons";
+import "./css/section.scss";
 
 export const Bar = ({ sectionID, barID }) => {
   const [{ sheetData }, dispatch] = useContext(SheetContext);
@@ -33,15 +35,18 @@ export const Bar = ({ sectionID, barID }) => {
   return (
     <div className="bar">
       <div className="bar-controls">
-        <div className="add-bar-inbetween" onClick={addBar}>
-          +
-        </div>
-        <div className="remove-bar" onClick={removeBar}>
-          -
-        </div>
+        <FontAwesomeIcon
+          icon={faPlus}
+          className="add-bar-inbetween"
+          onClick={addBar}
+        />
+        <FontAwesomeIcon
+          icon={faMinus}
+          className="remove-bar"
+          onClick={removeBar}
+        />
       </div>
       <div className="bar-content">
-        {barID}
         {sheetData.sections[sectionID].bars[barID].bar.map((chord, i) => {
           return (
             <input
@@ -73,8 +78,8 @@ export const Section = ({ sectionID }) => {
       {sheetData.sections[sectionID].bars.map((bar, i) => {
         return <Bar key={[sectionID, i]} sectionID={sectionID} barID={i} />;
       })}
-      <div className="bar" onClick={newBar}>
-        +
+      <div className="add-bar" onClick={newBar}>
+        <FontAwesomeIcon icon={faPlus} className="add-bar-icon" />
       </div>
     </div>
   );

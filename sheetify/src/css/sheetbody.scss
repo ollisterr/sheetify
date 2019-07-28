@@ -1,0 +1,53 @@
+@import "variables";
+
+.sheetbody {
+  width: 100%;
+}
+
+.section {
+  margin: 50px 0;
+  display: flex;
+  flex-flow: row wrap;
+  flex-basis: 600px;
+}
+
+.control-bar {
+  justify-content: space-around;
+  border-radius: 5px;
+  padding: 12px;
+  font-size: 2rem;
+  border: dotted 2px lightgrey;
+  display: flex;
+  flex-flow: row wrap;
+  width: 100%;
+  margin-top: 100px;
+
+  .add-section-icon {
+    font-size: 1.4rem;
+    margin: 0 10px;
+  }
+
+  > * {
+    margin: 0 10px;
+    color: lightgrey;
+    transition: color 0.2s, background-color 0.2s;
+    cursor: pointer;
+  }
+  > *:hover {
+    color: black;
+  }
+
+  .print {
+    background-color: lightgrey;
+    color: white;
+    padding: 0 6rem;
+    border-radius: 5px;
+    &:hover {
+      background-color: darkgrey;
+    }
+  }
+}
+
+.add-section {
+  cursor: pointer;
+}

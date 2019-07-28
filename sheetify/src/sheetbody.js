@@ -1,7 +1,9 @@
 import React, { useState, useContext } from "react";
 import { SheetContext } from "./state.js";
 import { Section } from "./section.js";
-import "./css/sheetbody.css";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faPlus } from "@fortawesome/free-solid-svg-icons";
+import "./css/sheetbody.scss";
 
 const SheetBody = () => {
   const [{ sheetData }, dispatch] = useContext(SheetContext);
@@ -35,13 +37,13 @@ const SheetBody = () => {
       ))}
       <div className="control-bar">
         <div className="add-section" onClick={addSection}>
+          <FontAwesomeIcon icon={faPlus} className="add-section-icon" />
           Add
         </div>
         <div className="print" onClick={printAll}>
           Print
         </div>
       </div>
-      {print}
     </div>
   );
 };
