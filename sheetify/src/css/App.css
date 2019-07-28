@@ -1,30 +1,40 @@
-@import url('https://fonts.googleapis.com/css?family=Gaegu:400,700');
+@import url("https://fonts.googleapis.com/css?family=Gaegu:400,700");
 
-html, body {
-    width: 100vw;
-    padding: 0px;
-    margin: 0px;
-    border: none;
-    font-family: 'Gaegu', sans-serif;
-    font-size: 3vh;
+*,
+*::before,
+*::after {
+  box-align: border-box;
 }
 
-textarea, select, input, button { 
-    outline: none;
+html,
+body {
+  width: 100vw;
+  padding: 0px;
+  margin: 0px;
+  border: none;
+  font-family: "Gaegu", sans-serif;
+  font-size: 1em;
+}
+
+textarea,
+select,
+input,
+button {
+  outline: none;
 }
 
 input {
-    width: 100%;
-    max-width: 500px;
-    font-size: inherit;
-    font-family: inherit;
+  width: 100%;
+  max-width: 500px;
+  font-size: inherit;
+  font-family: inherit;
 
-    border-radius: 5px;
-    border: none;
+  border-radius: 5px;
+  border: none;
 }
 
 .App {
-    margin: 0 auto;
-    width: 95%;
-    max-width: 1000px;
+  margin: 0 auto;
+  width: 95%;
+  max-width: 1000px;
 }
