@@ -64,6 +64,7 @@ export const Bar = ({ sectionID, barID }) => {
 
 export const Section = ({ sectionID }) => {
   const [{ sheetData }, dispatch] = useContext(SheetContext);
+  const sectionTags = ["A", "B", "C", "Bridge", "Intro", "Outro"];
 
   function newBar() {
     sheetData.sections[sectionID].bars = [
@@ -73,8 +74,49 @@ export const Section = ({ sectionID }) => {
     dispatch({ type: "setSheetData", newSheetData: sheetData });
   }
 
+  function setSectionTag(value) {
+    console.log(value);
+    if (sheetData.sections[sectionID].name === value || !value) {
+      delete sheetData.sections[sectionID].name;
+    } else {
+      sheetData.sections[sectionID].name = value;
+    }
+    dispatch({ type: "setSheetData", newSheetData: sheetData });
+  }
+
   return (
     <div className="section">
+      <div className="section-controls">
+        {sectionTags.map((tag, i) => {
+          const number = sheetData.sections.filter((section, index) => {
+            return section.name === tag && index <= sectionID;
+          }).length;
+          return (
+            <div
+              key={i}
+              className={
+                "section-tag " +
+                (tag === sheetData.sections[sectionID].name && "selected")
+              }
+              onClick={e => setSectionTag(tag)}
+            >
+              {tag}
+              {number > 1 && number}
+            </div>
+          );
+        })}
+
+        <input
+          className={
+            "section-tag " +
+            (!sectionTags.includes(sheetData.sections[sectionID].name) &&
+              sheetData.sections[sectionID].name !== undefined &&
+              "selected")
+          }
+          placeholder="Section name"
+          onChange={e => setSectionTag(e.target.value)}
+        />
+      </div>
       {sheetData.sections[sectionID].bars.map((bar, i) => {
         return <Bar key={[sectionID, i]} sectionID={sectionID} barID={i} />;
       })}

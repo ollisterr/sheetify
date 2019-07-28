@@ -38,7 +38,7 @@ const SheetBody = () => {
       <div className="control-bar">
         <div className="add-section" onClick={addSection}>
           <FontAwesomeIcon icon={faPlus} className="add-section-icon" />
-          Add
+          Add Section
         </div>
         <div className="print" onClick={printAll}>
           Print
