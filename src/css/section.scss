@@ -103,7 +103,11 @@
 
 .section {
   position: relative;
+  display: flex;
+  flex-flow: row wrap;
   height: auto;
+  margin: 30px 0;
+  padding-left: $barBorder;
   color: lightgrey;
 
   &:hover .section-tag {
