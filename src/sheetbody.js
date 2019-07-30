@@ -1,5 +1,5 @@
 import React, { useState, useContext } from "react";
-import { SheetContext } from "./state.js";
+import { SheetContext, emptyBar } from "./state.js";
 import { Section } from "./section.js";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
@@ -10,10 +10,7 @@ const SheetBody = () => {
   const [print, setPrint] = useState("No print");
 
   function addSection() {
-    sheetData.sections = [
-      ...sheetData.sections,
-      { bars: [{ bar: ["", "", "", ""] }] }
-    ];
+    sheetData.sections = [...sheetData.sections, { bars: [emptyBar()] }];
     dispatch({
       type: "setSheetData",
       newSheetData: sheetData

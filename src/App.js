@@ -1,5 +1,5 @@
 import React from "react";
-import "./css/App.css";
+import "./css/App.scss";
 import { ContextProvider, reducer, initialState } from "./state.js";
 import SheetSpecification from "./specs.js";
 import SheetBody from "./sheetbody.js";

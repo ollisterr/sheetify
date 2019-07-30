@@ -1,4 +1,5 @@
 import React, { createContext, useReducer } from "react";
+import { functionTypeAnnotation } from "@babel/types";
 
 export const SheetContext = createContext();
 
@@ -19,9 +20,18 @@ export const reducer = (state, action) => {
   }
 };
 
+export function emptyBar() {
+  const obj = new Object();
+  obj.bar = new Array("", "", "", "");
+  obj.repeat = new Array(false, false);
+  return obj;
+}
+
 export const initialState = {
   timeSignature: [4, 4],
-  sheetData: { sections: [{ bars: [{ bar: ["", "", "", ""] }] }] }
+  sheetData: {
+    sections: [{ bars: [{ bar: ["", "", "", ""], repeat: [false, false] }] }]
+  }
 };
 
 export const ContextProvider = ({ reducer, initialState, children }) => (

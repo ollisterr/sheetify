@@ -1,8 +1,10 @@
 import React, { useContext } from "react";
-import { SheetContext } from "./state.js";
+import { SheetContext, emptyBar } from "./state.js";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus, faMinus } from "@fortawesome/free-solid-svg-icons";
 import "./css/section.scss";
+import repeatStart from "./assets/repeat-sign-start.svg";
+import repeatEnd from "./assets/repeat-sign-end.svg";
 
 export const Bar = ({ sectionID, barID }) => {
   const [{ sheetData }, dispatch] = useContext(SheetContext);
@@ -17,7 +19,7 @@ export const Bar = ({ sectionID, barID }) => {
     const bars = sheetData.sections[sectionID].bars;
     sheetData.sections[sectionID].bars = bars
       .slice(0, barID)
-      .concat([{ bar: ["", "", "", ""] }])
+      .concat([emptyBar()])
       .concat(bars.slice(barID, bars.length));
     dispatch({ type: "setSheetData", newSheetData: sheetData });
     console.log("Adding after bar: " + barID);
@@ -34,6 +36,28 @@ export const Bar = ({ sectionID, barID }) => {
     }
   }
 
+  function setGoalName(value) {
+    console.log(sheetData.sections[sectionID].bars[barID]);
+    sheetData.sections[sectionID].bars[barID].goal = value;
+    dispatch({ type: "setSheetData", newSheetData: sheetData });
+    console.log(value);
+  }
+
+  function setRepeat(value) {
+    const repeat = sheetData.sections[sectionID].bars[barID].repeat;
+    console.log(repeat);
+    switch (value) {
+    case "start":
+      sheetData.sections[sectionID].bars[barID].repeat[0] = !repeat[0];
+      dispatch({ type: "setSheetData", newSheetData: sheetData });
+      break;
+    case "end":
+      sheetData.sections[sectionID].bars[barID].repeat[1] = !repeat[1];
+      dispatch({ type: "setSheetData", newSheetData: sheetData });
+      break;
+    }
+  }
+
   return (
     <div className="bar">
       <div className="bar-controls">
@@ -47,8 +71,26 @@ export const Bar = ({ sectionID, barID }) => {
           className="remove-bar"
           onClick={removeBar}
         />
+        <input
+          className={
+            "section-goal " +
+            (!!sheetData.sections[sectionID].bars[barID].goal && "defined-goal")
+          }
+          value={sheetData.sections[sectionID].bars[barID].goal}
+          onChange={e => setGoalName(e.target.value)}
+          placeholder="goal"
+          tabindex="-1"
+        />
       </div>
       <div className="bar-content">
+        <img
+          src={repeatStart}
+          className={
+            "repeat-sign-start " +
+            (sheetData.sections[sectionID].bars[barID].repeat[0] && "active")
+          }
+          onClick={() => setRepeat("start")}
+        />
         {sheetData.sections[sectionID].bars[barID].bar.map((chord, i) => {
           return (
             <input
@@ -59,6 +101,14 @@ export const Bar = ({ sectionID, barID }) => {
             />
           );
         })}
+        <img
+          src={repeatEnd}
+          className={
+            "repeat-sign-end " +
+            (sheetData.sections[sectionID].bars[barID].repeat[1] && "active")
+          }
+          onClick={() => setRepeat("end")}
+        />
       </div>
     </div>
   );
@@ -71,7 +121,7 @@ export const Section = ({ sectionID }) => {
   function newBar() {
     sheetData.sections[sectionID].bars = [
       ...sheetData.sections[sectionID].bars,
-      { bar: ["", "", "", ""] }
+      emptyBar()
     ];
     dispatch({ type: "setSheetData", newSheetData: sheetData });
   }
