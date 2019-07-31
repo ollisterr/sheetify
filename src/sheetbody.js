@@ -4,6 +4,7 @@ import { Section } from "./section.js";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import "./css/sheetbody.scss";
+import { longestChord, stringifySheet } from "./utils";
 
 const SheetBody = () => {
   const [{ sheetData }, dispatch] = useContext(SheetContext);
@@ -18,12 +19,9 @@ const SheetBody = () => {
   }
 
   function printAll() {
-    var output = "";
-    sheetData.foreach((section, i) => {
-      section.foreach(bar => {
-        output += i.concat(" | ", bar.join(", "), " |\n");
-      });
-    });
+    const longest = longestChord(sheetData);
+    const output = stringifySheet(sheetData, longest);
+    console.log(output);
     setPrint(output);
   }
 

@@ -30,7 +30,7 @@ export function emptyBar() {
 export const initialState = {
   timeSignature: [4, 4],
   sheetData: {
-    sections: [{ bars: [{ bar: ["", "", "", ""], repeat: [false, false] }] }]
+    sections: [{ bars: [emptyBar()] }]
   }
 };
 
