@@ -1,5 +1,3 @@
-import { stringify } from "querystring";
-
 export function longestChord(sheet) {
   return sheet.sections.reduce((sum, section) => {
     const barSums = section.bars.reduce((longest, bar) => {
@@ -37,9 +35,14 @@ export function stringifyBar(bar, longestChord, widthLimit = MAX_WIDTH) {
     bar.bar
       .map(chord =>
         chord
-          ? (
-            chord.charAt(0).toUpperCase() + chord.slice(1).toLowerCase()
-          ).padEnd(longestChord)
+          ? chord
+            .split("/")
+            .map(
+              chord =>
+                chord.charAt(0).toUpperCase() + chord.slice(1).toLowerCase()
+            )
+            .join("/")
+            .padEnd(longestChord)
           : " ".repeat(longestChord)
       )
       .join(" · ") +
