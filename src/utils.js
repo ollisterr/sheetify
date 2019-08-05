@@ -79,5 +79,5 @@ export function stringifySheet(sheet, longestChord, widthLimit = MAX_WIDTH) {
   const output = sheet.sections
     .map(section => stringifySection(section, longestChord, widthLimit))
     .join("\n");
-  return output;
+  return (sheet.name ? sheet.name : "Untitled song") + "\n" + output;
 }

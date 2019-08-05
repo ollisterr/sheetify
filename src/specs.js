@@ -4,11 +4,23 @@ import "./css/specs.scss";
 
 const SheetSpecification = () => {
   const [{ timeSignature }, dispatch] = useContext(SheetContext);
+  const [{ sheetData }, sheetDataDispatch] = useContext(SheetContext);
+
+  function setSheetTitle(title) {
+    sheetData["name"] = title;
+    console.log(title);
+    sheetDataDispatch({ type: "setSheetData", newSheetData: sheetData });
+  }
 
   return (
     <div className="container">
       <p className="trademark">Made with Sheetify</p>
-      <input className="title" name="title" placeholder="Sheet title" />
+      <input
+        className="title"
+        name="title"
+        placeholder="Sheet title"
+        onChange={e => setSheetTitle(e.target.value)}
+      />
       <div className="basic-info">
         <div>
           <input

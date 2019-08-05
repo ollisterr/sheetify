@@ -5,6 +5,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import "./css/sheetbody.scss";
 import { longestChord, stringifySheet } from "./utils";
+import FileSaver from "file-saver";
 
 const SheetBody = () => {
   const [{ sheetData }, dispatch] = useContext(SheetContext);
@@ -21,8 +22,19 @@ const SheetBody = () => {
   function printAll() {
     const longest = longestChord(sheetData);
     const output = stringifySheet(sheetData, longest);
-    console.log(output);
     setPrint(output);
+  }
+
+  function saveTxt() {
+    const longest = longestChord(sheetData);
+    const output = stringifySheet(sheetData, longest);
+    var blob = new Blob([output], {
+      type: "text/plain;charset=utf-8"
+    });
+    FileSaver.saveAs(
+      blob,
+      sheetData.name ? sheetData.name + ".txt" : "song-sheet.txt"
+    );
   }
 
   return (
@@ -35,9 +47,16 @@ const SheetBody = () => {
           <FontAwesomeIcon icon={faPlus} className="add-section-icon" />
           Add Section
         </div>
-        <div className="print" onClick={printAll}>
+        <div className="print" onClick={saveTxt}>
           Print
         </div>
+      </div>
+      <div className="print-output">
+        <pre
+          dangerouslySetInnerHTML={{
+            __html: print.replace(/(?:\r\n|\r|\n)/g, "<br />")
+          }}
+        />
       </div>
     </div>
   );
