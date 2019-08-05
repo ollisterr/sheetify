@@ -27,7 +27,7 @@ export function longestInSection(section) {
   }, 0);
 }
 
-const MAX_WIDTH = 100;
+const MAX_WIDTH = 70;
 
 export function stringifyBar(bar, longestChord, widthLimit = MAX_WIDTH) {
   const barStr =
@@ -57,7 +57,7 @@ export function stringifySection(
 ) {
   let length = 4;
   const sectionStr =
-    (section.name ? section.name + ": " : " ".repeat(3)) +
+    (section.name ? `[${section.name}]\n` : "") +
     "|" +
     section.bars
       .map(bar => {
@@ -79,5 +79,5 @@ export function stringifySheet(sheet, longestChord, widthLimit = MAX_WIDTH) {
   const output = sheet.sections
     .map(section => stringifySection(section, longestChord, widthLimit))
     .join("\n");
-  return (sheet.name ? sheet.name : "Untitled song") + "\n" + output;
+  return (sheet.name ? sheet.name : "Untitled song") + "\n---\n" + output;
 }
