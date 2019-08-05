@@ -6,10 +6,32 @@ import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import "./css/sheetbody.scss";
 import { longestChord, stringifySheet } from "./utils";
 import FileSaver from "file-saver";
+import html2canvas from "html2canvas";
+import jsPDF from "jspdf";
+
+const SavePopup = () => {
+  const [{ sheetData }, dispatch] = useContext(SheetContext);
+  const [print, setPrint] = useState("No print");
+
+  function printAll() {
+    const longest = longestChord(sheetData);
+    const output = stringifySheet(sheetData, longest);
+    setPrint(output);
+  }
+
+  return (
+    <div className="print-output">
+      <pre
+        dangerouslySetInnerHTML={{
+          __html: print.replace(/(?:\r\n|\r|\n)/g, "<br />")
+        }}
+      />
+    </div>
+  );
+};
 
 const SheetBody = () => {
   const [{ sheetData }, dispatch] = useContext(SheetContext);
-  const [print, setPrint] = useState("No print");
 
   function addSection() {
     sheetData.sections = [...sheetData.sections, { bars: [emptyBar()] }];
@@ -17,12 +39,6 @@ const SheetBody = () => {
       type: "setSheetData",
       newSheetData: sheetData
     });
-  }
-
-  function printAll() {
-    const longest = longestChord(sheetData);
-    const output = stringifySheet(sheetData, longest);
-    setPrint(output);
   }
 
   function saveTxt() {
@@ -37,6 +53,25 @@ const SheetBody = () => {
     );
   }
 
+  function savePDF() {
+    html2canvas(document.body).then(function(canvas) {
+      //document.body.append(canvas);
+      var title = sheetData.name ? sheetData.name : "Untitled song";
+      var imgData = canvas.toDataURL("image/jpeg", 2.0);
+      var image = document.createElement("img");
+      image.src = imgData;
+      var doc = new jsPDF("p", "mm", "a4");
+      doc.setProperties({
+        title: title,
+        subject: "Music sheet for " + title
+      });
+      var width = doc.internal.pageSize.getWidth();
+
+      doc.addImage(imgData, "JPEG", 0, 0, width, image.height);
+      doc.save(title + ".pdf");
+    });
+  }
+
   return (
     <div className="sheetbody">
       {sheetData.sections.map((section, i) => (
@@ -48,15 +83,11 @@ const SheetBody = () => {
           Add Section
         </div>
         <div className="print" onClick={saveTxt}>
-          Print
+          Save .txt
         </div>
-      </div>
-      <div className="print-output">
-        <pre
-          dangerouslySetInnerHTML={{
-            __html: print.replace(/(?:\r\n|\r|\n)/g, "<br />")
-          }}
-        />
+        <div className="print" onClick={savePDF}>
+          Save .pdf
+        </div>
       </div>
     </div>
   );
