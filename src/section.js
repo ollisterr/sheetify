@@ -1,7 +1,12 @@
 import React, { useContext } from "react";
 import { SheetContext, emptyBar } from "./state.js";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPlus, faMinus } from "@fortawesome/free-solid-svg-icons";
+import {
+  faPlus,
+  faMinus,
+  faTrash,
+  faPlusSquare
+} from "@fortawesome/free-solid-svg-icons";
 import "./css/section.scss";
 import repeatStart from "./assets/repeat-sign-start.svg";
 import repeatEnd from "./assets/repeat-sign-end.svg";
@@ -11,7 +16,6 @@ export const Bar = ({ sectionID, barID }) => {
 
   function updateBar(index, value) {
     sheetData.sections[sectionID].bars[barID].bar[index] = value;
-    console.log("Adding: " + sectionID + " | " + barID);
     dispatch({ type: "setSheetData", newSheetData: sheetData });
   }
 
@@ -22,30 +26,36 @@ export const Bar = ({ sectionID, barID }) => {
       .concat([emptyBar()])
       .concat(bars.slice(barID, bars.length));
     dispatch({ type: "setSheetData", newSheetData: sheetData });
-    console.log("Adding after bar: " + barID);
   }
 
   function removeBar() {
     const bars = sheetData.sections[sectionID].bars;
-    if (bars.length > 1) {
-      sheetData.sections[sectionID].bars = bars
-        .slice(0, barID)
-        .concat(bars.slice(barID + 1, bars.length));
-      dispatch({ type: "setSheetData", newSheetData: sheetData });
-      console.log("Removing: " + sectionID + " | " + barID);
+    // Delete bar if it's not the only bar in the sheet
+    if (sheetData.sections.length > 1 || bars.length > 1) {
+      // If only bar in the section, remove section
+      if (sheetData.sections[sectionID].bars.length === 1) {
+        sheetData.sections = sheetData.sections
+          .slice(0, sectionID)
+          .concat(
+            sheetData.sections.slice(sectionID + 1, sheetData.sections.length)
+          );
+        dispatch({ type: "setSheetData", newSheetData: sheetData });
+      } else {
+        sheetData.sections[sectionID].bars = bars
+          .slice(0, barID)
+          .concat(bars.slice(barID + 1, bars.length));
+        dispatch({ type: "setSheetData", newSheetData: sheetData });
+      }
     }
   }
 
   function setGoalName(value) {
-    console.log(sheetData.sections[sectionID].bars[barID]);
     sheetData.sections[sectionID].bars[barID].goal = value;
     dispatch({ type: "setSheetData", newSheetData: sheetData });
-    console.log(value);
   }
 
   function setRepeat(value) {
     const repeat = sheetData.sections[sectionID].bars[barID].repeat;
-    console.log(repeat);
     switch (value) {
     case "start":
       sheetData.sections[sectionID].bars[barID].repeat[0] = !repeat[0];
@@ -66,11 +76,14 @@ export const Bar = ({ sectionID, barID }) => {
           className="add-bar-inbetween"
           onClick={addBar}
         />
-        <FontAwesomeIcon
-          icon={faMinus}
-          className="remove-bar"
-          onClick={removeBar}
-        />
+        {(sheetData.sections.length > 1 ||
+          sheetData.sections[sectionID].bars.length > 1) && (
+          <FontAwesomeIcon
+            icon={faMinus}
+            className="remove-bar"
+            onClick={removeBar}
+          />
+        )}
         <input
           className={
             "section-goal " +
@@ -127,7 +140,6 @@ export const Section = ({ sectionID }) => {
   }
 
   function setSectionTag(value) {
-    console.log(value);
     if (sheetData.sections[sectionID].name === value || !value) {
       delete sheetData.sections[sectionID].name;
     } else {
@@ -136,38 +148,70 @@ export const Section = ({ sectionID }) => {
     dispatch({ type: "setSheetData", newSheetData: sheetData });
   }
 
+  function addSection() {
+    const sections = sheetData.sections;
+    sheetData.sections = sections
+      .slice(0, sectionID)
+      .concat([{ bars: [emptyBar()] }])
+      .concat(sections.slice(sectionID, sections.length));
+    dispatch({ type: "setSheetData", newSheetData: sheetData });
+  }
+
+  function removeSection() {
+    if (sheetData.sections.length > 1) {
+      sheetData.sections = sheetData.sections
+        .slice(0, sectionID)
+        .concat(
+          sheetData.sections.slice(sectionID + 1, sheetData.sections.length)
+        );
+      dispatch({ type: "setSheetData", newSheetData: sheetData });
+    }
+  }
+
   return (
     <div className="section">
       <div className="section-controls">
-        {sectionTags.map((tag, i) => {
-          const number = sheetData.sections.filter((section, index) => {
-            return section.name === tag && index <= sectionID;
-          }).length;
-          return (
-            <div
-              key={i}
-              className={
-                "section-tag " +
-                (tag === sheetData.sections[sectionID].name && "selected")
-              }
-              onClick={e => setSectionTag(tag)}
-            >
-              {tag}
-              {number > 1 && number}
-            </div>
-          );
-        })}
+        <div className="section-tags">
+          {sectionTags.map((tag, i) => {
+            const number = sheetData.sections.filter((section, index) => {
+              return section.name === tag && index <= sectionID;
+            }).length;
+            return (
+              <div
+                key={i}
+                className={
+                  "section-tag " +
+                  (tag === sheetData.sections[sectionID].name && "selected")
+                }
+                onClick={e => setSectionTag(tag)}
+              >
+                {tag}
+                {number > 1 && number}
+              </div>
+            );
+          })}
 
-        <input
-          className={
-            "section-tag " +
-            (!sectionTags.includes(sheetData.sections[sectionID].name) &&
-              !!sheetData.sections[sectionID].name &&
-              "selected")
-          }
-          placeholder="Section name"
-          onChange={e => setSectionTag(e.target.value)}
-        />
+          <input
+            className={
+              "section-tag " +
+              (!sectionTags.includes(sheetData.sections[sectionID].name) &&
+                !!sheetData.sections[sectionID].name &&
+                "selected")
+            }
+            placeholder="Section name"
+            onChange={e => setSectionTag(e.target.value)}
+          />
+        </div>
+        <div className="add-remove-section">
+          <div className="section-tag add-section" onClick={addSection}>
+            <FontAwesomeIcon icon={faPlusSquare} className="add-section-icon" />
+          </div>
+          {sheetData.sections.length > 1 && (
+            <div className="section-tag remove-section" onClick={removeSection}>
+              <FontAwesomeIcon icon={faTrash} className="remove-section-icon" />
+            </div>
+          )}
+        </div>
       </div>
       {sheetData.sections[sectionID].bars.map((bar, i) => {
         return <Bar key={[sectionID, i]} sectionID={sectionID} barID={i} />;

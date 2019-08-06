@@ -20,6 +20,14 @@
 .trademark {
   font-size: 0.8rem;
   text-align: center;
+
+  > img {
+    display: inline;
+    height: 1rem;
+    margin-left: 10px;
+    vertical-align: middle;
+    margin-top: -3px;
+  }
 }
 
 .title {

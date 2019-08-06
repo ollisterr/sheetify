@@ -1,6 +1,7 @@
 import React, { useContext } from "react";
 import { SheetContext } from "./state.js";
 import "./css/specs.scss";
+import logo from "./assets/sheetify-logo.svg";
 
 const SheetSpecification = () => {
   const [{ timeSignature }, dispatch] = useContext(SheetContext);
@@ -14,7 +15,9 @@ const SheetSpecification = () => {
 
   return (
     <div className="container">
-      <p className="trademark">Made with Sheetify</p>
+      <p className="trademark">
+        Made with <img className="logo" src={logo} />
+      </p>
       <input
         className="title"
         name="title"

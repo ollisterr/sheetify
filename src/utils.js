@@ -47,7 +47,7 @@ export function stringifyBar(bar, longestChord, widthLimit = MAX_WIDTH) {
       )
       .join(" · ") +
     (bar.repeat[1] ? ":" : " ");
-  return barStr + (barStr.length > widthLimit ? "|\n" + " ".repeat(3) : "");
+  return barStr + (barStr.length > widthLimit ? "|\n" : "");
 }
 
 export function stringifySection(
@@ -65,7 +65,7 @@ export function stringifySection(
         length += result.length;
         if (length > widthLimit) {
           length = 4 + result.length;
-          return "\n" + " ".repeat(3) + "|" + result;
+          return "\n|" + result;
         } else {
           return result;
         }
