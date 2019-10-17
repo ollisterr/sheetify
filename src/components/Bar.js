@@ -53,6 +53,13 @@ const Bar = ({ sectionID, barID }) => {
     dispatch({ type: "setSheetData", newSheetData: sheetData });
   }
 
+  function addBarOnTab(e) {
+    e.preventDefault();
+    if (e.key === "Tab") {
+      addBar();
+    }
+  }
+
   return (
     <div className="bar">
       <div className="bar-controls">
@@ -86,16 +93,20 @@ const Bar = ({ sectionID, barID }) => {
         <RepeatSignStartRaster
           repeat={sheetData.sections[sectionID].bars[barID].repeat}
         />
-        {sheetData.sections[sectionID].bars[barID].bar.map((chord, i) => {
-          return (
-            <input
-              value={chord}
-              key={(sectionID, barID, i)}
-              className="bar-block"
-              onChange={e => updateBar(i, e.target.value)}
-            />
-          );
-        })}
+        {sheetData.sections[sectionID].bars[barID].bar.map(
+          (chord, i, array) => {
+            return (
+              <input
+                value={chord}
+                key={(sectionID, barID, i)}
+                className="bar-block"
+                onChange={e => updateBar(i, e.target.value)}
+                autoFocus={i === 0}
+                onKeyDown={i === array.length - 1 ? addBarOnTab : null}
+              />
+            );
+          }
+        )}
         <RepeatSignEndRaster
           repeat={sheetData.sections[sectionID].bars[barID].repeat}
         />
