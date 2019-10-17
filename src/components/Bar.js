@@ -14,7 +14,12 @@ const Bar = ({ sectionID, barID }) => {
   const [{ sheetData }, dispatch] = useContext(SheetContext);
 
   function updateBar(index, value) {
-    sheetData.sections[sectionID].bars[barID].bar[index] = value;
+    const chord = value
+      .replace(/ /g, "")
+      .split("/")
+      .map(x => x.charAt(0).toUpperCase() + x.slice(1))
+      .join("/");
+    sheetData.sections[sectionID].bars[barID].bar[index] = chord;
     dispatch({ type: "setSheetData", newSheetData: sheetData });
   }
 
@@ -48,15 +53,17 @@ const Bar = ({ sectionID, barID }) => {
     }
   }
 
-  function setGoalName(value) {
-    sheetData.sections[sectionID].bars[barID].goal = value;
+  function setGoalName(e) {
+    sheetData.sections[sectionID].bars[barID].goal = e.target.value;
     dispatch({ type: "setSheetData", newSheetData: sheetData });
   }
 
   function addBarOnTab(e) {
-    e.preventDefault();
     if (e.key === "Tab") {
-      addBar();
+      e.preventDefault();
+      const bars = sheetData.sections[sectionID].bars;
+      sheetData.sections[sectionID].bars = [...bars, emptyBar()];
+      dispatch({ type: "setSheetData", newSheetData: sheetData });
     }
   }
 
@@ -84,7 +91,7 @@ const Bar = ({ sectionID, barID }) => {
               : "")
           }
           value={sheetData.sections[sectionID].bars[barID].goal}
-          onChange={e => setGoalName(e.target.value)}
+          onChange={setGoalName}
           placeholder="goal"
           tabIndex="-1"
         />
@@ -102,7 +109,12 @@ const Bar = ({ sectionID, barID }) => {
                 className="bar-block"
                 onChange={e => updateBar(i, e.target.value)}
                 autoFocus={i === 0}
-                onKeyDown={i === array.length - 1 ? addBarOnTab : null}
+                onKeyDown={
+                  i === array.length - 1 &&
+                  barID === sheetData.sections[sectionID].bars.length - 1
+                    ? addBarOnTab
+                    : null
+                }
               />
             );
           }
