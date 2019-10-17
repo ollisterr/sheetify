@@ -2,11 +2,13 @@
 .repeat-sign-end {
   height: 100%;
   opacity: 0;
+  visibility: hidden;
   transition: opacity 0.2s;
   cursor: pointer;
 
   &:hover {
     opacity: 0.4;
+    visibility: visible;
   }
 
   * {
@@ -22,4 +24,5 @@
 
 .active {
   opacity: 1;
+  visibility: visible;
 }

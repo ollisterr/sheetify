@@ -11,6 +11,7 @@
 
   &:hover .section-tag {
     opacity: 1 !important;
+    visibility: visible !important;
   }
 
   .section-controls {
@@ -36,8 +37,9 @@
       font-weight: bold;
 
       opacity: 0;
+      visibility: hidden;
       transition-property: color, background-color, opacity;
-      transition-duration: 0.2s;
+      transition-duration: 0.3s;
       cursor: pointer;
 
       @media (min-width: $large) {
@@ -72,8 +74,9 @@
       .selected {
         color: darkgrey;
         border-color: darkgrey;
-        opacity: 1;
         order: -1;
+        opacity: 1;
+        visibility: visible;
 
         @media (min-width: $large) {
           &:hover {

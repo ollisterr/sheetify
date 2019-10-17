@@ -20,6 +20,11 @@
   }
 
   &:hover {
+    .repeat-sign-start,
+    .repeat-sign-end {
+      visibility: visible;
+    }
+
     .bar-controls {
       > * {
         opacity: 1;
@@ -95,13 +100,14 @@
     border-style: solid;
 
     .bar-block {
-      border-radius: 0;
+      position: relative;
       display: inline-block;
       padding-left: $barBorder;
-      transition: border 0.2s;
-      border-width: 0 3px;
-      border-color: rgba(255, 255, 255, 0);
+      border-width: 0px 3px;
+      border-color: white;
       border-style: solid;
+      border-radius: 0;
+      outline: none;
 
       &:hover {
         border-color: whitesmoke;
