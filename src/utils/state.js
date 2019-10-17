@@ -1,5 +1,4 @@
 import React, { createContext, useReducer } from "react";
-import { functionTypeAnnotation } from "@babel/types";
 
 export const SheetContext = createContext();
 
@@ -21,9 +20,10 @@ export const reducer = (state, action) => {
 };
 
 export function emptyBar() {
-  const obj = new Object();
-  obj.bar = new Array("", "", "", "");
-  obj.repeat = new Array(false, false);
+  const obj = {};
+  obj.bar = ["", "", "", ""];
+  obj.repeat = [false, false];
+  obj.goal = "";
   return obj;
 }
 
