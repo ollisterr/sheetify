@@ -1,163 +1,5 @@
 @import "variables";
 
-.bar {
-  margin-top: 4px;
-  position: relative;
-  display: inline-block;
-  width: 50%;
-  animation: slide-in 0.5s ease-out;
-  font-size: 2rem;
-  margin-left: -$barBorder;
-
-  @media (max-width: $small) {
-    width: 100%;
-  }
-
-  &:hover > .bar-controls {
-    > * {
-      opacity: 1;
-      visibility: visible;
-    }
-    .add-bar-inbetween,
-    .remove-bar {
-      margin-right: 10px;
-      max-width: $barControlHeight !important;
-      padding: 3px;
-    }
-  }
-}
-
-@keyframes slide-in {
-  0% {
-    width: 0;
-  }
-  100% {
-    width: 50%;
-  }
-}
-
-.bar-controls {
-  margin-bottom: 8px;
-  display: flex;
-  justify-content: stretch;
-  height: $barControlHeight;
-  width: 100%;
-  transition: opacity 0.2s;
-
-  > * {
-    opacity: 0;
-  }
-
-  .add-bar-inbetween,
-  .remove-bar {
-    visibility: hidden;
-    height: $barControlHeight;
-    width: $barControlHeight !important;
-    max-width: 0 !important;
-    margin: 0;
-    padding: 0;
-    color: white;
-    font-weight: bold;
-    text-align: center;
-    border-radius: 100%;
-    background: lightgrey;
-    cursor: pointer;
-    transition: max-width 0.2s, margin 0.2s, padding 0.2s, opacity 0.5s 0.1s;
-
-    &:hover {
-      background-color: grey;
-    }
-  }
-
-  .section-goal {
-    width: 100%;
-    height: 100%;
-    margin-right: calc(#{$barBorder} + 5px);
-    padding-left: 5px;
-    border: solid 2px lightgrey;
-    border-width: 2px 0 0 2px;
-    border-radius: 0;
-    font-size: calc(#{$barControlHeight} - 1px);
-    transition: opacity 0.2s;
-  }
-
-  .defined-goal {
-    opacity: 1;
-  }
-}
-
-.bar-content {
-  font-size: $barFontSize;
-  display: flex;
-  width: 100%;
-  height: 3rem;
-  border-width: 0 $barBorder;
-  border-color: lightgrey;
-  border-style: solid;
-}
-
-.bar-block {
-  border-radius: 0;
-  display: inline-block;
-  padding-left: $barBorder;
-  text-transform: capitalize;
-  transition: border 0.2s;
-  border-width: 0 3px;
-  border-color: rgba(255, 255, 255, 0);
-  border-style: solid;
-
-  &:hover {
-    border-color: whitesmoke;
-  }
-}
-
-.repeat-sign-start,
-.repeat-sign-end {
-  height: 100%;
-  opacity: 0;
-  transition: opacity 0.2s;
-  cursor: pointer;
-
-  &:hover {
-    opacity: 0.4;
-  }
-}
-.repeat-sign-start {
-  margin-right: 5px;
-}
-.repeat-sign-end {
-  margin-left: 5px;
-}
-
-.active {
-  opacity: 1;
-}
-
-.add-bar {
-  display: flex;
-  width: 0;
-  align-items: center;
-  font-size: 1.5rem;
-  cursor: pointer;
-
-  .add-bar-icon {
-    width: 2.5rem !important;
-    height: 2.5rem;
-    color: white;
-    padding: 5px;
-    transform: translate(1rem, 0.7rem);
-    border-radius: 100%;
-    background-color: lightgrey;
-    transition: 0.2s background-color;
-
-    &:hover {
-      background-color: darkgrey;
-    }
-  }
-}
-
-/* === SECTION === */
-
 .section {
   position: relative;
   display: flex;
@@ -168,97 +10,130 @@
   color: lightgrey;
 
   &:hover .section-tag {
-    opacity: 1;
+    opacity: 1 !important;
   }
-}
 
-.section-controls {
-  display: flex;
-  flex-flow: row wrap;
-  justify-content: space-between;
-  width: 100%;
-  height: auto;
-  margin-left: -$barBorder;
-  font-weight: bold;
-}
+  .section-controls {
+    display: flex;
+    flex: 1 1 auto;
+    flex-flow: row wrap;
+    justify-content: space-between;
+    width: 100%;
+    height: auto;
+    margin-left: -$barBorder;
+    font-weight: bold;
 
-.section-tags {
-  display: flex;
-  flex-flow: row wrap;
-  margin-right: 5px;
-
-  > input {
-    color: lightgrey;
-    &::placeholder {
+    .section-tag {
+      box-sizing: content-box;
+      display: block;
+      width: auto;
+      height: 1.2rem;
+      margin-right: 6px;
+      padding: 5px 10px;
+      border: solid 2px lightgrey;
+      border-radius: 0;
       color: lightgrey;
+      font-weight: bold;
+
+      opacity: 0;
+      transition-property: color, background-color, opacity;
+      transition-duration: 0.2s;
+      cursor: pointer;
+
+      @media (min-width: $large) {
+        &:hover {
+          color: white;
+          background-color: lightgrey;
+        }
+      }
+
+      @media (max-width: $small) {
+        margin-bottom: 2px;
+      }
     }
-    &:hover {
-      &::placeholder {
-        color: white;
+
+    .section-tags {
+      display: flex;
+      flex-flow: row wrap;
+      margin-right: 5px;
+
+      > input {
+        color: lightgrey;
+        &::placeholder {
+          color: lightgrey;
+        }
+        &:hover {
+          &::placeholder {
+            color: white;
+          }
+        }
+      }
+
+      .selected {
+        color: darkgrey;
+        border-color: darkgrey;
+        opacity: 1;
+        order: -1;
+
+        @media (min-width: $large) {
+          &:hover {
+            color: white;
+            background-color: darkgrey;
+          }
+        }
+      }
+    }
+    .add-remove-section {
+      display: flex;
+      align-items: center;
+      width: auto;
+      height: 100%;
+      flex-flow: row wrap;
+
+      > .add-section,
+      .remove-section {
+        display: flex;
+        align-items: center;
+        height: 100%;
+        margin-left: 1rem;
+        font-size: 1.5rem;
+        border: none;
+        padding: 0;
+        transition-property: color, opacity;
+        cursor: pointer;
+
+        &:hover {
+          color: grey;
+          background: none;
+        }
       }
     }
   }
 
-  .selected {
-    color: darkgrey;
-    border-color: darkgrey;
-    opacity: 1;
-    order: -1;
-
-    &:hover {
-      background-color: darkgrey;
-    }
-  }
-}
-
-.section-tag {
-  box-sizing: content-box;
-  padding: 5px 10px;
-  display: block;
-  width: auto;
-  height: 1.2rem;
-  margin-right: 6px;
-  border: solid 2px lightgrey;
-  border-radius: 0;
-  opacity: 0;
-  color: lightgrey;
-  font-weight: bold;
-  transition-property: color, background-color, opacity;
-  transition-duration: 0.2s;
-  cursor: pointer;
-
-  &:hover {
-    color: white;
-    background-color: lightgrey;
-  }
-
-  @media (max-width: $small) {
-    margin-bottom: 2px;
-  }
-}
-
-.add-remove-section {
-  display: flex;
-  align-items: center;
-  width: auto;
-  height: 100%;
-  flex-flow: row wrap;
-
-  > .add-section,
-  .remove-section {
+  .add-bar {
     display: flex;
-    align-items: center;
-    height: 100%;
-    margin-left: 1rem;
+    width: 0;
+    align-items: flex-end;
     font-size: 1.5rem;
-    border: none;
-    padding: 0;
-    transition-property: color, opacity;
     cursor: pointer;
 
-    &:hover {
-      color: grey;
-      background: none;
+    @media (max-width: $medium) {
+      width: auto;
+    }
+
+    .add-bar-icon {
+      width: 2.5rem !important;
+      height: 2.5rem;
+      color: white;
+      padding: 5px;
+      margin: 0 0 0.2rem 1rem;
+      border-radius: 100%;
+      background-color: lightgrey;
+      transition: 0.2s background-color;
+
+      &:hover {
+        background-color: darkgrey;
+      }
     }
   }
 }

@@ -1,14 +1,12 @@
 import React from "react";
 import "./css/App.scss";
-import { ContextProvider, reducer, initialState } from "./state.js";
-import SheetSpecification from "./specs.js";
-import SheetBody from "./sheetbody.js";
-import "html2canvas";
+import { ContextProvider, reducer, initialState } from "./utils/state.js";
+import SheetSpecification from "./components/Specs.js";
+import SheetBody from "./components/SheetBody.js";
 
 const App = () => {
-  console.log("Running");
   return (
-    <div className="App">
+    <div id="App">
       <ContextProvider initialState={initialState} reducer={reducer}>
         <SheetSpecification />
         <SheetBody />

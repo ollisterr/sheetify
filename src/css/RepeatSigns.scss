@@ -1,0 +1,25 @@
+.repeat-sign-start,
+.repeat-sign-end {
+  height: 100%;
+  opacity: 0;
+  transition: opacity 0.2s;
+  cursor: pointer;
+
+  &:hover {
+    opacity: 0.4;
+  }
+
+  * {
+    height: 100%;
+  }
+}
+.repeat-sign-start {
+  margin-right: 5px;
+}
+.repeat-sign-end {
+  margin-left: 5px;
+}
+
+.active {
+  opacity: 1;
+}

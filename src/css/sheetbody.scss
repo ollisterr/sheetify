@@ -7,7 +7,7 @@
 .control-bar {
   justify-content: stretch;
   border-radius: 5px;
-  padding: 12px;
+  padding: 0.2rem;
   font-size: 2rem;
   border: dotted 2px lightgrey;
   display: flex;
@@ -17,13 +17,13 @@
 
   .add-section-icon {
     font-size: 1.2rem;
-    margin: 0 10px;
+    margin-right: 20px;
   }
 
   > * {
     flex: 1 1 auto;
     text-align: center;
-    margin: 0 10px;
+    margin: 5px;
     color: lightgrey;
     transition: color 0.2s, background-color 0.2s;
     cursor: pointer;
@@ -35,7 +35,7 @@
   .print {
     background-color: lightgrey;
     color: white;
-    padding: 0 2rem;
+    padding: 0.2rem 2rem;
     border-radius: 5px;
     &:hover {
       background-color: darkgrey;

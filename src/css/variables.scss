@@ -3,5 +3,16 @@ $barBorder: 0.3rem;
 $barControlHeight: 0.8rem;
 
 $small: 768px;
-$medium: 1024px;
-$large: 1280px;
+$medium: 950px;
+$large: 1050px;
+
+/* === ANIMATIONS === */
+
+@keyframes slide-in {
+  0% {
+    width: 0;
+  }
+  100% {
+    width: 50%;
+  }
+}
