@@ -4,6 +4,11 @@ export const SheetContext = createContext();
 
 export const reducer = (state, action) => {
   switch (action.type) {
+  case "setTitle":
+    return {
+      ...state,
+      title: action.newTitle
+    };
   case "setTimeSignature":
     return {
       ...state,
@@ -14,23 +19,38 @@ export const reducer = (state, action) => {
       ...state,
       sheetData: action.newSheetData
     };
+  case "setTempo":
+    return {
+      ...state,
+      tempo: action.newTempo
+    };
+  case "initialize":
+    return {
+      ...state,
+      title: action.newTitle,
+      timeSignature: action.newTimeSignature,
+      tempo: action.newTempo,
+      sheetData: action.newSheetData
+    };
   default:
     return state;
   }
 };
 
-export function emptyBar() {
+export function emptyBar(chordsPerBar) {
   const obj = {};
-  obj.bar = ["", "", "", ""];
+  obj.bar = new Array(chordsPerBar).fill("");
   obj.repeat = [false, false];
   obj.goal = "";
   return obj;
 }
 
 export const initialState = {
+  title: "",
   timeSignature: [4, 4],
+  tempo: 120,
   sheetData: {
-    sections: [{ bars: [emptyBar()] }]
+    sections: [{ bars: [emptyBar(4)], chordsPerBar: 4 }]
   }
 };
 

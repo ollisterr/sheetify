@@ -4,61 +4,103 @@ import "../css/Specs.scss";
 import logo from "../assets/sheetify-logo.png";
 
 const SheetSpecification = () => {
-  const [{ timeSignature }, dispatch] = useContext(SheetContext);
-  const [{ sheetData }, sheetDataDispatch] = useContext(SheetContext);
+  const [
+    { timeSignature, sheetData, chordsPerBar, tempo },
+    dispatch
+  ] = useContext(SheetContext);
 
-  function setSheetTitle(title) {
+  function setSheetTitle(e) {
+    const title = e.target.value;
     sheetData["name"] = title;
-    sheetDataDispatch({ type: "setSheetData", newSheetData: sheetData });
+    dispatch({ type: "setSheetData", newSheetData: sheetData });
+  }
+
+  function setTimeSignatureBase(e) {
+    const value = e.target.value.length > 0 ? parseInt(e.target.value) : 1;
+    dispatch({
+      type: "setTimeSignature",
+      newTimeSignature: [timeSignature[0], value]
+    });
+  }
+  function setTimeSignature(e) {
+    const value = e.target.value.length > 0 ? parseInt(e.target.value) : 1;
+    dispatch({
+      type: "setTimeSignature",
+      newTimeSignature: [value, timeSignature[1]]
+    });
+  }
+
+  function setTempo(e) {
+    const value = e.target.value.length > 0 ? parseInt(e.target.value) : 20;
+    dispatch({
+      type: "setTempo",
+      newTempo: value
+    });
+  }
+
+  function setChordsPerBar(e) {
+    const value = e.target.value.length > 0 ? parseInt(e.target.value) : 0;
+    dispatch({
+      type: "setChordsPerBar",
+      newChordsPerBar: value
+    });
   }
 
   return (
-    <div className="container">
-      <p className="trademark">
-        Made with <img className="logo" alt="Logo" src={logo} />
+    <div className='container'>
+      <p className='trademark'>
+        Made with <img className='logo' alt='Logo' src={logo} />
       </p>
       <input
-        className="title"
-        name="title"
-        placeholder="Sheet title"
-        onChange={e => setSheetTitle(e.target.value)}
+        className='title'
+        name='title'
+        placeholder='Sheet title'
+        onChange={setSheetTitle}
       />
-      <div className="basic-info">
+      <div className='basic-info'>
         <div>
           <input
-            type="number"
-            min="2"
-            className="time-signature-input"
-            placeholder={timeSignature[0]}
-            onChange={e =>
-              dispatch({
-                type: "setTimeSignature",
-                newTimeSignature: [e.target.value, timeSignature[1]]
-              })
-            }
+            type='number'
+            min='2'
+            className='time-signature-input'
+            value={timeSignature[0]}
+            onChange={setTimeSignature}
           />{" "}
           /
           <select
-            className="time-signature-input"
-            onChange={e =>
-              dispatch({
-                type: "setTimeSignature",
-                newTimeSignature: [timeSignature[0], e.target.value]
-              })
-            }
+            className='time-signature-input'
+            onChange={setTimeSignatureBase}
           >
-            <option value="4">4</option>
-            <option value="8">8</option>
-            <option value="16">16</option>
-            <option value="32">32</option>
-            <option value="64">64</option>
+            <option value='4'>4</option>
+            <option value='8'>8</option>
+            <option value='16'>16</option>
+            <option value='32'>32</option>
+            <option value='64'>64</option>
           </select>
         </div>
         <div>
-          Tempo: <input className="tempo" name="tempo" placeholder="120" /> BPM
+          Tempo:{" "}
+          <input
+            className='tempo'
+            type='number'
+            min='0'
+            name='tempo'
+            value={tempo}
+            onChange={setTempo}
+          />{" "}
+          BPM
         </div>
         <div>
-          Key: <input className="key" name="key" placeholder="C" />
+          Key: <input className='key' name='key' placeholder='C' />
+        </div>
+        <div>
+          <input
+            type='number'
+            min='1'
+            className='chords-per-bar'
+            value={chordsPerBar}
+            onChange={setChordsPerBar}
+          />
         </div>
       </div>
     </div>

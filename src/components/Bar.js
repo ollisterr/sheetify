@@ -1,6 +1,6 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus, faMinus } from "@fortawesome/free-solid-svg-icons";
-import React, { useContext } from "react";
+import React, { useContext, useMemo } from "react";
 import { SheetContext, emptyBar } from "../utils/state.js";
 import {
   RepeatSignStart,
@@ -12,6 +12,16 @@ import "../css/Bar.scss";
 
 const Bar = ({ sectionID, barID }) => {
   const [{ sheetData }, dispatch] = useContext(SheetContext);
+  const { section, bar } = useMemo(() => {
+    return {
+      section: sheetData.sections[sectionID],
+      bar: sheetData.sections[sectionID].bars[barID]
+    };
+  }, [sheetData.sections[sectionID].bars[barID]]);
+
+  function update() {
+    dispatch({ type: "setSheetData", newSheetData: sheetData });
+  }
 
   function updateBar(index, value) {
     const chord = value
@@ -19,109 +29,106 @@ const Bar = ({ sectionID, barID }) => {
       .split("/")
       .map(x => x.charAt(0).toUpperCase() + x.slice(1))
       .join("/");
-    sheetData.sections[sectionID].bars[barID].bar[index] = chord;
-    dispatch({ type: "setSheetData", newSheetData: sheetData });
+    bar.bar[index] = chord;
+    update();
   }
 
   function addBar() {
-    const bars = sheetData.sections[sectionID].bars;
-    sheetData.sections[sectionID].bars = bars
+    const bars = section.bars;
+    section.bars = bars
       .slice(0, barID)
-      .concat([emptyBar()])
+      .concat([emptyBar(section.chordsPerBar)])
       .concat(bars.slice(barID, bars.length));
-    dispatch({ type: "setSheetData", newSheetData: sheetData });
+    update();
   }
 
   function removeBar() {
-    const bars = sheetData.sections[sectionID].bars;
+    const bars = section.bars;
     // Delete bar if it's not the only bar in the sheet
     if (sheetData.sections.length > 1 || bars.length > 1) {
       // If only bar in the section, remove section
-      if (sheetData.sections[sectionID].bars.length === 1) {
+      if (section.bars.length === 1) {
         sheetData.sections = sheetData.sections
           .slice(0, sectionID)
           .concat(
             sheetData.sections.slice(sectionID + 1, sheetData.sections.length)
           );
-        dispatch({ type: "setSheetData", newSheetData: sheetData });
+        update();
       } else {
-        sheetData.sections[sectionID].bars = bars
+        section.bars = bars
           .slice(0, barID)
           .concat(bars.slice(barID + 1, bars.length));
-        dispatch({ type: "setSheetData", newSheetData: sheetData });
+        update();
       }
     }
   }
 
   function setGoalName(e) {
-    sheetData.sections[sectionID].bars[barID].goal = e.target.value;
-    dispatch({ type: "setSheetData", newSheetData: sheetData });
+    bar.goal = e.target.value;
+    update();
   }
 
   function addBarOnTab(e) {
     if (e.key === "Tab") {
       e.preventDefault();
-      const bars = sheetData.sections[sectionID].bars;
-      sheetData.sections[sectionID].bars = [...bars, emptyBar()];
-      dispatch({ type: "setSheetData", newSheetData: sheetData });
+      const bars = section.bars;
+      section.bars = [...bars, emptyBar(section.chordsPerBar)];
+      update();
     }
   }
 
   return (
-    <div className="bar">
-      <div className="bar-controls">
+    <div
+      className='bar'
+      style={{
+        maxWidth:
+          section.chordsPerBar === 2
+            ? "25%"
+            : section.chordsPerBar === 3
+              ? "33.4%"
+              : "50%"
+      }}
+    >
+      <div className='bar-controls'>
         <FontAwesomeIcon
           icon={faPlus}
-          className="add-bar-inbetween"
+          className='add-bar-inbetween'
           onClick={addBar}
         />
-        {(sheetData.sections.length > 1 ||
-          sheetData.sections[sectionID].bars.length > 1) && (
+        {(sheetData.sections.length > 1 || section.bars.length > 1) && (
           <FontAwesomeIcon
             icon={faMinus}
-            className="remove-bar"
+            className='remove-bar'
             onClick={removeBar}
           />
         )}
         <input
-          className={
-            "section-goal " +
-            (sheetData.sections[sectionID].bars[barID].goal
-              ? "defined-goal"
-              : "")
-          }
-          value={sheetData.sections[sectionID].bars[barID].goal}
+          className={"section-goal " + (bar.goal ? "defined-goal" : "")}
+          value={bar.goal}
           onChange={setGoalName}
-          placeholder="goal"
-          tabIndex="-1"
+          placeholder='goal'
+          tabIndex='-1'
         />
       </div>
-      <div className="bar-content">
-        <RepeatSignStartRaster
-          repeat={sheetData.sections[sectionID].bars[barID].repeat}
-        />
-        {sheetData.sections[sectionID].bars[barID].bar.map(
-          (chord, i, array) => {
-            return (
-              <input
-                value={chord}
-                key={(sectionID, barID, i)}
-                className="bar-block"
-                onChange={e => updateBar(i, e.target.value)}
-                autoFocus={i === 0}
-                onKeyDown={
-                  i === array.length - 1 &&
-                  barID === sheetData.sections[sectionID].bars.length - 1
-                    ? addBarOnTab
-                    : null
-                }
-              />
-            );
-          }
-        )}
-        <RepeatSignEndRaster
-          repeat={sheetData.sections[sectionID].bars[barID].repeat}
-        />
+      <div className='bar-content'>
+        <RepeatSignStartRaster repeat={bar.repeat} />
+        {bar.bar.map((chord, i, array) => {
+          return (
+            <input
+              value={chord}
+              key={(sectionID, barID, i)}
+              className='bar-block'
+              onChange={e => updateBar(i, e.target.value)}
+              autoFocus={i === 0}
+              onKeyDown={
+                i === array.length - 1 && barID === section.bars.length - 1
+                  ? addBarOnTab
+                  : null
+              }
+            />
+          );
+        })}
+        <RepeatSignEndRaster repeat={bar.repeat} />
       </div>
     </div>
   );

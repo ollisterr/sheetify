@@ -1,9 +1,12 @@
 .repeat-sign-start,
 .repeat-sign-end {
+  position: absolute;
+  top: 0;
   height: 100%;
   opacity: 0;
   visibility: hidden;
   transition: opacity 0.2s;
+  z-index: 10;
   cursor: pointer;
 
   &:hover {
@@ -16,10 +19,10 @@
   }
 }
 .repeat-sign-start {
-  margin-right: 5px;
+  left: 0;
 }
 .repeat-sign-end {
-  margin-left: 5px;
+  right: 0;
 }
 
 .active {

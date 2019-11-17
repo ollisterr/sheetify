@@ -20,7 +20,7 @@ const SavePopup = () => {
   }
 
   return (
-    <div className="print-output">
+    <div className='print-output'>
       <pre
         dangerouslySetInnerHTML={{
           __html: print.replace(/(?:\r\n|\r|\n)/g, "<br />")
@@ -31,10 +31,13 @@ const SavePopup = () => {
 };
 
 const SheetBody = () => {
-  const [{ sheetData }, dispatch] = useContext(SheetContext);
+  const [{ sheetData, timeSignature }, dispatch] = useContext(SheetContext);
 
   function addSection() {
-    sheetData.sections = [...sheetData.sections, { bars: [emptyBar()] }];
+    sheetData.sections = [
+      ...sheetData.sections,
+      { bars: [emptyBar(timeSignature[0])], chordsPerBar: timeSignature[0] }
+    ];
     dispatch({
       type: "setSheetData",
       newSheetData: sheetData
@@ -54,41 +57,42 @@ const SheetBody = () => {
   }
 
   function savePDF() {
-    html2canvas(document.body, { windowWidth: 1080, width: 1080 }).then(
-      function(canvas) {
-        // document.body.append(canvas);
+    html2canvas(document.body, {
+      windowWidth: 1080,
+      width: 1080
+    }).then(function(canvas) {
+      // document.body.append(canvas);
 
-        var title = sheetData.name ? sheetData.name : "Untitled song";
-        var imgData = canvas.toDataURL("image/jpeg", 2.0);
-        var image = document.createElement("img");
-        image.src = imgData;
-        var doc = new jsPDF("p", "mm", "a4");
-        doc.setProperties({
-          title: title,
-          subject: "Music sheet for " + title
-        });
-        var width = doc.internal.pageSize.getWidth();
+      var title = sheetData.name ? sheetData.name : "Untitled song";
+      var imgData = canvas.toDataURL("image/jpeg", 2.0);
+      var image = document.createElement("img");
+      image.src = imgData;
+      var doc = new jsPDF("p", "mm", "a4");
+      doc.setProperties({
+        title: title,
+        subject: "Music sheet for " + title
+      });
+      var width = doc.internal.pageSize.getWidth();
 
-        doc.addImage(imgData, "JPEG", 0, 0, width, image.height);
-        doc.save(title + ".pdf");
-      }
-    );
+      doc.addImage(imgData, "JPEG", 0, 0, width, image.height);
+      doc.save(title + ".pdf");
+    });
   }
 
   return (
-    <div className="sheetbody">
+    <div className='sheetbody'>
       {sheetData.sections.map((section, i) => (
-        <Section key={i} sectionID={i} />
+        <Section key={i} sectionID={i} section={section} />
       ))}
-      <div className="control-bar" data-html2canvas-ignore="true">
-        <div className="add-section" onClick={addSection}>
-          <FontAwesomeIcon icon={faPlus} className="add-section-icon" />
+      <div className='control-bar' data-html2canvas-ignore='true'>
+        <div className='add-section' onClick={addSection}>
+          <FontAwesomeIcon icon={faPlus} className='add-section-icon' />
           Add Section
         </div>
-        <div className="print" onClick={saveTxt}>
+        <div className='print' onClick={saveTxt}>
           Save .txt
         </div>
-        <div className="print" onClick={savePDF}>
+        <div className='print' onClick={savePDF}>
           Save .pdf
         </div>
       </div>
