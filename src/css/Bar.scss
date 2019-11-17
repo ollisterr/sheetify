@@ -2,8 +2,7 @@
 
 .bar {
   position: relative;
-  flex: 1 1 50%;
-  max-width: calc(50% + #{$barBorder});
+  flex: 1 1 calc(50% + #{$barBorder});
   margin-top: 4px;
   margin-left: -$barBorder;
   /*animation: slide-in 0.5s ease-out;*/
@@ -106,7 +105,7 @@
     .bar-block {
       position: relative;
       display: inline-block;
-      flex: 1 1 8rem;
+      flex: 1 1 auto;
       padding-left: $barBorder;
       border-width: 0px 3px;
       border-color: white;

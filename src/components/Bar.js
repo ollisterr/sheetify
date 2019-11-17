@@ -82,10 +82,10 @@ const Bar = ({ sectionID, barID }) => {
       className='bar'
       style={{
         maxWidth:
-          section.chordsPerBar === 2
+          section.chordsPerBar <= 2
             ? "25%"
             : section.chordsPerBar === 3
-              ? "33.4%"
+              ? (100 / 3).toString() + "%"
               : "50%"
       }}
     >
