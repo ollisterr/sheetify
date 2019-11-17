@@ -42,8 +42,9 @@ const Section = ({ sectionID }) => {
       e.target.value.length > 0 ? parseInt(e.target.value) : 1;
     section.bars = section.bars.map(bar => {
       const newBar = emptyBar(section.chordsPerBar);
-      for (let i = 0; i < newBar.length; i++) {
-        newBar[i] = bar.bar[i];
+      console.log(bar.bar);
+      for (let i = 0; i < newBar.bar.length; i++) {
+        newBar.bar[i] = bar.bar[i];
       }
       return newBar;
     });
