@@ -36,11 +36,11 @@
     justify-content: stretch;
     height: $barControlHeight;
     width: 100%;
+    overflow: hidden;
     transition: opacity 0.2s;
 
     @media (max-width: $small) {
       max-height: 0;
-      overflow: hidden;
     }
 
     > * {

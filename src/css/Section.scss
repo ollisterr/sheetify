@@ -30,12 +30,12 @@
     height: auto;
     margin-left: -$barBorder;
     font-weight: bold;
+    overflow: hidden;
 
     transition: max-width 0.2s;
 
     @media (max-width: $small) {
       max-height: calc(1.6rem + 8px);
-      overflow: hidden;
     }
 
     .section-tag {
