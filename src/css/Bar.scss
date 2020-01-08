@@ -2,21 +2,10 @@
 
 .bar {
   position: relative;
-  flex: 1 1 calc(50% + #{$barBorder});
   margin-top: 4px;
   margin-left: -$barBorder;
   /*animation: slide-in 0.5s ease-out;*/
   font-size: 2rem;
-
-  @media (max-width: $medium) {
-    &:nth-last-child(2) {
-      flex: 1 1 40%;
-    }
-  }
-  @media (max-width: $small) {
-    flex: 1 1 90%;
-    max-width: 100%;
-  }
 
   &:hover {
     .repeat-sign-start,
@@ -56,7 +45,7 @@
     .remove-bar {
       height: $barControlHeight;
       width: $barControlHeight !important;
-      max-width: none !important;
+      max-width: 0 !important;
       margin: 0;
       padding: 0;
       color: white;

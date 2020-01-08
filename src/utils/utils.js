@@ -1,3 +1,5 @@
+import { emptyBar } from "./state.js";
+
 export function longestChord(sheet) {
   return sheet.sections.reduce((sum, section) => {
     const barSums = section.bars.reduce((longest, bar) => {
@@ -80,4 +82,8 @@ export function stringifySheet(sheet, longestChord, widthLimit = MAX_WIDTH) {
     .map(section => stringifySection(section, longestChord, widthLimit))
     .join("\n");
   return (sheet.name ? sheet.name : "Untitled song") + "\n---\n" + output;
+}
+
+export function parseSheetData(data) {
+  return { sections: [{ bars: [emptyBar(4)] }] };
 }

@@ -16,6 +16,20 @@ const Section = ({ sectionID }) => {
     return sheetData.sections[sectionID];
   }, [sheetData.sections[sectionID]]);
 
+  const barsGrid = useMemo(() => {
+    if (window.innerWidth > 500) {
+      if (section.chordsPerBar <= 2) {
+        return `${100 / 4}% `.repeat(4);
+      } else if (section.chordsPerBar === 3) {
+        return `${100 / 3}% `.repeat(3);
+      } else {
+        return `${100 / 2}% `.repeat(2);
+      }
+    } else {
+      return "100%";
+    }
+  }, [section.chordsPerBar]);
+
   const sectionTags = ["A", "B", "C", "Bridge", "Intro", "Outro"];
 
   function update() {
@@ -23,7 +37,6 @@ const Section = ({ sectionID }) => {
   }
 
   function newBar() {
-    console.log(section.chordsPerBar);
     section.bars = [...section.bars, emptyBar(section.chordsPerBar)];
     update();
   }
@@ -42,7 +55,6 @@ const Section = ({ sectionID }) => {
       e.target.value.length > 0 ? parseInt(e.target.value) : 1;
     section.bars = section.bars.map(bar => {
       const newBar = emptyBar(section.chordsPerBar);
-      console.log(bar.bar);
       for (let i = 0; i < newBar.bar.length; i++) {
         newBar.bar[i] = bar.bar[i];
       }
@@ -75,7 +87,7 @@ const Section = ({ sectionID }) => {
 
   return (
     <div className='section'>
-      <div className='section-controls'>
+      <div className='section-controls' data-html2canvas-ignore='true'>
         <div className='section-tags'>
           {sectionTags.map((tag, i) => {
             const number = sheetData.sections.filter((section, index) => {
@@ -107,28 +119,46 @@ const Section = ({ sectionID }) => {
           />
         </div>
         <div className='section-config'>
-          <input
-            className='chords-per-bar'
-            type='number'
-            min='1'
-            value={section.chordsPerBar}
-            onChange={setChordsPerBar}
-          />
-          <div className='section-tag add-section' onClick={addSection}>
+          <div className='chords-per-bar'>
+            Chords per bar:
+            <input
+              className='chords-per-bar-input'
+              type='number'
+              min='1'
+              value={section.chordsPerBar}
+              onChange={setChordsPerBar}
+            />
+          </div>
+          <div className='add-section' onClick={addSection}>
             <FontAwesomeIcon icon={faPlusSquare} className='add-section-icon' />
           </div>
           {sheetData.sections.length > 1 && (
-            <div className='section-tag remove-section' onClick={removeSection}>
+            <div className='remove-section' onClick={removeSection}>
               <FontAwesomeIcon icon={faTrash} className='remove-section-icon' />
             </div>
           )}
         </div>
       </div>
-      {section.bars.map((bar, i) => {
-        return <Bar key={[sectionID, i]} sectionID={sectionID} barID={i} />;
-      })}
-      <div className='add-bar' data-html2canvas-ignore='true' onClick={newBar}>
-        <FontAwesomeIcon icon={faPlus} className='add-bar-icon' />
+      <div
+        className='bars'
+        style={{
+          gridTemplateColumns: barsGrid
+        }}
+      >
+        {section.bars.map((bar, i) => (
+          <div style={{ position: "relative" }}>
+            <Bar key={[sectionID, i]} sectionID={sectionID} barID={i} />
+            {i === section.bars.length - 1 && (
+              <div
+                className='add-bar'
+                data-html2canvas-ignore='true'
+                onClick={newBar}
+              >
+                <FontAwesomeIcon icon={faPlus} className='add-bar-icon' />
+              </div>
+            )}
+          </div>
+        ))}
       </div>
     </div>
   );

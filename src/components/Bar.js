@@ -2,12 +2,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus, faMinus } from "@fortawesome/free-solid-svg-icons";
 import React, { useContext, useMemo } from "react";
 import { SheetContext, emptyBar } from "../utils/state.js";
-import {
-  RepeatSignStart,
-  RepeatSignEnd,
-  RepeatSignStartRaster,
-  RepeatSignEndRaster
-} from "./RepeatSigns.js";
+import { RepeatSignStartRaster, RepeatSignEndRaster } from "./RepeatSigns.js";
 import "../css/Bar.scss";
 
 const Bar = ({ sectionID, barID }) => {
@@ -78,17 +73,7 @@ const Bar = ({ sectionID, barID }) => {
   }
 
   return (
-    <div
-      className='bar'
-      style={{
-        maxWidth:
-          section.chordsPerBar <= 2
-            ? "25%"
-            : section.chordsPerBar === 3
-              ? (100 / 3).toString() + "%"
-              : "50%"
-      }}
-    >
+    <div className='bar'>
       <div className='bar-controls'>
         <FontAwesomeIcon
           icon={faPlus}

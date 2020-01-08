@@ -2,15 +2,16 @@
 
 .section {
   position: relative;
-  display: flex;
-  flex-flow: row wrap;
+  display: grid;
+  grid-template-rows: auto auto;
   width: 100%;
   height: auto;
   margin-top: 30px;
   padding-left: $barBorder;
   color: lightgrey;
 
-  &:hover .section-tag {
+  &:hover .section-tag,
+  &:hover .section-config {
     opacity: 1 !important;
     visibility: visible !important;
   }
@@ -20,7 +21,7 @@
     flex: 1 1 auto;
     flex-flow: row wrap;
     justify-content: space-between;
-    width: 100%;
+    width: calc(100% + #{$barBorder});
     height: auto;
     margin-left: -$barBorder;
     font-weight: bold;
@@ -88,11 +89,27 @@
       }
     }
     .section-config {
-      display: flex;
+      display: grid;
+      grid-template-columns: 1fr auto auto;
       align-items: center;
       width: auto;
       height: 100%;
       flex-flow: row wrap;
+
+      opacity: 0;
+      visibility: hidden;
+      transition-property: color, background-color, opacity;
+      transition-duration: 0.3s;
+
+      .chords-per-bar {
+        display: flex;
+        flex-direction: row;
+
+        .chords-per-bar-input {
+          width: 4rem;
+          text-align: right;
+        }
+      }
 
       > .add-section,
       .remove-section {
@@ -114,29 +131,43 @@
     }
   }
 
-  .add-bar {
-    display: flex;
-    width: 0;
-    align-items: flex-end;
-    font-size: 1.5rem;
-    cursor: pointer;
+  .bars {
+    display: grid;
+    grid-template-rows: auto;
+    width: 100%;
 
-    @media (max-width: $medium) {
-      width: auto;
-    }
+    .add-bar {
+      position: absolute;
+      right: 0;
+      bottom: 0;
+      display: flex;
+      width: 0;
+      align-items: flex-end;
+      font-size: 1.5rem;
+      cursor: pointer;
 
-    .add-bar-icon {
-      width: 2.5rem !important;
-      height: 2.5rem;
-      color: white;
-      padding: 5px;
-      margin: 0 0 0.2rem 1rem;
-      border-radius: 100%;
-      background-color: lightgrey;
-      transition: 0.2s background-color;
+      @media (max-width: $medium) {
+        width: auto;
+      }
 
-      &:hover {
-        background-color: darkgrey;
+      .add-bar-icon {
+        width: 2.5rem !important;
+        height: 2.5rem;
+        color: white;
+        padding: 5px;
+        margin: 0 0 0.2rem 1rem;
+        border-radius: 100%;
+        background-color: lightgrey;
+        transition: 0.2s background-color;
+        @media (max-width: $medium) {
+          transform: translateX(43%);
+          margin-left: 0;
+          border: solid 2px white;
+        }
+
+        &:hover {
+          background-color: darkgrey;
+        }
       }
     }
   }
