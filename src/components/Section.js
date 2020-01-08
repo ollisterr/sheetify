@@ -88,45 +88,43 @@ const Section = ({ sectionID }) => {
   return (
     <div className='section'>
       <div className='section-controls' data-html2canvas-ignore='true'>
-        <div className='section-tags'>
-          {sectionTags.map((tag, i) => {
-            const number = sheetData.sections.filter((section, index) => {
-              return section.name === tag && index <= sectionID;
-            }).length;
-            return (
-              <div
-                key={i}
-                className={
-                  "section-tag " + (tag === section.name && "selected")
-                }
-                onClick={e => setSectionTag(tag)}
-              >
-                {tag}
-                {number > 1 && number}
-              </div>
-            );
-          })}
+        {sectionTags.map((tag, i) => {
+          const number = sheetData.sections.filter((section, index) => {
+            return section.name === tag && index <= sectionID;
+          }).length;
+          return (
+            <div
+              key={i}
+              className={"section-tag " + (tag === section.name && "selected")}
+              onClick={e => setSectionTag(tag)}
+            >
+              {tag}
+              {number > 1 && number}
+            </div>
+          );
+        })}
 
-          <input
-            className={
-              "section-tag " +
-              (!sectionTags.includes(section.name) &&
-                !!section.name &&
-                "selected")
-            }
-            placeholder='Section name'
-            onChange={setSectionTag}
-          />
-        </div>
+        <input
+          className={
+            "section-tag " +
+            (!sectionTags.includes(section.name) &&
+              !!section.name &&
+              "selected")
+          }
+          placeholder='Section name'
+          onChange={setSectionTag}
+          tabIndex='-1'
+        />
         <div className='section-config'>
           <div className='chords-per-bar'>
-            Chords per bar:
+            Chords:
             <input
               className='chords-per-bar-input'
               type='number'
               min='1'
               value={section.chordsPerBar}
               onChange={setChordsPerBar}
+              tabIndex='-1'
             />
           </div>
           <div className='add-section' onClick={addSection}>

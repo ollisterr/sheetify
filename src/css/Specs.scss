@@ -48,24 +48,26 @@
   font-size: 1rem;
 
   > * {
-    margin: 0 5%;
+    flex: 1 1 auto;
+    margin: 0 3%;
     color: grey;
     width: auto;
     display: inline-block;
+    text-align: center;
 
     input {
-      width: 3.5rem;
+      max-width: 2rem;
     }
   }
 }
 
 .tempo {
   text-align: right;
-  width: 2rem;
+  max-width: 3rem !important;
 }
 
 .time-signature-input {
-  width: 2rem;
+  max-width: 2rem;
   text-align: right;
   font-size: inherit;
   font-family: inherit;
@@ -74,7 +76,7 @@
 }
 
 select.time-signature-input {
-  width: 2rem;
+  max-width: 2rem;
   margin-left: 10px;
   text-align: right;
   background: transparent;

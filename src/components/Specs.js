@@ -38,14 +38,6 @@ const SheetSpecification = () => {
     });
   }
 
-  function setChordsPerBar(e) {
-    const value = e.target.value.length > 0 ? parseInt(e.target.value) : 0;
-    dispatch({
-      type: "setChordsPerBar",
-      newChordsPerBar: value
-    });
-  }
-
   return (
     <div className='container'>
       <p className='trademark'>
@@ -65,11 +57,13 @@ const SheetSpecification = () => {
             className='time-signature-input'
             value={timeSignature[0]}
             onChange={setTimeSignature}
+            tabIndex='-1'
           />{" "}
           /
           <select
             className='time-signature-input'
             onChange={setTimeSignatureBase}
+            tabIndex='-1'
           >
             <option value='4'>4</option>
             <option value='8'>8</option>
@@ -87,20 +81,13 @@ const SheetSpecification = () => {
             name='tempo'
             value={tempo}
             onChange={setTempo}
+            tabIndex='-1'
           />{" "}
           BPM
         </div>
-        <div>
-          Key: <input className='key' name='key' placeholder='C' />
-        </div>
-        <div>
-          <input
-            type='number'
-            min='1'
-            className='chords-per-bar'
-            value={chordsPerBar}
-            onChange={setChordsPerBar}
-          />
+        <div className='key'>
+          Key:{" "}
+          <input className='key' name='key' placeholder='C' tabIndex='-1' />
         </div>
       </div>
     </div>

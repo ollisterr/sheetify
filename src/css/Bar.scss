@@ -16,7 +16,6 @@
     .bar-controls {
       > * {
         opacity: 1;
-        visibility: visible;
       }
 
       .add-bar-inbetween,
@@ -24,6 +23,9 @@
         margin-right: 10px;
         max-width: $barControlHeight !important;
         padding: 3px;
+      }
+      @media (max-width: $small) {
+        max-height: $barControlHeight;
       }
     }
   }
@@ -36,9 +38,13 @@
     width: 100%;
     transition: opacity 0.2s;
 
+    @media (max-width: $small) {
+      max-height: 0;
+      overflow: hidden;
+    }
+
     > * {
       opacity: 0;
-      visibility: hidden;
     }
 
     .add-bar-inbetween,
@@ -54,7 +60,7 @@
       border-radius: 100%;
       background: lightgrey;
       cursor: pointer;
-      transition: max-width 0.2s, margin 0.2s, padding 0.2s, opacity 0.5s 0.1s;
+      transition: max-width 0.2s, margin 0.2s, padding 0.2s, opacity 0.3s 0.1s;
 
       &:hover {
         background-color: grey;
@@ -75,7 +81,6 @@
 
     .defined-goal {
       opacity: 1;
-      visibility: visible;
     }
   }
 

@@ -74,7 +74,12 @@ const Bar = ({ sectionID, barID }) => {
 
   return (
     <div className='bar'>
-      <div className='bar-controls'>
+      <div
+        className='bar-controls'
+        style={{
+          maxHeight: bar.goal ? "1rem" : undefined
+        }}
+      >
         <FontAwesomeIcon
           icon={faPlus}
           className='add-bar-inbetween'

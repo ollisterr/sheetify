@@ -13,41 +13,59 @@
   &:hover .section-tag,
   &:hover .section-config {
     opacity: 1 !important;
-    visibility: visible !important;
+  }
+
+  @media (max-width: $small) {
+    &:hover .section-controls {
+      max-height: 5rem;
+    }
   }
 
   .section-controls {
     display: flex;
     flex: 1 1 auto;
     flex-flow: row wrap;
-    justify-content: space-between;
+    align-items: center;
     width: calc(100% + #{$barBorder});
     height: auto;
     margin-left: -$barBorder;
     font-weight: bold;
+
+    transition: max-width 0.2s;
+
+    @media (max-width: $small) {
+      max-height: calc(1.6rem + 8px);
+      overflow: hidden;
+    }
 
     .section-tag {
       box-sizing: content-box;
       display: block;
       width: auto;
       height: 1.2rem;
-      margin-right: 6px;
-      padding: 5px 10px;
+      margin-right: 0.3rem;
+      padding: 0.3rem 0.6rem;
       border: solid 2px lightgrey;
       border-radius: 0;
+      font-size: 1rem;
       color: lightgrey;
       font-weight: bold;
 
       opacity: 0;
-      visibility: hidden;
       transition-property: color, background-color, opacity;
-      transition-duration: 0.3s;
+      transition-duration: 0.2s;
       cursor: pointer;
 
-      @media (min-width: $large) {
-        &:hover {
+      &::placeholder {
+        color: lightgrey;
+      }
+
+      &:hover {
+        color: white;
+        background-color: lightgrey;
+
+        &::placeholder {
           color: white;
-          background-color: lightgrey;
         }
       }
 
@@ -56,50 +74,30 @@
       }
     }
 
-    .section-tags {
-      display: flex;
-      flex-flow: row wrap;
-      margin-right: 5px;
+    .selected {
+      color: darkgrey;
+      border-color: darkgrey;
+      order: -1;
+      opacity: 1;
 
-      > input {
-        color: lightgrey;
-        &::placeholder {
-          color: lightgrey;
-        }
+      @media (min-width: $large) {
         &:hover {
-          &::placeholder {
-            color: white;
-          }
-        }
-      }
-
-      .selected {
-        color: darkgrey;
-        border-color: darkgrey;
-        order: -1;
-        opacity: 1;
-        visibility: visible;
-
-        @media (min-width: $large) {
-          &:hover {
-            color: white;
-            background-color: darkgrey;
-          }
+          color: white;
+          background-color: darkgrey;
         }
       }
     }
+
     .section-config {
       display: grid;
       grid-template-columns: 1fr auto auto;
-      align-items: center;
       width: auto;
       height: 100%;
-      flex-flow: row wrap;
+      margin-left: auto;
 
       opacity: 0;
-      visibility: hidden;
       transition-property: color, background-color, opacity;
-      transition-duration: 0.3s;
+      transition-duration: 0.2s;
 
       .chords-per-bar {
         display: flex;
