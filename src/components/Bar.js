@@ -101,6 +101,7 @@ const Bar = ({ sectionID, barID }) => {
           onChange={setGoalName}
           placeholder='goal'
           tabIndex='-1'
+          data-html2canvas-ignore={bar.goal ? "true" : "false"}
         />
       </div>
       <div className='bar-content'>
