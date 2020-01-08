@@ -1,4 +1,4 @@
-import React, { useContext, useMemo, useEffect } from "react";
+import React, { useContext, useMemo } from "react";
 import { SheetContext, emptyBar } from "../utils/state.js";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -12,9 +12,11 @@ import Bar from "./Bar.js";
 const Section = ({ sectionID }) => {
   const [{ sheetData, timeSignature }, dispatch] = useContext(SheetContext);
 
+  // Allow statical check of bar data change
+  const sectionData = sheetData.sections[sectionID];
   const section = useMemo(() => {
     return sheetData.sections[sectionID];
-  }, [sheetData.sections[sectionID]]);
+  }, [sectionData]);
 
   const barsGrid = useMemo(() => {
     if (window.innerWidth > 500) {
@@ -144,8 +146,8 @@ const Section = ({ sectionID }) => {
         }}
       >
         {section.bars.map((bar, i) => (
-          <div style={{ position: "relative" }}>
-            <Bar key={[sectionID, i]} sectionID={sectionID} barID={i} />
+          <div key={[sectionID, i]} style={{ position: "relative" }}>
+            <Bar sectionID={sectionID} barID={i} />
             {i === section.bars.length - 1 && (
               <div
                 className='add-bar'

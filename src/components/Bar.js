@@ -7,12 +7,15 @@ import "../css/Bar.scss";
 
 const Bar = ({ sectionID, barID }) => {
   const [{ sheetData }, dispatch] = useContext(SheetContext);
+
+  // Allow statical check of section data change
+  const barData = sheetData.sections[sectionID].bars[barID];
   const { section, bar } = useMemo(() => {
     return {
       section: sheetData.sections[sectionID],
       bar: sheetData.sections[sectionID].bars[barID]
     };
-  }, [sheetData.sections[sectionID].bars[barID]]);
+  }, [sectionID, barID, barData]);
 
   function update() {
     dispatch({ type: "setSheetData", newSheetData: sheetData });

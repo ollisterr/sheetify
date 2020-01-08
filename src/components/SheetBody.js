@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useContext } from "react";
 import { SheetContext, emptyBar } from "../utils/state.js";
 import Section from "./Section.js";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -8,27 +8,6 @@ import { longestChord, stringifySheet } from "../utils/utils";
 import FileSaver from "file-saver";
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
-
-const SavePopup = () => {
-  const [{ sheetData }, dispatch] = useContext(SheetContext);
-  const [print, setPrint] = useState("No print");
-
-  function printAll() {
-    const longest = longestChord(sheetData);
-    const output = stringifySheet(sheetData, longest);
-    setPrint(output);
-  }
-
-  return (
-    <div className='print-output'>
-      <pre
-        dangerouslySetInnerHTML={{
-          __html: print.replace(/(?:\r\n|\r|\n)/g, "<br />")
-        }}
-      />
-    </div>
-  );
-};
 
 const SheetBody = () => {
   const [{ sheetData, timeSignature }, dispatch] = useContext(SheetContext);

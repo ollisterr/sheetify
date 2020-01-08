@@ -4,10 +4,9 @@ import "../css/Specs.scss";
 import logo from "../assets/sheetify-logo.png";
 
 const SheetSpecification = () => {
-  const [
-    { timeSignature, sheetData, chordsPerBar, tempo },
-    dispatch
-  ] = useContext(SheetContext);
+  const [{ timeSignature, sheetData, tempo }, dispatch] = useContext(
+    SheetContext
+  );
 
   function setSheetTitle(e) {
     const title = e.target.value;
