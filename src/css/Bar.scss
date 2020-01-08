@@ -16,6 +16,7 @@
     .bar-controls {
       > * {
         opacity: 1;
+        visibility: visible;
       }
 
       .add-bar-inbetween,
@@ -75,12 +76,14 @@
       border: solid 2px lightgrey;
       border-width: 2px 0 0 2px;
       border-radius: 0;
+      visibility: hidden;
       font-size: calc(#{$barControlHeight} - 1px);
       transition: opacity 0.2s;
     }
 
     .defined-goal {
       opacity: 1;
+      visibility: visible;
     }
   }
 
