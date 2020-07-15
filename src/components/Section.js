@@ -113,14 +113,17 @@ const Section = ({ sectionID }) => {
           className={
             "section-tag " +
             (!sectionTags.includes(section.name) &&
-              !!section.name &&
-              "selected")
+              section.name ?
+              "selected" : "")
           }
+          {...!sectionTags.includes(section.name) &&
+            section.name && {"data-html2canvas-ignore": true}}
           placeholder='Section name'
           onChange={setSectionTag}
           tabIndex='-1'
+          data-html2canvas-ignore="true"
         />
-        <div className='section-config'>
+        <div className='section-config' data-html2canvas-ignore="true">
           <div className='chords-per-bar'>
             Chords:
             <input
