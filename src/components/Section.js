@@ -53,12 +53,13 @@ const Section = ({ sectionID }) => {
   }
 
   function setChordsPerBar(e) {
-    section.chordsPerBar =
-      e.target.value.length > 0 ? parseInt(e.target.value) : 1;
+    section.chordsPerBar = parseInt(e.target.value) || 1;
     section.bars = section.bars.map(bar => {
       const newBar = emptyBar(section.chordsPerBar);
       for (let i = 0; i < newBar.bar.length; i++) {
-        newBar.bar[i] = bar.bar[i];
+        if (bar.bar[i]) {
+          newBar.bar[i] = bar.bar[i];
+        }
       }
       return newBar;
     });
@@ -78,12 +79,12 @@ const Section = ({ sectionID }) => {
 
   function removeSection() {
     if (sheetData.sections.length > 1) {
-      sheetData.sections = sheetData.sections
+      const updated = sheetData.sections
         .slice(0, sectionID)
         .concat(
           sheetData.sections.slice(sectionID + 1, sheetData.sections.length)
         );
-      update();
+      update(updated);
     }
   }
 

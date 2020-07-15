@@ -9,16 +9,14 @@ export const ComposePage = ({ params }) => {
 
   useEffect(() => {
     if (!!params && Object.keys(this.params) > 0) {
-      const title = params.title ? params.title : "";
-      const timeSignature = params.time_signature
-        ? params.time_signature
-        : [4, 4];
+      const title = params.title || "";
+      const timeSignature = params.time_signature || [4, 4];
       const sheetData = params.sheet_data
         ? parseSheetData(params.sheet_data)
         : {
           sections: [{ bars: [emptyBar(chordsPerBar)] }]
         };
-      const chordsPerBar = params.chords_per_bar ? params.chords_per_bar : 4;
+      const chordsPerBar = params.chords_per_bar || 4;
 
       dispatch({
         type: "initialize",
