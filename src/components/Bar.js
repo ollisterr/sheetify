@@ -1,7 +1,7 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus, faMinus } from "@fortawesome/free-solid-svg-icons";
 import React, { useContext, useMemo } from "react";
-import { SheetContext, emptyBar } from "../utils/state.js";
+import { SheetContext, emptyBar } from "../store.js";
 import { RepeatSignStartRaster, RepeatSignEndRaster } from "./RepeatSigns.js";
 import "../css/Bar.scss";
 
@@ -77,12 +77,7 @@ const Bar = ({ sectionID, barID }) => {
 
   return (
     <div className='bar'>
-      <div
-        className='bar-controls'
-        style={{
-          maxHeight: bar.goal ? "1rem" : undefined
-        }}
-      >
+      <div className='bar-controls'>
         <FontAwesomeIcon
           icon={faPlus}
           className='add-bar-inbetween'
@@ -105,22 +100,20 @@ const Bar = ({ sectionID, barID }) => {
       </div>
       <div className='bar-content'>
         <RepeatSignStartRaster repeat={bar.repeat} />
-        {bar.bar.map((chord, i, array) => {
-          return (
-            <input
-              value={chord}
-              key={(sectionID, barID, i)}
-              className='bar-block'
-              onChange={e => updateBar(i, e.target.value)}
-              autoFocus={i === 0}
-              onKeyDown={
-                i === array.length - 1 && barID === section.bars.length - 1
-                  ? addBarOnTab
-                  : null
-              }
-            />
-          );
-        })}
+        {bar.bar.map((chord, i, array) => (
+          <input
+            value={chord}
+            key={(sectionID, barID, i)}
+            className='bar-block'
+            onChange={e => updateBar(i, e.target.value)}
+            autoFocus={i === 0}
+            onKeyDown={
+              i === array.length - 1 && barID === section.bars.length - 1
+                ? addBarOnTab
+                : null
+            }
+          />
+        ))}
         <RepeatSignEndRaster repeat={bar.repeat} />
       </div>
     </div>

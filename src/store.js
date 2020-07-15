@@ -37,11 +37,10 @@ export const reducer = (state, action) => {
   }
 };
 
-export function emptyBar(chordsPerBar) {
+export function emptyBar() {
   const obj = {};
-  obj.bar = new Array(chordsPerBar).fill("");
+  obj.bar = ["", "", "", ""];
   obj.repeat = [false, false];
-  obj.goal = "";
   return obj;
 }
 

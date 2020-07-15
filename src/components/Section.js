@@ -1,5 +1,5 @@
 import React, { useContext, useMemo } from "react";
-import { SheetContext, emptyBar } from "../utils/state.js";
+import { SheetContext, emptyBar } from "../store.js";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faPlus,
@@ -89,16 +89,18 @@ const Section = ({ sectionID }) => {
 
   return (
     <div className='section'>
-      <div className='section-controls' data-html2canvas-ignore='true'>
+      <div className='section-controls'>
         {sectionTags.map((tag, i) => {
-          const number = sheetData.sections.filter((section, index) => {
-            return section.name === tag && index <= sectionID;
-          }).length;
+          const number = sheetData.sections.filter((section, index) => 
+            section.name === tag && index <= sectionID
+          ).length;
+
           return (
             <div
               key={i}
-              className={"section-tag " + (tag === section.name && "selected")}
-              onClick={e => setSectionTag(tag)}
+              className={"section-tag " + (tag === section.name ? "selected" : "")}
+              {...tag !== section.name && {"data-html2canvas-ignore": true}}
+              onClick={() => setSectionTag(tag)}
             >
               {tag}
               {number > 1 && number}

@@ -1,8 +1,8 @@
 import React, { useContext, useEffect } from "react";
-import { SheetContext, emptyBar } from "../utils/state.js";
+import { SheetContext, emptyBar } from "../store.js";
 import SheetBody from "./SheetBody";
 import SheetSpecification from "./Specs";
-import { parseSheetData } from "../utils/utils.js";
+import { parseSheetData } from "../utils/txtUtils.js";
 
 export const ComposePage = ({ params }) => {
   const [{ chordsPerBar }, dispatch] = useContext(SheetContext);
@@ -33,10 +33,10 @@ export const ComposePage = ({ params }) => {
   }, [params]);
 
   return (
-    <div className='compose-page'>
+    <>
       <SheetSpecification />
       <SheetBody />
-    </div>
+    </>
   );
 };
 

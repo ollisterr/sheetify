@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import { SheetContext } from "../utils/state.js";
+import { SheetContext } from "../store.js";
 import "../css/Specs.scss";
 import logo from "../assets/sheetify-logo.png";
 

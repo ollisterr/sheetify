@@ -2,6 +2,10 @@
   margin: 20px 0;
 }
 
+#logo {
+  width: 70px;
+}
+
 .settings {
   position: fixed;
   font-size: 2rem;
@@ -21,14 +25,11 @@
   font-size: 0.8rem;
   text-align: center;
 
-  > .logo {
+  > img {
     display: inline-block;
-    height: 1rem;
-    padding: 2px;
+    width: 80px;
     margin-left: 10px;
-    margin-top: -3px;
     vertical-align: middle;
-    object-fit: contain;
   }
 }
 
