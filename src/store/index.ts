@@ -1,40 +1,31 @@
-import create from "zustand";
+import { observable } from "mobx";
 
 import { TimeSignature } from "../types";
 import { SectionModule } from "./SectionModule";
 
-type Store = {
-  title: string,
-  setTitle: (title: string) => void,
-  timeSignature: TimeSignature,
-  setTimeSignature: (signature: TimeSignature) => void,
-  tempo: number,
-  setTempo: (tempo: number) => void,
-  sheetData: SectionModule[],
-  addSection: (index?: number) => void,
-  removeSection: (index: number) => void
-}
 
-const useStore = create<Store>((set, get) => ({
+export const sheet = observable({
   title: "",
-  setTitle: (title) => set({ title }),
+  setTitle(title: string) { this.title = title; },
 
   timeSignature: [4, 4],
-  setTimeSignature: (timeSignature) => set({ timeSignature }),
+  setTimeSignature(timeSignature: TimeSignature) {
+    this.timeSignature = timeSignature;
+  },
 
   tempo: 120,
-  setTempo: (tempo) => set({ tempo }),
+  setTempo(tempo: number) { this.tempo = tempo; },
 
-  sheetData: [new SectionModule()],
-  addSection: (index) => set(
-    {
-      sheetData: index ?
-        // eslint-disable-next-line max-len
-        [...get().sheetData.slice(0, index), new SectionModule(), ...get().sheetData.slice(0, index)]
-        : [...get().sheetData, new SectionModule()]
-    }),
-  removeSection: (index) =>
-    set({ sheetData: get().sheetData.filter((_, i) => i === index) })
-}));
+  sections: [new SectionModule()],
+  addSection(index?: number) {
+    this.sections = index ?
+      // eslint-disable-next-line max-len
+      [...this.sections.slice(0, index), new SectionModule(), ...this.sections.slice(0, index)]
+      : [...this.sections, new SectionModule()];
+  },
+  removeSection(index: number) {
+    this.sections = this.sections.filter((_, i) => i !== index);
+  }
+});
 
-export default useStore;
+export type Sheet = typeof sheet;

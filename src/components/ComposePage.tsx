@@ -6,6 +6,7 @@ export const ComposePage: React.FC = () => {
   return (
     <>
       <SheetSpecification />
+      
       <SheetBody />
     </>
   );

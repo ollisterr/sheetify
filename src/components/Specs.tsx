@@ -1,32 +1,23 @@
 import React from "react";
 import "../css/Specs.scss";
 import logo from "../assets/sheetify-logo.png";
-import useStore from "../store";
+import { sheet } from "../store";
+import { observer } from "mobx-react-lite";
 
-const SheetSpecification: React.FC = () => {
-  const { 
-    setTitle, 
-    timeSignature, 
-    setTimeSignature, 
-    tempo, 
-    setTempo 
-  } = useStore(
-    state => state
-  );
-
+const SheetSpecification: React.FC = observer(() => {
   function setTimeSignatureBase(e: React.ChangeEvent<HTMLSelectElement>) {
     const value = e.target.value.length > 0 ? parseInt(e.target.value) : 1;
-    setTimeSignature([timeSignature[0], value]);
+    sheet.setTimeSignature([sheet.timeSignature[0], value]);
   }
 
   function setTimeSignatureBars(e: React.ChangeEvent<HTMLInputElement>) {
     const value = e.target.value.length > 0 ? parseInt(e.target.value) : 1;
-    setTimeSignature([value, timeSignature[1]]);
+    sheet.setTimeSignature([value, sheet.timeSignature[1]]);
   }
 
   function handleTempoChange(e: React.ChangeEvent<HTMLInputElement>) {
     const value = e.target.value.length > 0 ? parseInt(e.target.value) : 120;
-    setTempo(value);
+    sheet.setTempo(value);
   }
 
   return (
@@ -39,7 +30,7 @@ const SheetSpecification: React.FC = () => {
         className='title'
         name='title'
         placeholder='Sheet title'
-        onChange={(e) => setTitle(e.target.value)}
+        onChange={(e) => sheet.setTitle(e.target.value)}
       />
 
       <div className='basic-info'>
@@ -48,7 +39,7 @@ const SheetSpecification: React.FC = () => {
             type='number'
             min='2'
             className='time-signature-input'
-            value={timeSignature[0]}
+            value={sheet.timeSignature[0]}
             onChange={setTimeSignatureBars}
             tabIndex={-1}
           />{" "}
@@ -73,7 +64,7 @@ const SheetSpecification: React.FC = () => {
             type='number'
             min='0'
             name='tempo'
-            value={tempo}
+            value={sheet.tempo}
             onChange={handleTempoChange}
             tabIndex={-1}
           />{" "}
@@ -87,6 +78,6 @@ const SheetSpecification: React.FC = () => {
       </div>
     </div>
   );
-};
+});
 
 export default SheetSpecification;

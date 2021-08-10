@@ -9,16 +9,23 @@ import { observer } from "mobx-react-lite";
 
 import "../css/Section.scss";
 import Bar from "./Bar";
-import useStore from "../store";
 import { SectionModule } from "../store/SectionModule";
 
 const sectionTags = ["A", "B", "C", "Bridge", "Intro", "Outro"];
 
-const Section = observer(({ section }: { section: SectionModule }) => {
-  const sheetData = useStore(state => state.sheetData);
+interface Section {
+  section: SectionModule;
+  sections: SectionModule[];
+  addSection: () => void;
+  removeSection: () => void;
+}
 
-  console.log(section.bars);
-
+const Section = observer(({ 
+  section, 
+  sections,
+  addSection,
+  removeSection 
+}: Section) => {
   const barsGrid = useMemo(() => {
     if (window.innerWidth > 500) {
       if (section.chordsPerBar <= 2) {
@@ -37,7 +44,7 @@ const Section = observer(({ section }: { section: SectionModule }) => {
     <div className='section'>
       <div className='section-controls'>
         {sectionTags.map((tag, i) => {
-          const number = sheetData.filter((section, index) => 
+          const number = sections.filter((section, index) => 
             section.name === tag && index <= i
           ).length;
 
@@ -63,7 +70,7 @@ const Section = observer(({ section }: { section: SectionModule }) => {
               "selected" : "")
           }
           {...!sectionTags.includes(section.name ?? "") &&
-            name && {"data-html2canvas-ignore": true}}
+            section.name && { "data-html2canvas-ignore": true }}
           placeholder='Section name'
           onChange={(e) => section.setName(e.target.value)}
           tabIndex={-1}
@@ -84,12 +91,12 @@ const Section = observer(({ section }: { section: SectionModule }) => {
             />
           </div>
 
-          <div className='add-section'>
+          <div className='add-section' onClick={addSection}>
             <FontAwesomeIcon icon={faPlusSquare} className='add-section-icon' />
           </div>
 
-          {sheetData.length > 1 && (
-            <div className='remove-section'>
+          {sections.length > 1 && (
+            <div className='remove-section' onClick={removeSection}>
               <FontAwesomeIcon icon={faTrash} className='remove-section-icon' />
             </div>
           )}
@@ -109,9 +116,10 @@ const Section = observer(({ section }: { section: SectionModule }) => {
               // Make copies of the functions 
               // for them to remain observable in the parent
               addBar={() => section.addBar(i)} 
-              deleteBar={(sheetData.length > 1 || section.bars.length > 1) 
+              deleteBar={(sections.length > 1 || section.bars.length > 1) 
                 ? (() => section.deleteBar(i)) : undefined} 
-              isLastBar={i === section.bars.length - 1} 
+              // eslint-disable-next-line max-len
+              addBarAfter={i === section.bars.length - 1 ? (() => section.addBar()) : undefined} 
             />
 
             {i === section.bars.length - 1 && (

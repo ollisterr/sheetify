@@ -11,14 +11,14 @@ interface Bar {
   bar: BarModule,
   addBar: () => void;
   deleteBar?: () => void;
-  isLastBar: boolean;
+  addBarAfter?: () => void;
 }
 
 const Bar: React.FC<Bar> = observer(({ 
   bar, 
   addBar, 
   deleteBar,
-  isLastBar = false
+  addBarAfter
 }) => {
   function updateBar(index: number, value: string) {
     const chord = value
@@ -32,9 +32,9 @@ const Bar: React.FC<Bar> = observer(({
   }
 
   function addBarOnTab(e: React.KeyboardEvent<HTMLInputElement>) {
-    if (e.key === "Tab") {
+    if (e.key === "Tab" && addBarAfter) {
       e.preventDefault();
-      addBar();
+      addBarAfter();
     }
   }
 
@@ -74,7 +74,7 @@ const Bar: React.FC<Bar> = observer(({
             onChange={e => updateBar(i, e.target.value)}
             autoFocus={i === 0}
             onKeyDown={
-              i === array.length - 1 && isLastBar
+              i === array.length - 1 && addBarAfter
                 ? addBarOnTab
                 : undefined
             }
