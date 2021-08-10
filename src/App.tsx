@@ -1,11 +1,16 @@
 import React from "react";
-import "./css/App.scss";
+import { ThemeProvider } from "styled-components";
+
+import "./index.css";
 import ComposePage from "./pages/ComposePage";
+import theme from "./styles/theme";
 
 const App: React.FC = () => (
-  <div id='App'>
-    <ComposePage />
-  </div>
+  <ThemeProvider theme={theme}>
+    <div id='App'>
+      <ComposePage />
+    </div>
+  </ThemeProvider>
 );
 
 export default App;

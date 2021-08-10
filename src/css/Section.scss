@@ -148,6 +148,10 @@
         width: auto;
       }
 
+      @media print {
+        visibility: hidden;
+      }
+
       .add-bar-icon {
         width: 2.5rem !important;
         height: 2.5rem;

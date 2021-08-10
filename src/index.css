@@ -1,4 +1,3 @@
-@import "variables";
 @import url("https://fonts.googleapis.com/css?family=Gaegu:400,700");
 
 *,
@@ -26,6 +25,7 @@ select,
 input,
 button {
   outline: none;
+  border: none;
 }
 
 input {

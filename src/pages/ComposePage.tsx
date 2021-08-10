@@ -1,6 +1,7 @@
 import { observer } from "mobx-react-lite";
 import React, { useRef } from "react";
 import { useReactToPrint } from "react-to-print";
+import styled from "styled-components";
 
 import ControlBar from "../components/ControlBar";
 import SheetBody from "../components/SheetBody";
@@ -16,16 +17,22 @@ export const ComposePage: React.FC = observer(() => {
   });
 
   return (
-    <>
-      <div ref={printRef}>
+    <main>
+      <SheetPaper ref={printRef}>
         <SheetSpecification />
 
         <SheetBody />
-      </div>
+      </SheetPaper>
 
       <ControlBar printPDF={printPDF} />
-    </>
+    </main>
   );
 });
+
+const SheetPaper = styled.section`
+  @media print {
+    padding: 1rem 2rem;
+  }
+`;
 
 export default ComposePage;
