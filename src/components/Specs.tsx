@@ -1,40 +1,32 @@
-import React, { useContext } from "react";
-import { SheetContext } from "../store.js";
+import React from "react";
 import "../css/Specs.scss";
 import logo from "../assets/sheetify-logo.png";
+import useStore from "../store";
 
-const SheetSpecification = () => {
-  const [{ timeSignature, sheetData, tempo }, dispatch] = useContext(
-    SheetContext
+const SheetSpecification: React.FC = () => {
+  const { 
+    setTitle, 
+    timeSignature, 
+    setTimeSignature, 
+    tempo, 
+    setTempo 
+  } = useStore(
+    state => state
   );
 
-  function setSheetTitle(e) {
-    const title = e.target.value;
-    sheetData["name"] = title;
-    dispatch({ type: "setSheetData", newSheetData: sheetData });
+  function setTimeSignatureBase(e: React.ChangeEvent<HTMLSelectElement>) {
+    const value = e.target.value.length > 0 ? parseInt(e.target.value) : 1;
+    setTimeSignature([timeSignature[0], value]);
   }
 
-  function setTimeSignatureBase(e) {
+  function setTimeSignatureBars(e: React.ChangeEvent<HTMLInputElement>) {
     const value = e.target.value.length > 0 ? parseInt(e.target.value) : 1;
-    dispatch({
-      type: "setTimeSignature",
-      newTimeSignature: [timeSignature[0], value]
-    });
-  }
-  function setTimeSignature(e) {
-    const value = e.target.value.length > 0 ? parseInt(e.target.value) : 1;
-    dispatch({
-      type: "setTimeSignature",
-      newTimeSignature: [value, timeSignature[1]]
-    });
+    setTimeSignature([value, timeSignature[1]]);
   }
 
-  function setTempo(e) {
-    const value = e.target.value.length > 0 ? parseInt(e.target.value) : 20;
-    dispatch({
-      type: "setTempo",
-      newTempo: value
-    });
+  function handleTempoChange(e: React.ChangeEvent<HTMLInputElement>) {
+    const value = e.target.value.length > 0 ? parseInt(e.target.value) : 120;
+    setTempo(value);
   }
 
   return (
@@ -42,12 +34,14 @@ const SheetSpecification = () => {
       <p className='trademark'>
         Made with <img className='logo' alt='Logo' src={logo} />
       </p>
+
       <input
         className='title'
         name='title'
         placeholder='Sheet title'
-        onChange={setSheetTitle}
+        onChange={(e) => setTitle(e.target.value)}
       />
+
       <div className='basic-info'>
         <div>
           <input
@@ -55,14 +49,14 @@ const SheetSpecification = () => {
             min='2'
             className='time-signature-input'
             value={timeSignature[0]}
-            onChange={setTimeSignature}
-            tabIndex='-1'
+            onChange={setTimeSignatureBars}
+            tabIndex={-1}
           />{" "}
           /
           <select
             className='time-signature-input'
             onChange={setTimeSignatureBase}
-            tabIndex='-1'
+            tabIndex={-1}
           >
             <option value='4'>4</option>
             <option value='8'>8</option>
@@ -71,6 +65,7 @@ const SheetSpecification = () => {
             <option value='64'>64</option>
           </select>
         </div>
+
         <div>
           Tempo:{" "}
           <input
@@ -79,14 +74,15 @@ const SheetSpecification = () => {
             min='0'
             name='tempo'
             value={tempo}
-            onChange={setTempo}
-            tabIndex='-1'
+            onChange={handleTempoChange}
+            tabIndex={-1}
           />{" "}
           BPM
         </div>
+
         <div className='key'>
           Key:{" "}
-          <input className='key' name='key' placeholder='C' tabIndex='-1' />
+          <input className='key' name='key' placeholder='C' tabIndex={-1} />
         </div>
       </div>
     </div>

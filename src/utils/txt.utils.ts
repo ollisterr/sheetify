@@ -1,7 +1,10 @@
-import { emptyBar } from "./state.js";
+import { SheetType } from "../types/index";
+import FileSaver from "file-saver";
+import { BarModule } from "../store/BarModule";
+import { SectionModule } from "../store/SectionModule";
 
-export function longestChord(sheet) {
-  return sheet.sections.reduce((sum, section) => {
+export function longestChord(sheet: SheetType): number {
+  return sheet.reduce((sum, section) => {
     const barSums = section.bars.reduce((longest, bar) => {
       const longestBar = bar.bar.reduce((longestInBar, chord) => {
         if (!!chord && chord.length > longestInBar) {
@@ -16,8 +19,8 @@ export function longestChord(sheet) {
   }, 0);
 }
 
-export function longestInSection(section) {
-  return section.bars.reduce((longest, bar) => {
+export function longestInSection(section: SectionModule): number {
+  return section.bars.reduce((longest: number, bar: BarModule) => {
     const longestBar = bar.bar.reduce((longestInBar, chord) => {
       if (!!chord && chord.length > longestInBar) {
         return chord.length;
@@ -31,11 +34,15 @@ export function longestInSection(section) {
 
 const MAX_WIDTH = 70;
 
-export function stringifyBar(bar, longestChord, widthLimit = MAX_WIDTH) {
+export function stringifyBar(
+  bar: BarModule,
+  longestChord: number,
+  widthLimit = MAX_WIDTH
+): string {
   const barStr =
     (bar.repeat[0] ? ":" : " ") +
     bar.bar
-      .map(chord =>
+      .map((chord: string) =>
         chord
           ? chord
             .split("/")
@@ -53,16 +60,16 @@ export function stringifyBar(bar, longestChord, widthLimit = MAX_WIDTH) {
 }
 
 export function stringifySection(
-  section,
-  longestChord,
+  section: SectionModule,
+  longestChord: number,
   widthLimit = MAX_WIDTH
-) {
+): string {
   let length = 4;
   const sectionStr =
     (section.name ? `[${section.name}]\n` : "") +
     "|" +
     section.bars
-      .map(bar => {
+      .map((bar: BarModule) => {
         const result = stringifyBar(bar, longestChord, widthLimit);
         length += result.length;
         if (length > widthLimit) {
@@ -77,13 +84,26 @@ export function stringifySection(
   return sectionStr;
 }
 
-export function stringifySheet(sheet, longestChord, widthLimit = MAX_WIDTH) {
-  const output = sheet.sections
+export function stringifySheet(
+  sheet: SheetType,
+  longestChord: number,
+  widthLimit = MAX_WIDTH
+): string {
+  const output = sheet
     .map(section => stringifySection(section, longestChord, widthLimit))
     .join("\n");
-  return (sheet.name ? sheet.name : "Untitled song") + "\n---\n" + output;
+  return ("Untitled song") + "\n---\n" + output;
 }
 
-export function parseSheetData(data) {
-  return { sections: [{ bars: [emptyBar(4)] }] };
+export function saveTxt(sheetData: SheetType): void {
+  const longest = longestChord(sheetData);
+  const output = stringifySheet(sheetData, longest);
+  const blob = new Blob([output], {
+    type: "text/plain;charset=utf-8"
+  });
+
+  FileSaver.saveAs(
+    blob,
+    "song-sheet.txt"
+  );
 }
