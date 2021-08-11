@@ -1,5 +1,6 @@
 import React, { useMemo } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import styled from "styled-components";
 import {
   faPlus,
   faTrash,
@@ -10,6 +11,7 @@ import { observer } from "mobx-react-lite";
 import "../css/Section.scss";
 import Bar from "./Bar";
 import { SectionModule } from "../store/SectionModule";
+import { device } from "../utils/constants";
 
 const sectionTags = ["A", "B", "C", "Bridge", "Intro", "Outro"];
 
@@ -26,20 +28,6 @@ const Section = observer(({
   addSection,
   removeSection 
 }: Section) => {
-  const barsGrid = useMemo(() => {
-    if (window.innerWidth > 500) {
-      if (section.chordsPerBar <= 2) {
-        return `${100 / 4}% `.repeat(4);
-      } else if (section.chordsPerBar === 3) {
-        return `${100 / 3}% `.repeat(3);
-      } else {
-        return `${100 / 2}% `.repeat(2);
-      }
-    } else {
-      return "100%";
-    }
-  }, [section.chordsPerBar]);
-
   return (
     <div className='section'>
       <div className='section-controls'>
@@ -103,12 +91,7 @@ const Section = observer(({
         </div>
       </div>
 
-      <div
-        className='bars'
-        style={{
-          gridTemplateColumns: barsGrid
-        }}
-      >
+      <Bars chordsPerBar={section.chordsPerBar}>
         {section.bars.map((bar, i) => (
           <div key={i} style={{ position: "relative" }}>
             <Bar 
@@ -123,19 +106,78 @@ const Section = observer(({
             />
 
             {i === section.bars.length - 1 && (
-              <div
-                className='add-bar'
-                data-html2canvas-ignore='true'
-                onClick={() => section.addBar(section.bars.length)}
-              >
-                <FontAwesomeIcon icon={faPlus} className='add-bar-icon' />
-              </div>
+              <AddBarButton onClick={() => section.addBar(section.bars.length)}>
+                <AddBarIcon icon={faPlus} />
+              </AddBarButton>
             )}
           </div>
         ))}
-      </div>
+      </Bars>
     </div>
   );
 });
+
+const calculateBarsGrid = (chordsPerBar: number) => {
+  if (chordsPerBar <= 2) {
+    return "1fr ".repeat(4);
+  } else if (chordsPerBar === 3) {
+    return "1fr ".repeat(3);
+  } else {
+    return "1fr ".repeat(2);
+  }
+};
+
+const Bars = styled.div<{ chordsPerBar: number }>`
+  display: grid;
+  grid-template-columns: ${p => calculateBarsGrid(p.chordsPerBar)};
+  width: 100%;
+
+  @media ${device("sm")} {
+    grid-template-columns: 1fr;
+  }
+`;
+
+const AddBarButton = styled.div`
+  position: absolute;
+  bottom: 0;
+  right: -${p => p.theme.spacing.small};
+  transform: translateX(100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 3rem;
+  cursor: pointer;
+
+  @media ${device("sm")} {
+    right: 0;
+    width: 2rem;
+    transform: translateX(43%);
+  }
+
+  @media print {
+    visibility: hidden;
+  }
+`;
+
+const AddBarIcon = styled(FontAwesomeIcon)`
+  width: 2.4rem !important;
+  height: 2.4rem !important;
+  padding: ${p => p.theme.spacing.xsmall};
+  font-size: 3rem;
+  border-radius: 100%;
+
+  color: white;
+  background-color: lightgrey;
+  transition: 0.2s background-color;
+
+  @media ${device("sm")} {
+    height: 2rem !important;
+    border: solid 2px white;
+  }
+
+  &:hover {
+    background-color: darkgrey;
+  }
+`;
 
 export default Section;

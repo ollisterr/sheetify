@@ -34,7 +34,7 @@ input {
   font-size: inherit;
   font-family: inherit;
 
-  border-radius: 5px;
+  border-radius: 0;
   border: none;
 }
 
@@ -42,5 +42,5 @@ input {
   margin: 0 auto;
   width: 100%;
   max-width: 1000px;
-  padding: 20px;
+  padding: 1rem;
 }

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus, faMinus } from "@fortawesome/free-solid-svg-icons";
 import styled from "styled-components";
@@ -21,6 +21,8 @@ const Bar: React.FC<Bar> = observer(({
   deleteBar,
   addBarAfter
 }) => {
+  const [repeatTimes, setRepeatTimes] = useState(1);
+
   function updateBar(index: number, value: string) {
     const chord = value
       .replace(/ /g, "")
@@ -42,19 +44,16 @@ const Bar: React.FC<Bar> = observer(({
   return (
     <BarWrapper>
       <BarControls>
-        <BarControlButton>
-          <FontAwesomeIcon
+        <BarControlButton onClick={addBar}>
+          <BarControlIcon
             icon={faPlus}
-            onClick={addBar}
           />
         </BarControlButton>
 
         {deleteBar && (
-          <BarControlButton>
-            <FontAwesomeIcon
+          <BarControlButton onClick={() => deleteBar()}>
+            <BarControlIcon
               icon={faMinus}
-              className='remove-bar'
-              onClick={() => deleteBar()}
             />
           </BarControlButton>
         )}
@@ -66,6 +65,23 @@ const Bar: React.FC<Bar> = observer(({
           tabIndex={-1}
           isDefined={!!bar.goal}
         />
+
+        {bar.repeat[1] && (
+          <RepeatTag show={repeatTimes > 1}>
+            <RepeatInput 
+              value={repeatTimes}
+              type="number" 
+              min={1}
+              dir="rtl"
+              onChange={(e) => 
+                setRepeatTimes(Math.max(1, parseInt(e.target.value)))
+              } 
+              placeholder="Repeat times" 
+            />
+
+            {repeatTimes && <span>x</span>}
+          </RepeatTag>
+        )}
       </BarControls>
        
       <BarContent>
@@ -92,13 +108,14 @@ const Bar: React.FC<Bar> = observer(({
 });
 
 const BarControls = styled.div`
-  display: grid;
-  grid-template-columns: 0 0 1fr;
-  gap: 0;
+  display: flex;
+  justify-content: stretch;
   align-items: center;
+  gap: ${p => p.theme.spacing.small};
 
   width: calc(100% - ${p => p.theme.spacing.small});
   padding-bottom: ${p => p.theme.spacing.xsmall};
+  font-size: 0.9rem;
   transition: opacity 0.2s;
 
   > * {
@@ -107,7 +124,7 @@ const BarControls = styled.div`
 `;
 
 const BarControlButton = styled.button`
-  display: flex;
+  display: none;
   justify-content: center;
   align-items: center;
 
@@ -131,24 +148,39 @@ const BarControlButton = styled.button`
   }
 `;
 
+const BarControlIcon = styled(FontAwesomeIcon)`
+  font-size: 1rem;
+  padding: 2px;
+`;
+
 const SectionGoal = styled.input<{ isDefined: boolean }>`
   flex: 1;
-  width: 100%;
-  margin-right: ${p => p.theme.spacing.small};
   padding-left: ${p => p.theme.spacing.xsmall};
-  
 
   border: ${p => `solid ${p.theme.rem(2)} ${p.theme.colors.lightgrey}`};
   border-width: 2px 0 0 2px;
-  border-radius: 0;
   visibility: hidden;
-  font-size: 0.9rem;
   transition: opacity 0.2s;
 
   ${p => p.isDefined &&`
     opacity: 1;
     visibility: visible; 
   `}
+`;
+
+const RepeatTag = styled.div<{ show: boolean }>`
+  display: ${p => p.show ? "flex" : "none"};
+  width: 3rem;
+  font-size: 1.1rem;
+  font-weight: bold;
+  color: ${p => p.theme.colors.black};
+  opacity: ${p => p.show ? 1 : 0};
+`;
+
+const RepeatInput = styled.input`
+  padding: 0;
+  padding-right: ${p => p.theme.spacing.xsmall};
+  text-align: right;
 `;
 
 const BarContent = styled.div`
@@ -192,11 +224,14 @@ const BarWrapper = styled.div`
     }
 
     ${BarControls} {
-      grid-template-columns: auto auto 1fr;
-      gap: ${p => p.theme.spacing.small};
+      grid-template-columns: auto auto 1fr auto;
 
       > * {
         opacity: 1;
+      }
+
+      ${`${BarControlButton}, ${RepeatTag}`} {
+        display: flex;
       }
 
       ${SectionGoal} {

@@ -128,49 +128,4 @@
       }
     }
   }
-
-  .bars {
-    display: grid;
-    grid-template-rows: auto;
-    width: 100%;
-
-    .add-bar {
-      position: absolute;
-      right: 0;
-      bottom: 0;
-      display: flex;
-      width: 0;
-      align-items: flex-end;
-      font-size: 1.5rem;
-      cursor: pointer;
-
-      @media (max-width: $medium) {
-        width: auto;
-      }
-
-      @media print {
-        visibility: hidden;
-      }
-
-      .add-bar-icon {
-        width: 2.5rem !important;
-        height: 2.5rem;
-        color: white;
-        padding: 5px;
-        margin: 0 0 0.2rem 1rem;
-        border-radius: 100%;
-        background-color: lightgrey;
-        transition: 0.2s background-color;
-        @media (max-width: $medium) {
-          transform: translateX(43%);
-          margin-left: 0;
-          border: solid 2px white;
-        }
-
-        &:hover {
-          background-color: darkgrey;
-        }
-      }
-    }
-  }
 }
