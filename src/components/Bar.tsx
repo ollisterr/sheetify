@@ -73,6 +73,7 @@ const Bar: React.FC<Bar> = observer(({
               type="number" 
               min={1}
               dir="rtl"
+              tabIndex={-1}
               onChange={(e) => 
                 setRepeatTimes(Math.max(1, parseInt(e.target.value)))
               } 
