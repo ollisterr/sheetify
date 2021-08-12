@@ -7,6 +7,8 @@ import ControlBar from "../components/ControlBar";
 import SheetBody from "../components/SheetBody";
 import SheetSpecification from "../components/Specs";
 import { sheet } from "../store";
+import { Page } from "../styles";
+import { device } from "../utils/constants";
 
 export const ComposePage: React.FC = observer(() => {
   const printRef = useRef(null);
@@ -17,7 +19,7 @@ export const ComposePage: React.FC = observer(() => {
   });
 
   return (
-    <main>
+    <PageWrapper>
       <SheetPaper ref={printRef}>
         <SheetSpecification />
 
@@ -25,13 +27,24 @@ export const ComposePage: React.FC = observer(() => {
       </SheetPaper>
 
       <ControlBar printPDF={printPDF} />
-    </main>
+    </PageWrapper>
   );
 });
+
+const PageWrapper = styled(Page)`
+  padding: 1rem;
+  padding-right: 3.5rem; // for fitting add bar icon
+
+  @media ${device("sm")} {
+    padding: 0.8rem;
+    padding-right: 1.5rem;
+  }
+`;
 
 const SheetPaper = styled.section`
   @media print {
     padding: 1rem 2rem;
+    width: 210mm;
   }
 `;
 

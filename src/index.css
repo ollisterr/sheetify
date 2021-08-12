@@ -14,10 +14,7 @@ body {
   border: none;
   font-family: "Gaegu", "Courier New", Courier, monospace;
   font-size: 1em;
-
-  @media (max-width: $medium) {
-    font-size: 13px;
-  }
+  overflow: hidden;
 }
 
 textarea,
@@ -38,9 +35,14 @@ input {
   border: none;
 }
 
-#App {
-  margin: 0 auto;
-  width: 100%;
-  max-width: 1000px;
-  padding: 1rem;
+@page {
+  size: A4;
+  margin: 0;
+  padding: 0;
+}
+
+@media print {
+  html, body {
+    width: 210mm;
+  }
 }

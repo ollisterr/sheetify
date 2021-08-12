@@ -182,6 +182,19 @@ const RepeatInput = styled.input`
   padding: 0;
   padding-right: ${p => p.theme.spacing.xsmall};
   text-align: right;
+
+  // hide number input arrows on print
+  @media print {
+    &::-webkit-outer-spin-button,
+    &::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+
+    &[type=number] {
+      -moz-appearance: textfield;
+    }
+  }
 `;
 
 const BarContent = styled.div`
