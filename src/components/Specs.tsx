@@ -37,7 +37,7 @@ const SheetSpecification: React.FC = observer(() => {
         <div>
           <input
             type='number'
-            min='2'
+            min={2}
             className='time-signature-input'
             value={sheet.timeSignature[0]}
             onChange={setTimeSignatureBars}
