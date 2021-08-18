@@ -7,6 +7,7 @@ import repeatStart from "../assets/repeat-sign-start.svg";
 import repeatEnd from "../assets/repeat-sign-end.svg";
 import { BarModule } from "../store/BarModule";
 import { observer } from "mobx-react-lite";
+import { device } from "../utils/constants";
 
 interface Bar {
   bar: BarModule,
@@ -110,13 +111,18 @@ const BarControls = styled.div`
   align-items: center;
   gap: ${p => p.theme.spacing.small};
 
+  height: 1rem;
   width: calc(100% - ${p => p.theme.spacing.small});
-  padding-bottom: ${p => p.theme.spacing.xsmall};
+  margin-bottom: ${p => p.theme.spacing.xsmall};
   font-size: 0.9rem;
   transition: opacity 0.2s;
 
   > * {
     opacity: 0;
+  }
+
+  @media ${device.sm} {
+    width: 100%;
   }
 `;
 

@@ -127,6 +127,7 @@ const SectionTags = styled.div`
 export const SectionTag = styled.label<{ checked: boolean }>`
   display: flex;
   align-items: center;
+  height: 2rem;
   padding: 0.3rem 0.6rem;
   border: solid 2px ${p => p.theme.colors.lightgrey};
   font-weight: bold;
@@ -152,7 +153,7 @@ export const SectionTag = styled.label<{ checked: boolean }>`
   }
 
   @media ${device.sm} {
-    padding: 0.2rem 0.4rem;
+    padding: 0 0.5rem;
   }
 
   ${p => p.checked && `

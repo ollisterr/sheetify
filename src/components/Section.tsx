@@ -77,13 +77,16 @@ const SectionWrapper = styled.div`
   position: relative;
   width: 100%;
   height: auto;
-  margin-top: 30px;
-  padding-left: $barBorder;
-  color: lightgrey;
+  padding-top: ${p => p.theme.spacing.large};
+  color: ${p => p.theme.colors.lightgrey};
   page-break-before: auto;
 
   &:hover ${SectionTag}, &:hover ${SectionConfig} {
     opacity: 1;
+  }
+
+  @media ${device.sm} {
+    padding-top: ${p => p.theme.spacing.default};
   }
 `;
 
