@@ -25,6 +25,10 @@ button {
   border: none;
 }
 
+button {
+  cursor: pointer;
+}
+
 input {
   width: 100%;
   max-width: 500px;

@@ -1,8 +1,7 @@
 import React from "react";
-import Section from "./Section";
-
-import "../css/SheetBody.scss";
 import { observer } from "mobx-react-lite";
+
+import Section from "./Section";
 import { sheet } from "../store";
 
 const SheetBody: React.FC = observer(() => 

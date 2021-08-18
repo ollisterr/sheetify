@@ -14,7 +14,7 @@ const SheetSpecification: React.FC = observer(() => {
     const value = e.target.value.length > 0 ? parseInt(e.target.value) : 1;
     sheet.setTimeSignature([value, sheet.timeSignature[1]]);
   }
-
+ 
   function handleTempoChange(e: React.ChangeEvent<HTMLInputElement>) {
     const value = e.target.value.length > 0 ? parseInt(e.target.value) : 120;
     sheet.setTempo(value);

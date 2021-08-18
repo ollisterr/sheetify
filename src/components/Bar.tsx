@@ -260,10 +260,6 @@ const BarWrapper = styled.div`
   font-size: 2rem;
 
   &:hover {
-    ${RepeatSign} {
-      opacity: 0.5;
-    }
-
     ${BarControls} {
       grid-template-columns: auto auto 1fr auto;
 

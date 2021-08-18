@@ -20,8 +20,8 @@ export const sheet = observable({
   addSection(index?: number) {
     this.sections = index ?
       // eslint-disable-next-line max-len
-      [...this.sections.slice(0, index), new SectionModule(), ...this.sections.slice(index)]
-      : [...this.sections, new SectionModule()];
+      [...this.sections.slice(0, index), new SectionModule(this.timeSignature[0]), ...this.sections.slice(index)]
+      : [...this.sections, new SectionModule(this.timeSignature[0])];
   },
   removeSection(index: number) {
     this.sections = this.sections.filter((_, i) => i !== index);
