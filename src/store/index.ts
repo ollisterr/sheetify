@@ -16,6 +16,15 @@ export const sheet = observable({
   tempo: 120,
   setTempo(tempo: number) { this.tempo = tempo; },
 
+  key: "C",
+  setKey(newKey: string) {
+    if (newKey.length > 0) {
+      this.key = newKey[0].toUpperCase() + newKey.slice(1);
+    } else {
+      this.key = newKey;
+    }
+  },
+
   sections: [new SectionModule()],
   addSection(index?: number) {
     this.sections = index ?

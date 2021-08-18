@@ -153,7 +153,7 @@ const BarControlButton = styled.button`
   }
 
   &:focus {
-    outline: solid 2px black;
+    box-shadow: 0 0 0 ${p => p.theme.rem(3)} ${p => p.theme.colors.black};
   }
 `;
 

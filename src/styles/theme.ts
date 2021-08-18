@@ -2,7 +2,7 @@ const theme = {
   rem: (px: number) => `${px / 16}rem`,
   colors: {
     black: "#333",
-    grey: "#555",
+    grey: "#666",
     lightgrey: "#aaa",
   },
   padding: {

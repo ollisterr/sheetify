@@ -50,7 +50,8 @@ const SectionControls = observer(({
       checked={!sectionTags.includes(section.name ?? "") && !!section.name}
       placeholder='Section name...'
       onChange={(e: React.ChangeEvent<HTMLInputElement>) => 
-        section.setName(e.target.value)}
+        section.setName(e.target.value)
+      }
       tabIndex={-1}
     />
         
@@ -64,8 +65,8 @@ const SectionControls = observer(({
           min='1'
           value={section.chordsPerBar}
           onChange={(e) => 
-            section.setChordsPerBar(parseInt(e.target.value) ?? 1)}
-          tabIndex={-1}
+            section.setChordsPerBar(parseInt(e.target.value) ?? 1)
+          }
         />
       </ChordsPerBar>
 
@@ -119,12 +120,12 @@ export const SectionTag = styled.label<{ checked: boolean }>`
   cursor: pointer;
 
   &::placeholder {
-    color: lightgrey;
+    color: ${p => p.theme.colors.lightgrey};
   }
 
-  &:hover {
+  &:hover, &:focus {
     color: white;
-    background-color: lightgrey;
+    background-color: ${p => p.theme.colors.lightgrey};
 
     &::placeholder {
       color: white;
@@ -172,15 +173,16 @@ const SectionControl = styled.button`
   display: flex;
   align-items: center;
   height: 100%;
-  margin-left: 1rem;
-  font-size: 1.5rem;
-  border: none;
   padding: 0;
+  border: none;
+  margin-left: 1rem;
+  color: ${p => p.theme.colors.black};
+  font-size: 1.5rem;
   transition-property: color, opacity;
   cursor: pointer;
 
-  &:hover {
-    color: grey;
+  &:hover, &:focus {
+    color: ${p => p.theme.colors.grey};
     background: none;
   }
 `;

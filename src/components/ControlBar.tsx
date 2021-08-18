@@ -51,9 +51,9 @@ const Button = styled.button`
   color: white;
   text-align: center;
   background-color: ${p => p.theme.colors.lightgrey};
-  transition: color 0.15s, background-color 0.15s;
+  transition: color 0.15s, background-color 0.1s;
 
-  &:hover {
+  &:hover, &:focus {
     background-color: ${p => p.theme.colors.grey};
   }
 `;
