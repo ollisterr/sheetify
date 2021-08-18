@@ -25,77 +25,80 @@ const SectionControls = observer(({
   addSection, 
   removeSection 
 }: SectionControls) => {
-  return <SectionControlsWrapper>
-    {sectionTags.map((tag, i) => {
-      // check running number for the tag
-      const number = sections.filter((section) => 
-        section.name === tag
-      ).indexOf(section) + 1;
+  return (
+    <SectionControlsWrapper>
+      <SectionTags>
+        {sectionTags.map((tag, i) => {
+        // check running number for the tag
+          const number = sections.filter((section) => 
+            section.name === tag
+          ).indexOf(section) + 1;
 
-      return (
-        <SectionTag
-          key={i}
-          checked={tag === section.name}
-          onClick={() => section.setName(tag)}
-        >
-          <SectionRadioButton />
+          return (
+            <SectionTag
+              key={i}
+              checked={tag === section.name}
+              onClick={() => section.setName(tag)}
+            >
+              <SectionRadioButton />
 
-          {tag}{number > 1 && number}
-        </SectionTag>
-      );
-    })}
+              {tag}{number > 1 && number}
+            </SectionTag>
+          );
+        })}
 
-    <CustomSectionTag
-      as="input"
-      checked={!sectionTags.includes(section.name ?? "") && !!section.name}
-      placeholder='Section name...'
-      onChange={(e: React.ChangeEvent<HTMLInputElement>) => 
-        section.setName(e.target.value)
-      }
-      tabIndex={-1}
-    />
+        <CustomSectionTag
+          as="input"
+          checked={!sectionTags.includes(section.name ?? "") && !!section.name}
+          placeholder='Section name...'
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) => 
+            section.setName(e.target.value)
+          }
+          tabIndex={-1}
+        />
+      </SectionTags>
         
-    <SectionConfig>
-      <ChordsPerBar>
+      <SectionConfig>
+        <ChordsPerBar>
         Chords:
       
-        <ChordsPerBarInput
-          className='chords-per-bar-input'
-          type='number'
-          min='1'
-          value={section.chordsPerBar}
-          onChange={(e) => 
-            section.setChordsPerBar(parseInt(e.target.value) ?? 1)
-          }
-        />
-      </ChordsPerBar>
+          <ChordsPerBarInput
+            className='chords-per-bar-input'
+            type='number'
+            min='1'
+            value={section.chordsPerBar}
+            onChange={(e) => 
+              section.setChordsPerBar(parseInt(e.target.value) ?? 1)
+            }
+          />
+        </ChordsPerBar>
 
-      <SectionControl onClick={addSection}>
-        <SectionControlIcon icon={faPlusSquare} />
-      </SectionControl>
-
-      {sections.length > 1 && (
-        <SectionControl onClick={removeSection}>
-          <SectionControlIcon icon={faTrash} />
+        <SectionControl onClick={addSection}>
+          <SectionControlIcon icon={faPlusSquare} />
         </SectionControl>
-      )}
-    </SectionConfig>
-  </SectionControlsWrapper>;
+
+        {sections.length > 1 && (
+          <SectionControl onClick={removeSection}>
+            <SectionControlIcon icon={faTrash} />
+          </SectionControl>
+        )}
+      </SectionConfig>
+    </SectionControlsWrapper>
+  );
 });
 
 export const SectionControlsWrapper = styled.div`
   display: flex;
-  gap: ${p => p.theme.spacing.xsmall};
+  gap: ${p => p.theme.spacing.default};
   flex-flow: row wrap;
   align-items: center;
   width: 100%;
   margin-left: -${p => p.theme.spacing.xsmall};
   font-weight: bold;
   overflow: hidden;
-  transition: max-width 0.2s;
 
   @media ${device.sm} {
-    max-height: calc(1.6rem + 8px);
+    font-size: 0.8rem;
   }
 `;
 
@@ -103,16 +106,32 @@ const SectionRadioButton = styled.input.attrs({ type: "radio" })`
   display: none;
 `;
 
+const SectionTags = styled.div`
+  position: relative;
+  flex: 1;
+  display: flex;
+  gap: ${p => p.theme.spacing.xsmall};
+
+  @media ${device.sm} {
+    width: 60%;
+    overflow-x: scroll;
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+
+    &::-webkit-scrollbar {
+      display: none;
+    }
+  }
+`;
+
 export const SectionTag = styled.label<{ checked: boolean }>`
-  box-sizing: content-box;
-  display: block;
-  width: auto;
-  height: 1.2rem;
+  display: flex;
+  align-items: center;
   padding: 0.3rem 0.6rem;
   border: solid 2px ${p => p.theme.colors.lightgrey};
-  font-size: 1rem;
   font-weight: bold;
   color: ${p => p.theme.colors.lightgrey};
+  line-height: 1;
 
   opacity: 0;
   transition-property: color, background-color, opacity;
@@ -133,7 +152,7 @@ export const SectionTag = styled.label<{ checked: boolean }>`
   }
 
   @media ${device.sm} {
-    margin-bottom: 2px;
+    padding: 0.2rem 0.4rem;
   }
 
   ${p => p.checked && `
@@ -151,14 +170,15 @@ export const SectionTag = styled.label<{ checked: boolean }>`
   `}
 `;
 
-const CustomSectionTag = styled(SectionTag)``;
+const CustomSectionTag = styled(SectionTag)`
+  width: 10rem;
+`;
 
 export const SectionConfig = styled.div`
-  display: grid;
-  grid-template-columns: 1fr auto auto;
+  display: flex;
   width: auto;
   height: 100%;
-  margin-left: auto;
+  margin-left: auto; // align right
 
   opacity: 0;
   transition-property: color, background-color, opacity;
@@ -198,7 +218,7 @@ const ChordsPerBar = styled.label`
 `;
 
 const ChordsPerBarInput = styled.input`
-  width: 4rem;
+  width: 2em;
   text-align: right;
 `;
 

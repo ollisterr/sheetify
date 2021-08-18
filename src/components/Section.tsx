@@ -130,6 +130,8 @@ const AddBarButton = styled.button`
   @media ${device.sm} {
     right: 0;
     width: 2rem;
+    height: 2rem;
+    border: solid 2px white;
     transform: translateX(43%);
   }
 
@@ -143,11 +145,6 @@ const AddBarIcon = styled(FontAwesomeIcon)`
   height: 100% !important;
   font-size: 3rem;
   color: white;
-
-  @media ${device.sm} {
-    height: 2rem !important;
-    border: solid 2px white;
-  }
 `;
 
 export default Section;

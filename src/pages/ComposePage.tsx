@@ -4,7 +4,7 @@ import { useReactToPrint } from "react-to-print";
 import styled from "styled-components";
 
 import ControlBar from "../components/ControlBar";
-import SheetBody from "../components/SheetBody";
+import Section from "../components/Section";
 import SheetSpecification from "../components/Specs";
 import { sheet } from "../store";
 import { Page } from "../styles";
@@ -23,7 +23,17 @@ export const ComposePage: React.FC = observer(() => {
       <SheetPaper ref={printRef}>
         <SheetSpecification />
 
-        <SheetBody />
+        <div>
+          {sheet.sections.map((section, i) => (
+            <Section 
+              key={i} 
+              section={section} 
+              sections={sheet.sections} 
+              addSection={() => sheet.addSection(i)} 
+              removeSection={() => sheet.removeSection(i)} 
+            />
+          ))}
+        </div>
       </SheetPaper>
 
       <ControlBar printPDF={printPDF} />
@@ -37,7 +47,7 @@ const PageWrapper = styled(Page)`
 
   @media ${device.sm} {
     padding: 0.8rem;
-    padding-right: 1.5rem;
+    padding-right: 1.1rem;
   }
 `;
 

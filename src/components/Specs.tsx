@@ -1,9 +1,9 @@
 import React from "react";
-import "../css/Specs.scss";
+import styled from "styled-components";
+import { observer } from "mobx-react-lite";
+
 import logo from "../assets/sheetify-logo.svg";
 import { sheet } from "../store";
-import { observer } from "mobx-react-lite";
-import styled from "styled-components";
 
 const SheetSpecification: React.FC = observer(() => {
   function setTimeSignatureBase(e: React.ChangeEvent<HTMLSelectElement>) {

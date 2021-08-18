@@ -7,13 +7,12 @@ import styled from "styled-components";
 
 import { sheet } from "../store";
 import { saveTxt } from "../utils/txt.utils";
+import { device } from "../utils/constants";
 
 const ControlBar = observer(({ printPDF }: { printPDF?: () => void }) => (
   <ControlBarWrapper>
     <AddSection onClick={() => sheet.addSection()}>
-      <FontAwesomeIcon icon={faPlus} />
-
-      Add Section
+      <FontAwesomeIcon icon={faPlus} /> Add Section
     </AddSection>
 
     <Button onClick={() => saveTxt(sheet.sections)}>
@@ -44,17 +43,26 @@ const Button = styled.button`
   justify-content: center;
   align-items: center;
   gap: ${p => p.theme.spacing.default};
-  padding: 0.2rem 2rem;
+  padding: 0.4rem 1rem;
   border-radius: 5px;
   font-size: 2rem;
   font-family: inherit;
   color: white;
+  line-height: 1;
   text-align: center;
   background-color: ${p => p.theme.colors.lightgrey};
   transition: color 0.15s, background-color 0.1s;
 
   &:hover, &:focus {
     background-color: ${p => p.theme.colors.grey};
+  }
+
+  @media ${device.md} {
+    font-size: 1.8rem;
+  }
+  
+  @media ${device.sm} {
+    font-size: 1rem;
   }
 `;
 
