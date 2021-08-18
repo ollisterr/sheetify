@@ -16,12 +16,21 @@ export const sheet = observable({
   tempo: 120,
   setTempo(tempo: number) { this.tempo = tempo; },
 
+  key: "C",
+  setKey(newKey: string) {
+    if (newKey.length > 0) {
+      this.key = newKey[0].toUpperCase() + newKey.slice(1);
+    } else {
+      this.key = newKey;
+    }
+  },
+
   sections: [new SectionModule()],
   addSection(index?: number) {
     this.sections = index ?
       // eslint-disable-next-line max-len
-      [...this.sections.slice(0, index), new SectionModule(), ...this.sections.slice(0, index)]
-      : [...this.sections, new SectionModule()];
+      [...this.sections.slice(0, index), new SectionModule(this.timeSignature[0]), ...this.sections.slice(index)]
+      : [...this.sections, new SectionModule(this.timeSignature[0])];
   },
   removeSection(index: number) {
     this.sections = this.sections.filter((_, i) => i !== index);

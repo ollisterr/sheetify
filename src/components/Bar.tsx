@@ -3,8 +3,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus, faMinus } from "@fortawesome/free-solid-svg-icons";
 import styled from "styled-components";
 
-import { RepeatSignStart, RepeatSignEnd } from "./RepeatSigns";
-import "../css/Bar.scss";
+import repeatStart from "../assets/repeat-sign-start.svg";
+import repeatEnd from "../assets/repeat-sign-end.svg";
 import { BarModule } from "../store/BarModule";
 import { observer } from "mobx-react-lite";
 
@@ -18,8 +18,7 @@ interface Bar {
 const Bar: React.FC<Bar> = observer(({ 
   bar, 
   addBar, 
-  deleteBar,
-  addBarAfter
+  deleteBar
 }) => {
   const [repeatTimes, setRepeatTimes] = useState(1);
 
@@ -32,13 +31,6 @@ const Bar: React.FC<Bar> = observer(({
     const newBar = [...bar.bar];
     newBar[index] = chord;
     bar.setBar(newBar);
-  }
-
-  function addBarOnTab(e: React.KeyboardEvent<HTMLInputElement>) {
-    if (e.key === "Tab" && addBarAfter) {
-      e.preventDefault();
-      addBarAfter();
-    }
   }
 
   return (
@@ -77,6 +69,7 @@ const Bar: React.FC<Bar> = observer(({
               onChange={(e) => 
                 setRepeatTimes(Math.max(1, parseInt(e.target.value)))
               } 
+              onFocus={e => e.target.select()}
               placeholder="Repeat times" 
             />
 
@@ -86,23 +79,26 @@ const Bar: React.FC<Bar> = observer(({
       </BarControls>
        
       <BarContent>
-        <RepeatSignStart repeat={bar.repeat} />
+        <RepeatSign checked={!!bar.repeat[0]} dir="right">
+          <img src={repeatStart} />
 
-        {bar.bar.map((chord: string, i: number, array: string[]) => (
+          <RepeatSignCheckbox onChange={() => bar.toggleRepeat(0)} />
+        </RepeatSign>
+
+        {bar.bar.map((chord: string, i: number) => (
           <BarBlock
             value={chord}
             key={i}
             onChange={e => updateBar(i, e.target.value)}
             autoFocus={i === 0}
-            onKeyDown={
-              i === array.length - 1 && addBarAfter
-                ? addBarOnTab
-                : undefined
-            }
           />
         ))}
 
-        <RepeatSignEnd repeat={bar.repeat} />
+        <RepeatSign checked={!!bar.repeat[1]} dir="left">
+          <img src={repeatEnd} />
+
+          <RepeatSignCheckbox onChange={() => bar.toggleRepeat(1)} />
+        </RepeatSign>
       </BarContent>
     </BarWrapper>
   );
@@ -145,7 +141,7 @@ const BarControlButton = styled.button`
   }
 
   &:focus {
-    outline: solid 2px black;
+    box-shadow: 0 0 0 ${p => p.theme.rem(3)} ${p => p.theme.colors.black};
   }
 `;
 
@@ -169,9 +165,9 @@ const SectionGoal = styled.input<{ isDefined: boolean }>`
   `}
 `;
 
-const RepeatTag = styled.div<{ show: boolean }>`
+const RepeatTag = styled.label<{ show: boolean }>`
   display: ${p => p.show ? "flex" : "none"};
-  width: 3rem;
+  width: 3.5rem;
   font-size: 1.1rem;
   font-weight: bold;
   color: ${p => p.theme.colors.black};
@@ -182,15 +178,48 @@ const RepeatInput = styled.input`
   padding: 0;
   padding-right: ${p => p.theme.spacing.xsmall};
   text-align: right;
+
+  // hide number input arrows on print
+  @media print {
+    &::-webkit-outer-spin-button,
+    &::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+
+    &[type=number] {
+      -moz-appearance: textfield;
+    }
+  }
+`;
+
+const RepeatSignCheckbox = styled.input.attrs({ type: "checkbox" })`
+  display: none;
+`;
+
+const RepeatSign = styled.label<{ checked: boolean, dir: "left" | "right" }>` 
+  height: 100%;
+  opacity: ${p => p.checked ? 1 : 0};
+  transition: opacity 0.2s;
+  cursor: pointer;
+  ${p => `padding-${p.dir}: ${p.theme.spacing.small};`}
+
+  > img {
+    height: 100%;
+  }
+
+  &:hover {
+    opacity: 0.5;
+  }
 `;
 
 const BarContent = styled.div`
   position: relative;
   display: flex;
+  align-items: stretch;
   width: 100%;
   height: 3rem;
   box-sizing: border-box;
-  padding: 0 ${p => p.theme.spacing.default};
   border-width: 0 ${p => p.theme.spacing.xsmall};
   border-color: ${p => p.theme.colors.lightgrey};
   border-style: solid;
@@ -219,11 +248,6 @@ const BarWrapper = styled.div`
   font-size: 2rem;
 
   &:hover {
-    .repeat-sign-start,
-    .repeat-sign-end {
-      visibility: visible;
-    }
-
     ${BarControls} {
       grid-template-columns: auto auto 1fr auto;
 

@@ -1,8 +1,9 @@
 import React from "react";
-import "../css/Specs.scss";
-import logo from "../assets/sheetify-logo.png";
-import { sheet } from "../store";
+import styled from "styled-components";
 import { observer } from "mobx-react-lite";
+
+import logo from "../assets/sheetify-logo.svg";
+import { sheet } from "../store";
 
 const SheetSpecification: React.FC = observer(() => {
   function setTimeSignatureBase(e: React.ChangeEvent<HTMLSelectElement>) {
@@ -14,70 +15,143 @@ const SheetSpecification: React.FC = observer(() => {
     const value = e.target.value.length > 0 ? parseInt(e.target.value) : 1;
     sheet.setTimeSignature([value, sheet.timeSignature[1]]);
   }
-
+ 
   function handleTempoChange(e: React.ChangeEvent<HTMLInputElement>) {
     const value = e.target.value.length > 0 ? parseInt(e.target.value) : 120;
     sheet.setTempo(value);
   }
 
   return (
-    <div className='container'>
-      <p className='trademark'>
-        Made with <img className='logo' alt='Logo' src={logo} />
-      </p>
+    <SpecsWrapper>
+      <Trademark>
+        Made with <Logo alt='Logo' src={logo} />
+      </Trademark>
 
-      <input
-        className='title'
+      <TitleInput
         name='title'
         placeholder='Sheet title'
         onChange={(e) => sheet.setTitle(e.target.value)}
+        autoComplete="off"
       />
 
-      <div className='basic-info'>
-        <div>
-          <input
+      <SettingsWrapper>
+        <Setting>
+          <TimeSignatureInput
             type='number'
-            min='2'
+            min={2}
             className='time-signature-input'
             value={sheet.timeSignature[0]}
             onChange={setTimeSignatureBars}
-            tabIndex={-1}
-          />{" "}
+            onFocus={(e) => e.target.select()}
+          />
           /
-          <select
-            className='time-signature-input'
-            onChange={setTimeSignatureBase}
-            tabIndex={-1}
-          >
-            <option value='4'>4</option>
-            <option value='8'>8</option>
-            <option value='16'>16</option>
-            <option value='32'>32</option>
-            <option value='64'>64</option>
-          </select>
-        </div>
+          <TimeSignatureSelect onChange={setTimeSignatureBase}>
+            {[4, 8, 16, 32, 64].map((x) => 
+              <option key={x} value={x}>{x}</option>)
+            }
+          </TimeSignatureSelect>
+        </Setting>
 
-        <div>
-          Tempo:{" "}
-          <input
+        <Setting>
+          Tempo:
+          <TempoInput
             className='tempo'
             type='number'
             min='0'
             name='tempo'
             value={sheet.tempo}
             onChange={handleTempoChange}
-            tabIndex={-1}
-          />{" "}
+            onFocus={(e) => e.target.select()}
+          />
           BPM
-        </div>
+        </Setting>
 
-        <div className='key'>
-          Key:{" "}
-          <input className='key' name='key' placeholder='C' tabIndex={-1} />
-        </div>
-      </div>
-    </div>
+        <Setting>
+          Key:
+          <KeyInputname 
+            name='key' 
+            value={sheet.key} 
+            onChange={(e) => sheet.setKey(e.target.value)} 
+            autoComplete="off"
+            onFocus={(e) => e.target.select()} 
+          />
+        </Setting>
+      </SettingsWrapper>
+    </SpecsWrapper>
   );
 });
 
+const SpecsWrapper = styled.div`
+  margin: ${p => p.theme.spacing.medium};
+`;
+
+const Trademark = styled.p`
+  font-size: 0.8rem;
+  text-align: center;
+`;
+
+const Logo = styled.img`
+  width: ${p => p.theme.rem(70)};
+  vertical-align: middle;
+  margin-left: 10px;
+  display: inline-block;
+`;
+
+const TitleInput = styled.input`
+  font-size: 2.5rem;
+  width: 100%;
+  text-align: center;
+  max-width: none;
+  padding: 0px;
+  margin: 10px auto;
+`;
+
+const SettingsWrapper = styled.div`
+  display: flex;
+  justify-content: stretch;
+  gap: ${p => p.theme.spacing.default};
+  width: 100%;
+`;
+
+const Setting = styled.label`
+  flex: 1;
+  display: flex;
+  gap: ${p => p.theme.spacing.small};
+  justify-content: center;
+`;
+
+const TimeSignatureInput = styled.input`
+  max-width: 2rem;
+  text-align: right;
+  font-size: inherit;
+  font-family: inherit;
+  color: inherit;
+  display: inline-block;
+`;
+
+const TimeSignatureSelect = styled.select`
+  max-width: 2rem;
+  margin-left: 0.5rem;
+  border: none;
+  font-family: inherit;
+  font-size: inherit;
+  appearance: none;
+  cursor: pointer;
+
+  &:focus {
+    outline: solid 2px ${p => p.theme.colors.lightgrey};
+  }
+`;
+
+const TempoInput = styled.input`
+  text-align: right;
+  max-width: 3rem !important;
+`;
+
+
+const KeyInputname = styled.input`
+  width: 4rem;
+`;
+
 export default SheetSpecification;
+

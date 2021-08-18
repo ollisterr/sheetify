@@ -7,9 +7,7 @@ import theme from "./styles/theme";
 
 const App: React.FC = () => (
   <ThemeProvider theme={theme}>
-    <div id='App'>
-      <ComposePage />
-    </div>
+    <ComposePage />
   </ThemeProvider>
 );
 
