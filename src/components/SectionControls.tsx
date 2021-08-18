@@ -27,9 +27,10 @@ const SectionControls = observer(({
 }: SectionControls) => {
   return <SectionControlsWrapper>
     {sectionTags.map((tag, i) => {
-      const number = sections.filter((section, index) => 
-        section.name === tag && index <= i
-      ).length;
+      // check running number for the tag
+      const number = sections.filter((section) => 
+        section.name === tag
+      ).indexOf(section) + 1;
 
       return (
         <SectionTag
@@ -39,7 +40,7 @@ const SectionControls = observer(({
         >
           <SectionRadioButton />
 
-          {tag} {number > 1 && number}
+          {tag}{number > 1 && number}
         </SectionTag>
       );
     })}
