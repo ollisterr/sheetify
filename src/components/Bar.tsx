@@ -4,7 +4,6 @@ import { faPlus, faMinus } from "@fortawesome/free-solid-svg-icons";
 import styled from "styled-components";
 
 import { RepeatSignStart, RepeatSignEnd } from "./RepeatSigns";
-import "../css/Bar.scss";
 import { BarModule } from "../store/BarModule";
 import { observer } from "mobx-react-lite";
 

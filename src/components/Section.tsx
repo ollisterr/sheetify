@@ -1,19 +1,16 @@
-import React, { useMemo } from "react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import React from "react";
 import styled from "styled-components";
 import {
   faPlus,
-  faTrash,
-  faPlusSquare
 } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { observer } from "mobx-react-lite";
 
-import "../css/Section.scss";
 import Bar from "./Bar";
 import { SectionModule } from "../store/SectionModule";
 import { device } from "../utils/constants";
+import SectionControls, { SectionConfig, SectionTag } from "./SectionControls";
 
-const sectionTags = ["A", "B", "C", "Bridge", "Intro", "Outro"];
 
 interface Section {
   section: SectionModule;
@@ -29,67 +26,13 @@ const Section = observer(({
   removeSection 
 }: Section) => {
   return (
-    <div className='section'>
-      <div className='section-controls'>
-        {sectionTags.map((tag, i) => {
-          const number = sections.filter((section, index) => 
-            section.name === tag && index <= i
-          ).length;
-
-          return (
-            <div
-              key={i}
-              className={"section-tag " + 
-              (tag === section.name ? "selected" : "")}
-              {...tag !== section.name && {"data-html2canvas-ignore": true}}
-              onClick={() => section.setName(tag)}
-            >
-              {tag}
-              {number > 1 && number}
-            </div>
-          );
-        })}
-
-        <input
-          className={
-            "section-tag " +
-            (!sectionTags.includes(section.name ?? "") &&
-            section.name ?
-              "selected" : "")
-          }
-          {...!sectionTags.includes(section.name ?? "") &&
-            section.name && { "data-html2canvas-ignore": true }}
-          placeholder='Section name'
-          onChange={(e) => section.setName(e.target.value)}
-          tabIndex={-1}
-          data-html2canvas-ignore="true"
-        />
-        
-        <div className='section-config' data-html2canvas-ignore="true">
-          <div className='chords-per-bar'>
-            Chords:
-            <input
-              className='chords-per-bar-input'
-              type='number'
-              min='1'
-              value={section.chordsPerBar}
-              onChange={(e) => 
-                section.setChordsPerBar(parseInt(e.target.value) ?? 1)}
-              tabIndex={-1}
-            />
-          </div>
-
-          <div className='add-section' onClick={addSection}>
-            <FontAwesomeIcon icon={faPlusSquare} className='add-section-icon' />
-          </div>
-
-          {sections.length > 1 && (
-            <div className='remove-section' onClick={removeSection}>
-              <FontAwesomeIcon icon={faTrash} className='remove-section-icon' />
-            </div>
-          )}
-        </div>
-      </div>
+    <SectionWrapper>
+      <SectionControls 
+        section={section} 
+        sections={sections} 
+        addSection={addSection} 
+        removeSection={removeSection} 
+      />
 
       <Bars chordsPerBar={section.chordsPerBar}>
         {section.bars.map((bar, i) => (
@@ -113,27 +56,51 @@ const Section = observer(({
           </div>
         ))}
       </Bars>
-    </div>
+    </SectionWrapper>
   );
 });
 
 const calculateBarsGrid = (chordsPerBar: number) => {
-  if (chordsPerBar <= 2) {
+  if (chordsPerBar === 1) {
+    return "1fr ".repeat(8);
+  } else if (chordsPerBar === 2) {
     return "1fr ".repeat(4);
   } else if (chordsPerBar === 3) {
     return "1fr ".repeat(3);
+  } else if (chordsPerBar >= 8) {
+    return "1fr";
   } else {
     return "1fr ".repeat(2);
   }
 };
+
+const SectionWrapper = styled.div`
+  position: relative;
+  width: 100%;
+  height: auto;
+  margin-top: 30px;
+  padding-left: $barBorder;
+  color: lightgrey;
+  page-break-before: auto;
+
+  &:hover ${SectionTag}, &:hover ${SectionConfig} {
+    opacity: 1;
+  }
+`;
+
+
 
 const Bars = styled.div<{ chordsPerBar: number }>`
   display: grid;
   grid-template-columns: ${p => calculateBarsGrid(p.chordsPerBar)};
   width: 100%;
 
-  @media ${device("sm")} {
+  @media ${device.sm} {
     grid-template-columns: 1fr;
+  }
+
+  @media print {
+    grid-template-columns: ${p => calculateBarsGrid(p.chordsPerBar)};
   }
 `;
 
@@ -148,7 +115,7 @@ const AddBarButton = styled.div`
   height: 3rem;
   cursor: pointer;
 
-  @media ${device("sm")} {
+  @media ${device.sm} {
     right: 0;
     width: 2rem;
     transform: translateX(43%);
@@ -169,14 +136,14 @@ const AddBarIcon = styled(FontAwesomeIcon)`
   color: white;
   background-color: lightgrey;
   transition: 0.2s background-color;
-
-  @media ${device("sm")} {
-    height: 2rem !important;
-    border: solid 2px white;
-  }
-
+  
   &:hover {
     background-color: darkgrey;
+  }
+
+  @media ${device.sm} {
+    height: 2rem !important;
+    border: solid 2px white;
   }
 `;
 

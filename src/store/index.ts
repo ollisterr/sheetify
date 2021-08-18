@@ -20,7 +20,7 @@ export const sheet = observable({
   addSection(index?: number) {
     this.sections = index ?
       // eslint-disable-next-line max-len
-      [...this.sections.slice(0, index), new SectionModule(), ...this.sections.slice(0, index)]
+      [...this.sections.slice(0, index), new SectionModule(), ...this.sections.slice(index)]
       : [...this.sections, new SectionModule()];
   },
   removeSection(index: number) {

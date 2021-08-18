@@ -5,6 +5,9 @@ export const BREAKPOINTS = {
   lg: 1200,
 };
 
-export const device = (size: keyof typeof BREAKPOINTS) => {
-  return `(max-width: ${BREAKPOINTS[size]}px)`;
+export const device = {
+  sm: `(max-width: ${BREAKPOINTS.sm}px)`,
+  md: `(min-width: ${BREAKPOINTS.md}px, max-width: ${BREAKPOINTS.md}px)`,
+  mdDown: `(min-width: ${BREAKPOINTS.md}px)`,
+  lg: `(min-width: ${BREAKPOINTS.lg}px, max-width: ${BREAKPOINTS.lg}px)`,
 };

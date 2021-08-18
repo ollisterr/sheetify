@@ -35,7 +35,7 @@ const PageWrapper = styled(Page)`
   padding: 1rem;
   padding-right: 3.5rem; // for fitting add bar icon
 
-  @media ${device("sm")} {
+  @media ${device.sm} {
     padding: 0.8rem;
     padding-right: 1.5rem;
   }
