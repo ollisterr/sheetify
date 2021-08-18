@@ -32,5 +32,9 @@ export class BarModule {
   setRepeat(newRepeat: Repeat) {
     this.repeat = newRepeat;
   }
+
+  toggleRepeat(index: 0 | 1) {
+    this.repeat[index] = !this.repeat[index];
+  }
 }
 

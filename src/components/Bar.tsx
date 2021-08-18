@@ -3,7 +3,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus, faMinus } from "@fortawesome/free-solid-svg-icons";
 import styled from "styled-components";
 
-import { RepeatSignStart, RepeatSignEnd } from "./RepeatSigns";
+import repeatStart from "../assets/repeat-sign-start.svg";
+import repeatEnd from "../assets/repeat-sign-end.svg";
 import { BarModule } from "../store/BarModule";
 import { observer } from "mobx-react-lite";
 
@@ -85,7 +86,11 @@ const Bar: React.FC<Bar> = observer(({
       </BarControls>
        
       <BarContent>
-        <RepeatSignStart repeat={bar.repeat} />
+        <RepeatSign checked={!!bar.repeat[0]} dir="right">
+          <img src={repeatStart} />
+
+          <RepeatSignCheckbox onChange={() => bar.toggleRepeat(0)} />
+        </RepeatSign>
 
         {bar.bar.map((chord: string, i: number, array: string[]) => (
           <BarBlock
@@ -101,7 +106,11 @@ const Bar: React.FC<Bar> = observer(({
           />
         ))}
 
-        <RepeatSignEnd repeat={bar.repeat} />
+        <RepeatSign checked={!!bar.repeat[1]} dir="left">
+          <img src={repeatEnd} />
+
+          <RepeatSignCheckbox onChange={() => bar.toggleRepeat(1)} />
+        </RepeatSign>
       </BarContent>
     </BarWrapper>
   );
@@ -196,13 +205,33 @@ const RepeatInput = styled.input`
   }
 `;
 
+const RepeatSignCheckbox = styled.input.attrs({ type: "checkbox" })`
+  display: none;
+`;
+
+const RepeatSign = styled.label<{ checked: boolean, dir: "left" | "right" }>` 
+  height: 100%;
+  opacity: ${p => p.checked ? 1 : 0};
+  transition: opacity 0.2s;
+  cursor: pointer;
+  ${p => `padding-${p.dir}: ${p.theme.spacing.small};`}
+
+  > img {
+    height: 100%;
+  }
+
+  &:hover {
+    opacity: 0.5;
+  }
+`;
+
 const BarContent = styled.div`
   position: relative;
   display: flex;
+  align-items: stretch;
   width: 100%;
   height: 3rem;
   box-sizing: border-box;
-  padding: 0 ${p => p.theme.spacing.default};
   border-width: 0 ${p => p.theme.spacing.xsmall};
   border-color: ${p => p.theme.colors.lightgrey};
   border-style: solid;
@@ -231,9 +260,8 @@ const BarWrapper = styled.div`
   font-size: 2rem;
 
   &:hover {
-    .repeat-sign-start,
-    .repeat-sign-end {
-      visibility: visible;
+    ${RepeatSign} {
+      opacity: 0.5;
     }
 
     ${BarControls} {

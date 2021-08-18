@@ -1,6 +1,6 @@
 import React from "react";
 import "../css/Specs.scss";
-import logo from "../assets/sheetify-logo.png";
+import logo from "../assets/sheetify-logo.svg";
 import { sheet } from "../store";
 import { observer } from "mobx-react-lite";
 
