@@ -69,6 +69,7 @@ const Bar: React.FC<Bar> = observer(({
               onChange={(e) => 
                 setRepeatTimes(Math.max(1, parseInt(e.target.value)))
               } 
+              onFocus={e => e.target.select()}
               placeholder="Repeat times" 
             />
 
@@ -164,9 +165,9 @@ const SectionGoal = styled.input<{ isDefined: boolean }>`
   `}
 `;
 
-const RepeatTag = styled.div<{ show: boolean }>`
+const RepeatTag = styled.label<{ show: boolean }>`
   display: ${p => p.show ? "flex" : "none"};
-  width: 3rem;
+  width: 3.5rem;
   font-size: 1.1rem;
   font-weight: bold;
   color: ${p => p.theme.colors.black};
