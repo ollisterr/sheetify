@@ -43,13 +43,14 @@ const Section = observer(({
               // for them to remain observable in the parent
               addBar={() => section.addBar(i)} 
               deleteBar={(sections.length > 1 || section.bars.length > 1) 
-                ? (() => section.deleteBar(i)) : undefined} 
-              // eslint-disable-next-line max-len
-              addBarAfter={i === section.bars.length - 1 ? (() => section.addBar()) : undefined} 
+                ? (() => section.deleteBar(i)) : undefined
+              } 
             />
 
             {i === section.bars.length - 1 && (
-              <AddBarButton onClick={() => section.addBar(section.bars.length)}>
+              <AddBarButton 
+                onClick={() => section.addBar(section.bars.length)} 
+              >
                 <AddBarIcon icon={faPlus} />
               </AddBarButton>
             )}
@@ -88,11 +89,10 @@ const SectionWrapper = styled.div`
   }
 `;
 
-
-
 const Bars = styled.div<{ chordsPerBar: number }>`
   display: grid;
   grid-template-columns: ${p => calculateBarsGrid(p.chordsPerBar)};
+  align-items: center;
   width: 100%;
 
   @media ${device.sm} {
@@ -104,16 +104,28 @@ const Bars = styled.div<{ chordsPerBar: number }>`
   }
 `;
 
-const AddBarButton = styled.div`
+const AddBarButton = styled.button`
   position: absolute;
-  bottom: 0;
+  bottom: 0.3rem;
   right: -${p => p.theme.spacing.small};
   transform: translateX(100%);
+
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 3rem;
-  cursor: pointer;
+  width: 2.4rem !important;
+  height: 2.4rem !important;
+  border-radius: 100%;
+  background-color: lightgrey;
+  transition: 0.2s background-color;
+  
+  &:hover {
+    background-color: darkgrey;
+  }
+
+  &:focus {
+    box-shadow: 0 0 0 ${p => p.theme.rem(3)} ${p => p.theme.colors.black};
+  }
 
   @media ${device.sm} {
     right: 0;
@@ -127,19 +139,10 @@ const AddBarButton = styled.div`
 `;
 
 const AddBarIcon = styled(FontAwesomeIcon)`
-  width: 2.4rem !important;
-  height: 2.4rem !important;
-  padding: ${p => p.theme.spacing.xsmall};
+  width: 100% !important;
+  height: 100% !important;
   font-size: 3rem;
-  border-radius: 100%;
-
   color: white;
-  background-color: lightgrey;
-  transition: 0.2s background-color;
-  
-  &:hover {
-    background-color: darkgrey;
-  }
 
   @media ${device.sm} {
     height: 2rem !important;

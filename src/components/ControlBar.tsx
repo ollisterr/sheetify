@@ -66,6 +66,11 @@ const AddSection = styled(Button)`
     background-color: transparent;
     color: ${p => p.theme.colors.grey};
   }
+  
+  &:focus {
+    background-color: ${p => p.theme.colors.whitesmoke};
+    color: ${p => p.theme.colors.grey};
+  }
 `;
 
 

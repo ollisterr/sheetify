@@ -18,8 +18,7 @@ interface Bar {
 const Bar: React.FC<Bar> = observer(({ 
   bar, 
   addBar, 
-  deleteBar,
-  addBarAfter
+  deleteBar
 }) => {
   const [repeatTimes, setRepeatTimes] = useState(1);
 
@@ -32,13 +31,6 @@ const Bar: React.FC<Bar> = observer(({
     const newBar = [...bar.bar];
     newBar[index] = chord;
     bar.setBar(newBar);
-  }
-
-  function addBarOnTab(e: React.KeyboardEvent<HTMLInputElement>) {
-    if (e.key === "Tab" && addBarAfter) {
-      e.preventDefault();
-      addBarAfter();
-    }
   }
 
   return (
@@ -92,17 +84,12 @@ const Bar: React.FC<Bar> = observer(({
           <RepeatSignCheckbox onChange={() => bar.toggleRepeat(0)} />
         </RepeatSign>
 
-        {bar.bar.map((chord: string, i: number, array: string[]) => (
+        {bar.bar.map((chord: string, i: number) => (
           <BarBlock
             value={chord}
             key={i}
             onChange={e => updateBar(i, e.target.value)}
             autoFocus={i === 0}
-            onKeyDown={
-              i === array.length - 1 && addBarAfter
-                ? addBarOnTab
-                : undefined
-            }
           />
         ))}
 

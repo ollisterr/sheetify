@@ -4,6 +4,7 @@ const theme = {
     black: "#333",
     grey: "#666",
     lightgrey: "#aaa",
+    whitesmoke: "#ddd",
   },
   padding: {
     small: "0.5rem",
