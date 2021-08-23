@@ -7,11 +7,13 @@ export class BarModule {
   bar: string[];
   goal?: string;
   repeat: Repeat;
+  repeatTimes: number | null;
 
   constructor(chordsPerBar: number) {
     makeAutoObservable(this);
     this.bar = new Array(chordsPerBar).fill("");
     this.repeat = [false, false] as Repeat;
+    this.repeatTimes = null;
   }
 
   setBar(barData: string[]) {
@@ -36,6 +38,15 @@ export class BarModule {
 
   setRepeat(newRepeat: Repeat) {
     this.repeat = newRepeat;
+    if (!newRepeat[1]) {
+      this.repeatTimes = null;
+    }
+  }
+
+  setRepeatTimes(times: number) {
+    if (this.repeat[1]) {
+      this.repeatTimes = times;
+    }
   }
 
   toggleRepeat(index: 0 | 1) {

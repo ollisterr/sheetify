@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus, faMinus } from "@fortawesome/free-solid-svg-icons";
 import styled from "styled-components";
@@ -21,8 +21,6 @@ const Bar: React.FC<Bar> = observer(({
   addBar, 
   deleteBar
 }) => {
-  const [repeatTimes, setRepeatTimes] = useState(1);
-
   function updateBar(index: number, value: string) {
     const chord = value
       .replace(/ /g, "")
@@ -60,21 +58,21 @@ const Bar: React.FC<Bar> = observer(({
         />
 
         {bar.repeat[1] && (
-          <RepeatTag show={repeatTimes > 1}>
+          <RepeatTag show={(bar.repeatTimes ?? 1) > 1}>
             <RepeatInput 
-              value={repeatTimes}
+              value={bar.repeatTimes ?? 1}
               type="number" 
               min={1}
               dir="rtl"
               tabIndex={-1}
               onChange={(e) => 
-                setRepeatTimes(Math.max(1, parseInt(e.target.value)))
+                bar.setRepeatTimes(Math.max(1, parseInt(e.target.value)))
               } 
               onFocus={e => e.target.select()}
               placeholder="Repeat times" 
             />
 
-            {repeatTimes && <span>x</span>}
+            {bar.repeatTimes && <span>x</span>}
           </RepeatTag>
         )}
       </BarControls>
