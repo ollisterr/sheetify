@@ -38,9 +38,10 @@ const SectionControls = observer(({
             <SectionTag
               key={i}
               checked={tag === section.name}
-              onClick={() => section.setName(tag)}
             >
-              <SectionRadioButton />
+              <SectionRadioButton 
+                onClick={() => section.setName(tag === section.name ? "" : tag)}
+              />
 
               {tag}{number > 1 && number}
             </SectionTag>
@@ -129,13 +130,13 @@ export const SectionTag = styled.label<{ checked: boolean }>`
   align-items: center;
   height: 2rem;
   padding: 0.3rem 0.6rem;
-  border: solid 2px ${p => p.theme.colors.lightgrey};
+  border: solid 2px ${p => p.theme.colors[p.checked ? "grey" : "lightgrey"]};
+  color: ${p => p.theme.colors[p.checked ? "grey" : "lightgrey"]};
   font-weight: bold;
-  color: ${p => p.theme.colors.lightgrey};
   line-height: 1;
 
   opacity: 0;
-  transition-property: color, background-color, opacity;
+  transition-property: opacity;
   transition-duration: 0.2s;
   cursor: pointer;
 
@@ -154,11 +155,14 @@ export const SectionTag = styled.label<{ checked: boolean }>`
 
   @media ${device.sm} {
     padding: 0 0.5rem;
+    opacity: 1;
+  }
+
+  @media print {
+    opacity: ${p => p.checked ? 1 : 0};
   }
 
   ${p => p.checked && `
-    color: darkgrey;
-    border-color: darkgrey;
     order: -1;
     opacity: 1;
 
@@ -184,6 +188,10 @@ export const SectionConfig = styled.div`
   opacity: 0;
   transition-property: color, background-color, opacity;
   transition-duration: 0.2s;
+  
+  @media ${device.sm} {
+    opacity: 1;
+  }
 
   @media print {
     display: none;
