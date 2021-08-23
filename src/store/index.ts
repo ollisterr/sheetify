@@ -24,6 +24,9 @@ export const sheet = observable({
       this.key = newKey;
     }
   },
+  transpose(interval: -1 | 1) {
+    this.sections.forEach(section => section.transpose(interval));
+  },
 
   sections: [new SectionModule()],
   addSection(index?: number) {

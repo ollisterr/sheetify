@@ -33,4 +33,8 @@ export class SectionModule {
     this.bars.forEach(bar => bar.setChordsPerBar(count));
     this.chordsPerBar = count;
   }
+
+  transpose(interval: number) {
+    this.bars.forEach(bar => bar.transpose(interval));
+  }
 }

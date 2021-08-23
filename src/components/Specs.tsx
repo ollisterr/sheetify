@@ -1,6 +1,8 @@
 import React from "react";
 import styled from "styled-components";
 import { observer } from "mobx-react-lite";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faMinus, faPlus } from "@fortawesome/free-solid-svg-icons";
 
 import logo from "../assets/sheetify-logo.svg";
 import { sheet } from "../store";
@@ -19,6 +21,10 @@ const SheetSpecification: React.FC = observer(() => {
   function handleTempoChange(e: React.ChangeEvent<HTMLInputElement>) {
     const value = e.target.value.length > 0 ? parseInt(e.target.value) : 120;
     sheet.setTempo(value);
+  }
+
+  function transpose(interval: -1 | 1) {
+    sheet.transpose(interval);
   }
 
   return (
@@ -76,6 +82,19 @@ const SheetSpecification: React.FC = observer(() => {
             onFocus={(e) => e.target.select()} 
           />
         </Setting>
+
+        <Setting hide>
+          <TransposeButton onClick={() => transpose(-1)}>
+            <FontAwesomeIcon icon={faMinus} />
+          </TransposeButton>
+        
+        Transpose
+
+          <TransposeButton onClick={() => transpose(1)}>
+            <FontAwesomeIcon icon={faPlus} />
+          </TransposeButton>
+          
+        </Setting>
       </SettingsWrapper>
     </SpecsWrapper>
   );
@@ -113,11 +132,15 @@ const SettingsWrapper = styled.div`
   width: 100%;
 `;
 
-const Setting = styled.label`
+const Setting = styled.div<{ hide?: boolean}>`
   flex: 1;
   display: flex;
   gap: ${p => p.theme.spacing.small};
   justify-content: center;
+
+  @media print {
+    ${p => p.hide && "display: none;"} // hide in print
+  }
 `;
 
 const TimeSignatureInput = styled.input`
@@ -148,9 +171,32 @@ const TempoInput = styled.input`
   max-width: 3rem !important;
 `;
 
-
 const KeyInputname = styled.input`
   width: 4rem;
+`;
+
+const TransposeButton = styled.button`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  height: 1.2rem;
+  width: 1.2rem;
+  border-radius: 100%;
+
+  color: ${p => p.theme.colors.grey};
+  cursor: pointer;
+  overflow: hidden;
+
+  transition: background-color 0.15s;
+
+  &:hover {
+    background-color: ${p => p.theme.colors.whitesmoke};
+  }
+
+  &:focus {
+    box-shadow: 0 0 0 ${p => p.theme.rem(3)} ${p => p.theme.colors.black};
+  }
 `;
 
 export default SheetSpecification;

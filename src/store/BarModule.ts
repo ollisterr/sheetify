@@ -1,5 +1,6 @@
 import { Repeat } from "../types";
 import { makeAutoObservable } from "mobx";
+import { transposeBar } from "../utils/chords.utils";
 
 
 export class BarModule {
@@ -23,6 +24,10 @@ export class BarModule {
     } else {
       this.bar = this.bar.slice(0, newChordsPerBar);
     }
+  }
+
+  transpose(interval: number) {
+    this.bar = transposeBar(this.bar, interval);
   }
 
   setGoal(newGoal?: string) {
