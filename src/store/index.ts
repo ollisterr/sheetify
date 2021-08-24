@@ -4,15 +4,22 @@ import { TimeSignature } from "../types";
 import { transposeChord } from "../utils/chords.utils";
 import { SectionModule } from "./SectionModule";
 
+type SheetProperties = {
+  title: string,
+  timeSignature: [number, number],
+  tempo: number,
+  key: string,
+  sections: SectionModule[],
+}
 
 export const sheet = observable({
-  read(sheetData: any) {
+  read(sheetData: Partial<SheetProperties>) {
     this.title = sheetData.title ?? "";
-    this.timeSignature = sheetData.timeSignature;
-    this.tempo = sheetData.tempo;
-    this.key = sheetData.key;
+    this.timeSignature = sheetData.timeSignature || [4, 4];
+    this.tempo = sheetData.tempo || 120;
+    this.key = sheetData.key || "C";
 
-    sheetData.sections.forEach((
+    sheetData.sections?.forEach((
       sectionData: Partial<SectionModule>,
       i: number
     ) => {
