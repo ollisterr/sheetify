@@ -22,7 +22,11 @@ async function postData(data, id) {
       )
 
     // return the object identifier
-    return sheetInstance.insertedId;
+    if (sheetInstance.upsertedId) {
+      return sheetInstance.upsertedId
+    } else {
+      return id;
+    }
   } catch (err) {
     console.log(err); // output to netlify function log
   } finally {
@@ -35,8 +39,8 @@ exports.handler = async function (event) {
     const { data, id } = JSON.parse(event.body);
     const insertedId = await postData(data, id);
 
-    return {
-      statusCode: 200,
+    return { 
+      statusCode: 200, 
       body: JSON.stringify({ id: insertedId })
     };
   } catch (err) {
