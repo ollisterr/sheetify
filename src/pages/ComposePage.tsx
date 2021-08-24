@@ -6,6 +6,7 @@ import axios from "axios";
 
 import ControlBar from "../components/ControlBar";
 import Section from "../components/Section";
+import Loading from "../components/Loading";
 import SheetSpecification from "../components/Specs";
 import { sheet } from "../store";
 import { Page } from "../styles";
@@ -54,7 +55,7 @@ const ComposePage: React.FC = observer(() => {
     });
   };
 
-  return (
+  return loading ? <Loading /> : (
     <PageWrapper>
       <SheetPaper ref={printRef}>
         <SheetSpecification />
