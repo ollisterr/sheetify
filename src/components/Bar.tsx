@@ -72,7 +72,7 @@ const Bar: React.FC<Bar> = observer(({
               placeholder="Repeat times" 
             />
 
-            {bar.repeatTimes && <span>x</span>}
+            <span>x</span>
           </RepeatTag>
         )}
       </BarControls>

@@ -35,6 +35,7 @@ const SheetSpecification: React.FC = observer(() => {
 
       <TitleInput
         name='title'
+        value={sheet.title}
         placeholder='Sheet title'
         onChange={(e) => sheet.setTitle(e.target.value)}
         autoComplete="off"

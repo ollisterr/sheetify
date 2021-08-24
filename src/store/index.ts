@@ -1,6 +1,7 @@
 import { observable } from "mobx";
 
 import { TimeSignature } from "../types";
+import { transposeChord } from "../utils/chords.utils";
 import { SectionModule } from "./SectionModule";
 
 
@@ -25,6 +26,7 @@ export const sheet = observable({
     }
   },
   transpose(interval: -1 | 1) {
+    this.key = transposeChord(this.key, interval);
     this.sections.forEach(section => section.transpose(interval));
   },
 

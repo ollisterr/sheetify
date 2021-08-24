@@ -53,7 +53,6 @@ const hashBar = (bar: BarModule) => {
   const hash = bar.bar.map(x => x.replace(
     hashablesRegex,
     (match: string) => {
-      console.log(match);
       const hash: string =
         hashMap[match.toLowerCase() as keyof typeof hashMap] ?? match;
       return hash.toLowerCase();

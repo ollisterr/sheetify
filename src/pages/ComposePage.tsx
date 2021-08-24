@@ -10,7 +10,7 @@ import { sheet } from "../store";
 import { Page } from "../styles";
 import { device } from "../utils/constants";
 
-export const ComposePage: React.FC = observer(() => {
+const ComposePage: React.FC = observer(() => {
   const printRef = useRef(null);
 
   const printPDF = useReactToPrint({
