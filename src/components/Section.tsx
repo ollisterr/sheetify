@@ -83,6 +83,7 @@ const SectionWrapper = styled.div`
 
   &:hover ${SectionTag}, &:hover ${SectionConfig} {
     opacity: 1;
+    display: flex;
   }
 
   @media ${device.sm} {

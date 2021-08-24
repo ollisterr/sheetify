@@ -180,7 +180,7 @@ const CustomSectionTag = styled(SectionTag)`
 `;
 
 export const SectionConfig = styled.div`
-  display: flex;
+  display: none;
   width: auto;
   height: 100%;
   margin-left: auto; // align right

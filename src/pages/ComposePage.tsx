@@ -72,9 +72,7 @@ const ComposePage: React.FC = observer(() => {
         </div>
       </SheetPaper>
 
-      <ControlBar printPDF={printPDF} />
-
-      <button onClick={saveSheet}>SAVE SHEET</button>
+      <ControlBar saveSheet={saveSheet} printPDF={printPDF} />
     </PageWrapper>
   );
 });

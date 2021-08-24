@@ -9,32 +9,61 @@ import { sheet } from "../store";
 import { saveTxt } from "../utils/txt.utils";
 import { device } from "../utils/constants";
 
-const ControlBar = observer(({ printPDF }: { printPDF?: () => void }) => (
+interface Props {
+  saveSheet: () => void,
+  printPDF?: () => void,
+}
+
+const ControlBar = observer(({ printPDF, saveSheet }: Props) => (
   <ControlBarWrapper>
     <AddSection onClick={() => sheet.addSection()}>
       <FontAwesomeIcon icon={faPlus} /> Add Section
     </AddSection>
 
-    <Button onClick={() => saveTxt(sheet.sections)}>
-      Save .txt
-    </Button>
+    <SaveWrapper>
+      <Button onClick={saveSheet}>
+        Save & Share
+      </Button>
 
-    <Button onClick={printPDF}>
-      Save .pdf
-    </Button>
+      <Button onClick={() => saveTxt(sheet.sections)}>
+        Save .txt
+      </Button>
+
+      <Button onClick={printPDF}>
+        Save .pdf
+      </Button>
+    </SaveWrapper>
   </ControlBarWrapper>
 ));
 
 const ControlBarWrapper = styled.div`
   display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  align-items: stretch;
+  width: 100%;
+  padding: ${p => p.theme.spacing.xxxlarge} 0;
+`;
+
+const SaveWrapper = styled.div`
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: flex;
   flex-flow: row wrap;
   justify-content: stretch;
   gap: ${p => p.theme.spacing.small};
-  width: 100%;
-  padding: 0.4rem;
-  border-radius: 5px;
-  border: dotted 2px ${p => p.theme.colors.lightgrey};
-  margin-top: ${p => p.theme.spacing.xxxlarge};
+  width: 100vw;
+  padding: 0.4rem 2vw;
+  // border-top: solid 1px ${p => p.theme.colors.lightgrey};
+  box-shadow: 0 -0.5rem 1rem rgba(0, 0, 0, 0.1);
+  background-color: #fff;
+
+  @media ${device.sm} {
+    gap: ${p => p.theme.spacing.xsmall};
+    padding: 0.4rem;
+  }
 `;
 
 const Button = styled.button`
