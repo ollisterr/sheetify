@@ -2,6 +2,7 @@ import { SheetType } from "../types/index";
 import FileSaver from "file-saver";
 import { BarModule } from "../store/BarModule";
 import { SectionModule } from "../store/SectionModule";
+import { Sheet } from "../store";
 
 export function longestChord(sheet: SheetType): number {
   return sheet.reduce((sum, section) => {
@@ -85,25 +86,30 @@ export function stringifySection(
 }
 
 export function stringifySheet(
-  sheet: SheetType,
+  sheet: Sheet,
   longestChord: number,
   widthLimit = MAX_WIDTH
 ): string {
-  const output = sheet
+  const { title, timeSignature, tempo, key } = sheet;
+
+  const sheetTitle = title.length ? title : "Untitled sheet";
+  const specs = `${timeSignature.join("/")} – Key: ${key} – ${tempo} BPM`;
+  const output = sheet.sections
     .map(section => stringifySection(section, longestChord, widthLimit))
     .join("\n");
-  return ("Untitled song") + "\n---\n" + output;
+
+  return [sheetTitle, specs].join("\n") + "\n---\n" + output;
 }
 
-export function saveTxt(sheetData: SheetType): void {
-  const longest = longestChord(sheetData);
-  const output = stringifySheet(sheetData, longest);
+export function saveTxt(sheet: Sheet): void {
+  const longest = longestChord(sheet.sections);
+  const output = stringifySheet(sheet, longest);
   const blob = new Blob([output], {
     type: "text/plain;charset=utf-8"
   });
 
   FileSaver.saveAs(
     blob,
-    "song-sheet.txt"
+    `${sheet.title.length ? sheet.title : "my-sheet"}.txt`
   );
 }

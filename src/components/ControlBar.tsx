@@ -25,7 +25,7 @@ const ControlBar = observer(({ printPDF, saveSheet }: Props) => (
         Save & Share
       </Button>
 
-      <Button onClick={() => saveTxt(sheet.sections)}>
+      <Button onClick={() => saveTxt(sheet)}>
         Save .txt
       </Button>
 
