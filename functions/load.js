@@ -19,6 +19,8 @@ async function getData(id) {
     return sheetInstance;
   } catch (err) {
     console.log(err); // output to netlify function log
+
+    throw new Error("Invalid object ID");
   } finally {
     await client.close();
   }
@@ -26,7 +28,6 @@ async function getData(id) {
 
 exports.handler = async function (event) {
   try {
-    console.log(event.body);
     const { id } = JSON.parse(event.body);
     const data = await getData(id);
 

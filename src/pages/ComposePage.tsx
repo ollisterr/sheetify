@@ -24,6 +24,8 @@ const ComposePage: React.FC = observer(() => {
         if (res.data) {
           sheet.read(res.data);
         }
+      }).catch(() => {
+        window.location.replace(window.location.origin);
       }).finally(() => {
         setLoading(false);
       });
