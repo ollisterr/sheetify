@@ -6,6 +6,22 @@ import { SectionModule } from "./SectionModule";
 
 
 export const sheet = observable({
+  read(sheetData: any) {
+    this.title = sheetData.title ?? "";
+    this.timeSignature = sheetData.timeSignature;
+    this.tempo = sheetData.tempo;
+    this.key = sheetData.key;
+
+    sheetData.sections.forEach((
+      sectionData: Partial<SectionModule>,
+      i: number
+    ) => {
+      const newSection = new SectionModule(sectionData.chordsPerBar);
+      newSection.read(sectionData);
+      this.sections[i] = newSection;
+    });
+  },
+
   title: "",
   setTitle(title: string) { this.title = title; },
 

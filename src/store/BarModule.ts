@@ -16,6 +16,13 @@ export class BarModule {
     this.repeatTimes = null;
   }
 
+  read(barData: Partial<BarModule>) {
+    this.bar = barData.bar ?? new Array(4).fill("");
+    this.goal = barData.goal;
+    this.repeat = barData.repeat ?? [false, false];
+    this.repeatTimes = barData.repeatTimes ?? null;
+  }
+
   setBar(barData: string[]) {
     this.bar = barData;
   }

@@ -12,6 +12,17 @@ export class SectionModule {
     this.bars = [new BarModule(chordsPerBar ?? 4)];
   }
 
+  read(sectionData: Partial<SectionModule>) {
+    this.name = sectionData.name;
+    this.chordsPerBar = sectionData.chordsPerBar ?? 4;
+
+    sectionData.bars?.forEach((barData: Partial<BarModule>, i: number) => {
+      const newBar = new BarModule(this.chordsPerBar);
+      newBar.read(barData);
+      this.bars[i] = newBar;
+    });
+  }
+
   setName(newName: string) {
     this.name = newName;
   }
