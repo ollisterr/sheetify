@@ -94,6 +94,7 @@ const SectionWrapper = styled.div`
 const Bars = styled.div<{ chordsPerBar: number }>`
   display: grid;
   grid-template-columns: ${p => calculateBarsGrid(p.chordsPerBar)};
+  gap: 0 ${p => p.theme.spacing.xsmall};
   align-items: center;
   width: 100%;
 

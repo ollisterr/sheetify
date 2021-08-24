@@ -94,7 +94,6 @@ export const SectionControlsWrapper = styled.div`
   flex-flow: row wrap;
   align-items: center;
   width: 100%;
-  margin-left: -${p => p.theme.spacing.xsmall};
   font-weight: bold;
   overflow: hidden;
 

@@ -215,40 +215,54 @@ const RepeatSign = styled.label<{ checked: boolean, dir: "left" | "right" }>`
   &:hover {
     opacity: 0.5;
   }
+
+  @media print {
+    ${p => `padding-${p.dir}: ${p.checked ? p.theme.spacing.xsmall : 0};`}
+  }
 `;
 
 const BarContent = styled.div`
   position: relative;
   display: flex;
   align-items: stretch;
+  gap: ${p => p.theme.rem(3)};
   width: 100%;
   height: 3rem;
-  box-sizing: border-box;
-  border-width: 0 ${p => p.theme.spacing.xsmall};
-  border-color: ${p => p.theme.colors.lightgrey};
-  border-style: solid;
-  font-size: 1.6rem;
+  box-shadow: 
+    -${p => p.theme.spacing.xsmall} 0 0 0 ${p => p.theme.colors.lightgrey}, 
+    ${p => p.theme.spacing.xsmall} 0 0 0 ${p => p.theme.colors.lightgrey};
+  font-size: max(1rem, 1.5vw);
+
+  @media ${device.sm} {
+    font-size: 1.5rem;
+  }
+
+  @media print {
+    font-size: 1.2rem;
+    gap: 0;
+  }
 `;
 
 const BarBlock = styled.input`
   position: relative;
   display: inline-block;
   flex: 1 1 auto;
+  padding: 0;
   padding-left: ${p => p.theme.spacing.xsmall};
-  border-width: 0px 3px;
-  border-color: white;
-  border-style: solid;
-  border-radius: 0;
+  margin: 0;
+  background: none;
+  transition: box-shadow 0.1s;
 
   &:hover, &:focus {
-    border-color: whitesmoke;
+    box-shadow: 
+      -${p => p.theme.rem(3)} 0px 0px 0px rgba(0, 0, 0, 0.1), 
+      ${p => p.theme.rem(3)} 0px 0px 0px rgba(0, 0, 0, 0.1);
   }
 `;
 
 const BarWrapper = styled.div`
   position: relative;
   padding-top: ${p => p.theme.spacing.small};
-  margin-left: -${p => p.theme.spacing.xsmall};
   font-size: 2rem;
 
   &:hover {
