@@ -22,14 +22,19 @@ const Bar: React.FC<Bar> = observer(({
   deleteBar
 }) => {
   function updateBar(index: number, value: string) {
-    const chord = value
-      .replace(/ /g, "")
-      .split("/")
-      .map(x => x.charAt(0).toUpperCase() + x.slice(1))
-      .join("/");
-    const newBar = [...bar.bar];
-    newBar[index] = chord;
-    bar.setBar(newBar);
+    // eslint-disable-next-line max-len
+    const regex = /^\(?[a-gA-G]{1}(#|b)?(m|-)?[a-zA-Z1-9-+°]*(\/[a-gA-G]{1}(#|b)?)?\)?$/g;
+    // match chords with allowed characters
+    // add exception for / being the last character
+    if (value.match(regex) || value[value.length - 1] === "/") {
+      const chord = value
+        .split("/")
+        .map(x => x.charAt(0).toUpperCase() + x.slice(1))
+        .join("/");
+      const newBar = [...bar.bar];
+      newBar[index] = chord;
+      bar.setBar(newBar);
+    }
   }
 
   return (
@@ -90,6 +95,11 @@ const Bar: React.FC<Bar> = observer(({
             key={i}
             onChange={e => updateBar(i, e.target.value)}
             autoFocus={i === 0}
+            // auto scale font for large inputs
+            style={{ fontSize: chord.length > 7 
+              ? `${1.5 * 8 / chord.length}rem` 
+              : undefined 
+            }}
           />
         ))}
 
@@ -231,7 +241,7 @@ const BarContent = styled.div`
   box-shadow: 
     -${p => p.theme.spacing.xsmall} 0 0 0 ${p => p.theme.colors.lightgrey}, 
     ${p => p.theme.spacing.xsmall} 0 0 0 ${p => p.theme.colors.lightgrey};
-  font-size: max(1rem, 1.5vw);
+  font-size: min(1.8rem, 1.5vw);
 
   @media ${device.sm} {
     font-size: 1.5rem;

@@ -52,9 +52,9 @@ export const transposeChord = (chord: string, interval: number) => {
   return chord.replace(
     /[CDEFGAB](b|#)?/g,
     (match: string) => {
-      const i = (SCALE.indexOf((normalize[match as keyof typeof normalize]
-        ? normalize[match as keyof typeof normalize]
-        : match)) + interval) % SCALE.length;
+      const i = (SCALE.indexOf(
+        normalize[match as keyof typeof normalize] ?? match
+      ) + interval) % SCALE.length;
       return SCALE[i < 0 ? i + SCALE.length : i];
     });
 };
