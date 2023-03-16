@@ -16,10 +16,9 @@ import { Helmet } from "react-helmet-async";
 const ComposePage: React.FC = observer(() => {
   const [loading, setLoading] = useState(true);
   const printRef = useRef(null);
+  const path = window.location.pathname.replace("/", "");
 
   useEffect(() => {
-    const path = window.location.pathname.replace("/", "");
-
     if (path.length > 0) {
       axios
         .post("/.netlify/functions/load", { id: path })
@@ -70,7 +69,9 @@ const ComposePage: React.FC = observer(() => {
   ) : (
     <>
       <Helmet>
-        <title>{sheet.title} | Sheetify</title>
+        <title>
+          {path ? `${sheet.title ?? "Untitled"} | Sheetify` : "Sheetify"}
+        </title>
       </Helmet>
 
       <PageWrapper>
