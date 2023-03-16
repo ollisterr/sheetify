@@ -11,6 +11,7 @@ import SheetSpecification from "../components/Specs";
 import { sheet } from "../store";
 import { Page } from "../styles";
 import { device } from "../utils/constants";
+import { Helmet } from "react-helmet-async";
 
 const ComposePage: React.FC = observer(() => {
   const [loading, setLoading] = useState(true);
@@ -20,15 +21,19 @@ const ComposePage: React.FC = observer(() => {
     const path = window.location.pathname.replace("/", "");
 
     if (path.length > 0) {
-      axios.post("/.netlify/functions/load", { id: path }).then((res) => {
-        if (res.data) {
-          sheet.read(res.data);
-        }
-      }).catch(() => {
-        window.location.replace(window.location.origin);
-      }).finally(() => {
-        setLoading(false);
-      });
+      axios
+        .post("/.netlify/functions/load", { id: path })
+        .then((res) => {
+          if (res.data) {
+            sheet.read(res.data);
+          }
+        })
+        .catch(() => {
+          window.location.replace(window.location.origin);
+        })
+        .finally(() => {
+          setLoading(false);
+        });
     } else {
       setLoading(false);
     }
@@ -36,47 +41,58 @@ const ComposePage: React.FC = observer(() => {
 
   const printPDF = useReactToPrint({
     content: () => printRef.current,
-    documentTitle: sheet.title
+    documentTitle: sheet.title,
   });
 
   const saveSheet = () => {
     const path = window.location.pathname.replace("/", "");
     setLoading(true);
 
-    axios.post(
-      "/.netlify/functions/save", 
-      { data: sheet, id: path.length ? path : undefined }
-    ).then((res) => {
-      const { id } = res.data;
+    axios
+      .post("/.netlify/functions/save", {
+        data: sheet,
+        id: path.length ? path : undefined,
+      })
+      .then((res) => {
+        const { id } = res.data;
 
-      if (id && id !== path) {
-        window.location.replace(`${window.location.origin}/${id}`);
-      }
-    }).finally(() => {
-      setLoading(false);
-    });
+        if (id && id !== path) {
+          window.location.replace(`${window.location.origin}/${id}`);
+        }
+      })
+      .finally(() => {
+        setLoading(false);
+      });
   };
 
-  return loading ? <Loading /> : (
-    <PageWrapper>
-      <SheetPaper ref={printRef}>
-        <SheetSpecification />
+  return loading ? (
+    <Loading />
+  ) : (
+    <>
+      <Helmet>
+        <title>{sheet.title}</title>
+      </Helmet>
 
-        <div>
-          {sheet.sections.map((section, i) => (
-            <Section 
-              key={i} 
-              section={section} 
-              sections={sheet.sections} 
-              addSection={() => sheet.addSection(i)} 
-              removeSection={() => sheet.removeSection(i)} 
-            />
-          ))}
-        </div>
-      </SheetPaper>
+      <PageWrapper>
+        <SheetPaper ref={printRef}>
+          <SheetSpecification />
 
-      <ControlBar saveSheet={saveSheet} printPDF={printPDF} />
-    </PageWrapper>
+          <div>
+            {sheet.sections.map((section, i) => (
+              <Section
+                key={i}
+                section={section}
+                sections={sheet.sections}
+                addSection={() => sheet.addSection(i)}
+                removeSection={() => sheet.removeSection(i)}
+              />
+            ))}
+          </div>
+        </SheetPaper>
+
+        <ControlBar saveSheet={saveSheet} printPDF={printPDF} />
+      </PageWrapper>
+    </>
   );
 });
 
