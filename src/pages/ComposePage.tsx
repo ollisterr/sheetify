@@ -70,7 +70,7 @@ const ComposePage: React.FC = observer(() => {
   ) : (
     <>
       <Helmet>
-        <title>{sheet.title}</title>
+        <title>{sheet.title} | Sheetify</title>
       </Helmet>
 
       <PageWrapper>
