@@ -1,5 +1,5 @@
-import { makeAutoObservable } from "mobx";
-import { BarModule } from "./BarModule";
+import { makeAutoObservable } from 'mobx';
+import { BarModule } from './BarModule';
 
 export class SectionModule {
   name?: string;
@@ -28,10 +28,14 @@ export class SectionModule {
   }
 
   addBar(index?: number) {
-    this.bars = index !== undefined ?
-      // eslint-disable-next-line max-len
-      [...this.bars.slice(0, index), new BarModule(this.chordsPerBar), ...this.bars.slice(index)]
-      : [...this.bars.slice(0, index), new BarModule(this.chordsPerBar)];
+    this.bars =
+      index !== undefined
+        ? [
+            ...this.bars.slice(0, index),
+            new BarModule(this.chordsPerBar),
+            ...this.bars.slice(index),
+          ]
+        : [...this.bars.slice(0, index), new BarModule(this.chordsPerBar)];
   }
 
   deleteBar(index: number) {
@@ -41,11 +45,11 @@ export class SectionModule {
   }
 
   setChordsPerBar(count: number) {
-    this.bars.forEach(bar => bar.setChordsPerBar(count));
+    this.bars.forEach((bar) => bar.setChordsPerBar(count));
     this.chordsPerBar = count;
   }
 
   transpose(interval: number) {
-    this.bars.forEach(bar => bar.transpose(interval));
+    this.bars.forEach((bar) => bar.transpose(interval));
   }
 }

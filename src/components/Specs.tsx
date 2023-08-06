@@ -1,11 +1,11 @@
-import React from "react";
-import styled from "styled-components";
-import { observer } from "mobx-react-lite";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faMinus, faPlus } from "@fortawesome/free-solid-svg-icons";
+import React from 'react';
+import styled from 'styled-components';
+import { observer } from 'mobx-react-lite';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faMinus, faPlus } from '@fortawesome/free-solid-svg-icons';
 
-import logo from "../assets/sheetify-logo.svg";
-import { sheet } from "../store";
+import logo from '../assets/sheetify-logo.svg';
+import { sheet } from '../store';
 
 const SheetSpecification: React.FC = observer(() => {
   function setTimeSignatureBase(e: React.ChangeEvent<HTMLSelectElement>) {
@@ -17,7 +17,7 @@ const SheetSpecification: React.FC = observer(() => {
     const value = e.target.value.length > 0 ? parseInt(e.target.value) : 1;
     sheet.setTimeSignature([value, sheet.timeSignature[1]]);
   }
- 
+
   function handleTempoChange(e: React.ChangeEvent<HTMLInputElement>) {
     const value = e.target.value.length > 0 ? parseInt(e.target.value) : 120;
     sheet.setTempo(value);
@@ -30,13 +30,13 @@ const SheetSpecification: React.FC = observer(() => {
   return (
     <SpecsWrapper>
       <Trademark>
-        Made with <Logo alt='Logo' src={logo} />
+        Made with <Logo alt="Logo" src={logo} />
       </Trademark>
 
       <TitleInput
-        name='title'
+        name="title"
         value={sheet.title}
-        placeholder='Sheet title'
+        placeholder="Sheet title"
         onChange={(e) => sheet.setTitle(e.target.value)}
         autoComplete="off"
       />
@@ -44,28 +44,30 @@ const SheetSpecification: React.FC = observer(() => {
       <SettingsWrapper>
         <Setting>
           <TimeSignatureInput
-            type='number'
+            type="number"
             min={2}
-            className='time-signature-input'
+            className="time-signature-input"
             value={sheet.timeSignature[0]}
             onChange={setTimeSignatureBars}
             onFocus={(e) => e.target.select()}
           />
           /
           <TimeSignatureSelect onChange={setTimeSignatureBase}>
-            {[4, 8, 16, 32, 64].map((x) => 
-              <option key={x} value={x}>{x}</option>)
-            }
+            {[4, 8, 16, 32, 64].map((x) => (
+              <option key={x} value={x}>
+                {x}
+              </option>
+            ))}
           </TimeSignatureSelect>
         </Setting>
 
         <Setting>
           Tempo:
           <TempoInput
-            className='tempo'
-            type='number'
-            min='0'
-            name='tempo'
+            className="tempo"
+            type="number"
+            min="0"
+            name="tempo"
             value={sheet.tempo}
             onChange={handleTempoChange}
             onFocus={(e) => e.target.select()}
@@ -75,12 +77,12 @@ const SheetSpecification: React.FC = observer(() => {
 
         <Setting>
           Key:
-          <KeyInputname 
-            name='key' 
-            value={sheet.key} 
-            onChange={(e) => sheet.setKey(e.target.value)} 
+          <KeyInputname
+            name="key"
+            value={sheet.key}
+            onChange={(e) => sheet.setKey(e.target.value)}
             autoComplete="off"
-            onFocus={(e) => e.target.select()} 
+            onFocus={(e) => e.target.select()}
           />
         </Setting>
 
@@ -88,13 +90,10 @@ const SheetSpecification: React.FC = observer(() => {
           <TransposeButton onClick={() => transpose(-1)}>
             <FontAwesomeIcon icon={faMinus} />
           </TransposeButton>
-        
-        Transpose
-
+          Transpose
           <TransposeButton onClick={() => transpose(1)}>
             <FontAwesomeIcon icon={faPlus} />
           </TransposeButton>
-          
         </Setting>
       </SettingsWrapper>
     </SpecsWrapper>
@@ -102,7 +101,7 @@ const SheetSpecification: React.FC = observer(() => {
 });
 
 const SpecsWrapper = styled.div`
-  margin: ${p => p.theme.spacing.medium};
+  margin: ${(p) => p.theme.spacing.medium};
 `;
 
 const Trademark = styled.p`
@@ -111,7 +110,7 @@ const Trademark = styled.p`
 `;
 
 const Logo = styled.img`
-  width: ${p => p.theme.rem(70)};
+  width: ${(p) => p.theme.rem(70)};
   vertical-align: middle;
   margin-left: 10px;
   display: inline-block;
@@ -129,18 +128,18 @@ const TitleInput = styled.input`
 const SettingsWrapper = styled.div`
   display: flex;
   justify-content: stretch;
-  gap: ${p => p.theme.spacing.default};
+  gap: ${(p) => p.theme.spacing.default};
   width: 100%;
 `;
 
-const Setting = styled.div<{ hide?: boolean}>`
+const Setting = styled.div<{ hide?: boolean }>`
   flex: 1;
   display: flex;
-  gap: ${p => p.theme.spacing.small};
+  gap: ${(p) => p.theme.spacing.small};
   justify-content: center;
 
   @media print {
-    ${p => p.hide && "display: none;"} // hide in print
+    ${(p) => p.hide && 'display: none;'}// hide in print
   }
 `;
 
@@ -163,7 +162,7 @@ const TimeSignatureSelect = styled.select`
   cursor: pointer;
 
   &:focus {
-    outline: solid 2px ${p => p.theme.colors.lightgrey};
+    outline: solid 2px ${(p) => p.theme.colors.lightgrey};
   }
 `;
 
@@ -185,20 +184,19 @@ const TransposeButton = styled.button`
   width: 1.2rem;
   border-radius: 100%;
 
-  color: ${p => p.theme.colors.grey};
+  color: ${(p) => p.theme.colors.grey};
   cursor: pointer;
   overflow: hidden;
 
   transition: background-color 0.15s;
 
   &:hover {
-    background-color: ${p => p.theme.colors.whitesmoke};
+    background-color: ${(p) => p.theme.colors.whitesmoke};
   }
 
   &:focus {
-    box-shadow: 0 0 0 ${p => p.theme.rem(3)} ${p => p.theme.colors.black};
+    box-shadow: 0 0 0 ${(p) => p.theme.rem(3)} ${(p) => p.theme.colors.black};
   }
 `;
 
 export default SheetSpecification;
-

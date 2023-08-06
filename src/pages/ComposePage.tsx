@@ -1,27 +1,27 @@
-import React, { useRef, useEffect, useState } from "react";
-import { observer } from "mobx-react-lite";
-import { useReactToPrint } from "react-to-print";
-import styled from "styled-components";
-import axios from "axios";
+import React, { useRef, useEffect, useState } from 'react';
+import { observer } from 'mobx-react-lite';
+import { useReactToPrint } from 'react-to-print';
+import styled from 'styled-components';
+import axios from 'axios';
 
-import ControlBar from "../components/ControlBar";
-import Section from "../components/Section";
-import Loading from "../components/Loading";
-import SheetSpecification from "../components/Specs";
-import { sheet } from "../store";
-import { Page } from "../styles";
-import { device } from "../utils/constants";
-import { Helmet } from "react-helmet-async";
+import ControlBar from '../components/ControlBar';
+import Section from '../components/Section';
+import Loading from '../components/Loading';
+import SheetSpecification from '../components/Specs';
+import { sheet } from '../store';
+import { Page } from '../styles';
+import { device } from '../utils/constants';
+import { Helmet } from 'react-helmet-async';
 
 const ComposePage: React.FC = observer(() => {
   const [loading, setLoading] = useState(true);
   const printRef = useRef(null);
-  const path = window.location.pathname.replace("/", "");
+  const path = window.location.pathname.replace('/', '');
 
   useEffect(() => {
     if (path.length > 0) {
       axios
-        .post("/.netlify/functions/load", { id: path })
+        .post('/.netlify/functions/load', { id: path })
         .then((res) => {
           if (res.data) {
             sheet.read(res.data);
@@ -44,11 +44,11 @@ const ComposePage: React.FC = observer(() => {
   });
 
   const saveSheet = () => {
-    const path = window.location.pathname.replace("/", "");
+    const path = window.location.pathname.replace('/', '');
     setLoading(true);
 
     axios
-      .post("/.netlify/functions/save", {
+      .post('/.netlify/functions/save', {
         data: sheet,
         id: path.length ? path : undefined,
       })
@@ -70,7 +70,7 @@ const ComposePage: React.FC = observer(() => {
     <>
       <Helmet>
         <title>
-          {path ? `${sheet.title ?? "Untitled"} | Sheetify` : "Sheetify"}
+          {path ? `${sheet.title ?? 'Untitled'} | Sheetify` : 'Sheetify'}
         </title>
       </Helmet>
 

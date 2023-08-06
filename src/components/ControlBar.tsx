@@ -1,17 +1,16 @@
+import React from 'react';
+import { observer } from 'mobx-react-lite';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faPlus } from '@fortawesome/free-solid-svg-icons';
+import styled from 'styled-components';
 
-import React from "react";
-import { observer } from "mobx-react-lite";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPlus } from "@fortawesome/free-solid-svg-icons";
-import styled from "styled-components";
-
-import { sheet } from "../store";
-import { saveTxt } from "../utils/txt.utils";
-import { device } from "../utils/constants";
+import { sheet } from '../store';
+import { saveTxt } from '../utils/txt.utils';
+import { device } from '../utils/constants';
 
 interface Props {
-  saveSheet: () => void,
-  printPDF?: () => void,
+  saveSheet: () => void;
+  printPDF?: () => void;
 }
 
 const ControlBar = observer(({ printPDF, saveSheet }: Props) => (
@@ -21,17 +20,11 @@ const ControlBar = observer(({ printPDF, saveSheet }: Props) => (
     </AddSection>
 
     <SaveWrapper>
-      <Button onClick={saveSheet}>
-        Save & Share
-      </Button>
+      <Button onClick={saveSheet}>Save & Share</Button>
 
-      <Button onClick={() => saveTxt(sheet)}>
-        Save .txt
-      </Button>
+      <Button onClick={() => saveTxt(sheet)}>Save .txt</Button>
 
-      <Button onClick={printPDF}>
-        Save .pdf
-      </Button>
+      <Button onClick={printPDF}>Save .pdf</Button>
     </SaveWrapper>
   </ControlBarWrapper>
 ));
@@ -42,7 +35,7 @@ const ControlBarWrapper = styled.div`
   gap: 1rem;
   align-items: stretch;
   width: 100%;
-  padding: ${p => p.theme.spacing.xxxlarge} 0;
+  padding: ${(p) => p.theme.spacing.xxxlarge} 0;
 `;
 
 const SaveWrapper = styled.div`
@@ -53,15 +46,15 @@ const SaveWrapper = styled.div`
   display: flex;
   flex-flow: row wrap;
   justify-content: stretch;
-  gap: ${p => p.theme.spacing.small};
+  gap: ${(p) => p.theme.spacing.small};
   width: 100vw;
   padding: 0.4rem 2vw;
-  // border-top: solid 1px ${p => p.theme.colors.lightgrey};
+  // border-top: solid 1px ${(p) => p.theme.colors.lightgrey};
   box-shadow: 0 -0.5rem 1rem rgba(0, 0, 0, 0.1);
   background-color: #fff;
 
   @media ${device.sm} {
-    gap: ${p => p.theme.spacing.xsmall};
+    gap: ${(p) => p.theme.spacing.xsmall};
     padding: 0.4rem;
   }
 `;
@@ -71,7 +64,7 @@ const Button = styled.button`
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: ${p => p.theme.spacing.default};
+  gap: ${(p) => p.theme.spacing.default};
   padding: 0.4rem 1rem;
   border-radius: 5px;
   font-size: 2rem;
@@ -79,17 +72,20 @@ const Button = styled.button`
   color: white;
   line-height: 1;
   text-align: center;
-  background-color: ${p => p.theme.colors.lightgrey};
-  transition: color 0.15s, background-color 0.1s;
+  background-color: ${(p) => p.theme.colors.lightgrey};
+  transition:
+    color 0.15s,
+    background-color 0.1s;
 
-  &:hover, &:focus {
-    background-color: ${p => p.theme.colors.grey};
+  &:hover,
+  &:focus {
+    background-color: ${(p) => p.theme.colors.grey};
   }
 
   @media ${device.md} {
     font-size: 1.8rem;
   }
-  
+
   @media ${device.sm} {
     font-size: 1rem;
   }
@@ -98,17 +94,16 @@ const Button = styled.button`
 const AddSection = styled(Button)`
   background-color: transparent;
   color: lightgrey;
-  
+
   &:hover {
     background-color: transparent;
-    color: ${p => p.theme.colors.grey};
+    color: ${(p) => p.theme.colors.grey};
   }
-  
+
   &:focus {
-    background-color: ${p => p.theme.colors.whitesmoke};
-    color: ${p => p.theme.colors.grey};
+    background-color: ${(p) => p.theme.colors.whitesmoke};
+    color: ${(p) => p.theme.colors.grey};
   }
 `;
-
 
 export default ControlBar;

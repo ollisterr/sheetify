@@ -1,14 +1,13 @@
-import React from "react";
-import styled from "styled-components";
-import { faPlus } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { observer } from "mobx-react-lite";
+import React from 'react';
+import styled from 'styled-components';
+import { faPlus } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { observer } from 'mobx-react-lite';
 
-import Bar from "./Bar";
-import { SectionModule } from "../store/SectionModule";
-import { device } from "../utils/constants";
-import SectionControls, { SectionConfig, SectionTag } from "./SectionControls";
-
+import Bar from './Bar';
+import { SectionModule } from '../store/SectionModule';
+import { device } from '../utils/constants';
+import SectionControls, { SectionConfig, SectionTag } from './SectionControls';
 
 interface Section {
   section: SectionModule;
@@ -17,59 +16,58 @@ interface Section {
   removeSection: () => void;
 }
 
-const Section = observer(({ 
-  section, 
-  sections,
-  addSection,
-  removeSection 
-}: Section) => {
-  return (
-    <SectionWrapper>
-      <SectionControls 
-        section={section} 
-        sections={sections} 
-        addSection={addSection} 
-        removeSection={removeSection} 
-      />
+const Section = observer(
+  ({ section, sections, addSection, removeSection }: Section) => {
+    return (
+      <SectionWrapper>
+        <SectionControls
+          section={section}
+          sections={sections}
+          addSection={addSection}
+          removeSection={removeSection}
+        />
 
-      <Bars chordsPerBar={section.chordsPerBar}>
-        {section.bars.map((bar, i) => (
-          <div key={i} style={{ position: "relative" }}>
-            <Bar 
-              bar={bar}
-              // Make copies of the functions 
-              // for them to remain observable in the parent
-              addBar={() => section.addBar(i)} 
-              deleteBar={(sections.length > 1 || section.bars.length > 1) 
-                ? (() => section.deleteBar(i)) : undefined
-              } 
-            />
+        <Bars chordsPerBar={section.chordsPerBar}>
+          {section.bars.map((bar, i) => (
+            <div key={i} style={{ position: 'relative' }}>
+              <Bar
+                bar={bar}
+                // Make copies of the functions
+                // for them to remain observable in the parent
+                addBar={() => section.addBar(i)}
+                deleteBar={
+                  sections.length > 1 || section.bars.length > 1
+                    ? () => section.deleteBar(i)
+                    : undefined
+                }
+              />
 
-            {i === section.bars.length - 1 && (
-              <AddBarButton 
-                onClick={() => section.addBar(section.bars.length)} 
-              >
-                <AddBarIcon icon={faPlus} />
-              </AddBarButton>
-            )}
-          </div>
-        ))}
-      </Bars>
-    </SectionWrapper>
-  );
-});
+              {i === section.bars.length - 1 && (
+                <AddBarButton
+                  onClick={() => section.addBar(section.bars.length)}
+                >
+                  <AddBarIcon icon={faPlus} />
+                </AddBarButton>
+              )}
+            </div>
+          ))}
+        </Bars>
+      </SectionWrapper>
+    );
+  },
+);
 
 const calculateBarsGrid = (chordsPerBar: number) => {
   if (chordsPerBar === 1) {
-    return "1fr ".repeat(8);
+    return '1fr '.repeat(8);
   } else if (chordsPerBar === 2) {
-    return "1fr ".repeat(4);
+    return '1fr '.repeat(4);
   } else if (chordsPerBar === 3) {
-    return "1fr ".repeat(3);
+    return '1fr '.repeat(3);
   } else if (chordsPerBar >= 8) {
-    return "1fr";
+    return '1fr';
   } else {
-    return "1fr ".repeat(2);
+    return '1fr '.repeat(2);
   }
 };
 
@@ -77,8 +75,8 @@ const SectionWrapper = styled.div`
   position: relative;
   width: 100%;
   height: auto;
-  padding-top: ${p => p.theme.spacing.large};
-  color: ${p => p.theme.colors.lightgrey};
+  padding-top: ${(p) => p.theme.spacing.large};
+  color: ${(p) => p.theme.colors.lightgrey};
   page-break-before: auto;
 
   &:hover ${SectionTag}, &:hover ${SectionConfig} {
@@ -87,14 +85,14 @@ const SectionWrapper = styled.div`
   }
 
   @media ${device.sm} {
-    padding-top: ${p => p.theme.spacing.default};
+    padding-top: ${(p) => p.theme.spacing.default};
   }
 `;
 
 const Bars = styled.div<{ chordsPerBar: number }>`
   display: grid;
-  grid-template-columns: ${p => calculateBarsGrid(p.chordsPerBar)};
-  gap: 0 ${p => p.theme.spacing.xsmall};
+  grid-template-columns: ${(p) => calculateBarsGrid(p.chordsPerBar)};
+  gap: 0 ${(p) => p.theme.spacing.xsmall};
   align-items: center;
   width: 100%;
 
@@ -103,14 +101,14 @@ const Bars = styled.div<{ chordsPerBar: number }>`
   }
 
   @media print {
-    grid-template-columns: ${p => calculateBarsGrid(p.chordsPerBar)};
+    grid-template-columns: ${(p) => calculateBarsGrid(p.chordsPerBar)};
   }
 `;
 
 const AddBarButton = styled.button`
   position: absolute;
   bottom: 0.3rem;
-  right: -${p => p.theme.spacing.small};
+  right: -${(p) => p.theme.spacing.small};
   transform: translateX(100%);
 
   display: flex;
@@ -121,13 +119,13 @@ const AddBarButton = styled.button`
   border-radius: 100%;
   background-color: lightgrey;
   transition: 0.2s background-color;
-  
+
   &:hover {
     background-color: darkgrey;
   }
 
   &:focus {
-    box-shadow: 0 0 0 ${p => p.theme.rem(3)} ${p => p.theme.colors.black};
+    box-shadow: 0 0 0 ${(p) => p.theme.rem(3)} ${(p) => p.theme.colors.black};
   }
 
   @media ${device.sm} {
