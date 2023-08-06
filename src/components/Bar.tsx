@@ -96,7 +96,7 @@ const Bar: React.FC<Bar> = observer(({
             onChange={e => updateBar(i, e.target.value)}
             autoFocus={i === 0}
             // auto scale font for large inputs
-            style={{ fontSize: chord.length > 7 
+            style={{ fontSize: (chord?.length ?? 0) > 7 
               ? `${1.5 * 8 / chord.length}rem` 
               : undefined 
             }}
@@ -203,6 +203,7 @@ const RepeatInput = styled.input`
 
     &[type=number] {
       -moz-appearance: textfield;
+      appearance: textfield;
     }
   }
 `;
