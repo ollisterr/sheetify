@@ -2,18 +2,15 @@ import { Repeat } from "../types";
 import { makeAutoObservable } from "mobx";
 import { transposeBar } from "../utils/chords.utils";
 
-
 export class BarModule {
   bar: string[];
   goal?: string;
-  repeat: Repeat;
-  repeatTimes: number | null;
+  repeat: Repeat = [false, false];
+  repeatTimes: number | null = null;
 
   constructor(chordsPerBar: number) {
     makeAutoObservable(this);
     this.bar = new Array(chordsPerBar).fill("");
-    this.repeat = [false, false] as Repeat;
-    this.repeatTimes = null;
   }
 
   read(barData: Partial<BarModule>) {
@@ -60,4 +57,3 @@ export class BarModule {
     this.repeat[index] = !this.repeat[index];
   }
 }
-

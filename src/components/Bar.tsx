@@ -26,7 +26,7 @@ const Bar: React.FC<Bar> = observer(({
     const regex = /^\(?[a-gA-G]{1}(#|b)?(m|-)?[a-zA-Z1-9-+°]*(\/[a-gA-G]{1}(#|b)?)?\)?$/g;
     // match chords with allowed characters
     // add exception for / being the last character
-    if (value.match(regex) || value[value.length - 1] === "/") {
+    if (value.match(regex) || value[value.length - 1] === "/" || value === "") {
       const chord = value
         .split("/")
         .map(x => x.charAt(0).toUpperCase() + x.slice(1))
@@ -35,7 +35,7 @@ const Bar: React.FC<Bar> = observer(({
       newBar[index] = chord;
       bar.setBar(newBar);
     }
-  }
+  } 
 
   return (
     <BarWrapper>
