@@ -1,0 +1,57 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  width: 100vw;
+  padding: 0;
+  margin: 0;
+  border: none;
+  font-family: 'Gaegu', 'Courier New', Courier, monospace;
+  font-size: 1em;
+  overflow-x: hidden;
+}
+
+textarea,
+select,
+input,
+button {
+  outline: none;
+  border: none;
+}
+
+button {
+  background: none;
+  cursor: pointer;
+
+  -webkit-user-select: none; /* Safari */
+  -moz-user-select: none; /* Firefox */
+  -ms-user-select: none; /* IE10+/Edge */
+  user-select: none; /* Standard */
+}
+
+input {
+  width: 100%;
+  max-width: 500px;
+  font-size: inherit;
+  font-family: inherit;
+
+  border-radius: 0;
+  border: none;
+}
+
+@page {
+  size: A4;
+  margin: 0;
+  padding: 1rem;
+}
+
+@media print {
+  html,
+  body {
+    width: 210mm;
+  }
+}
