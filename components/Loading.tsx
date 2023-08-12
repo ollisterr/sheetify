@@ -57,7 +57,7 @@ const animation = keyframes`
 
 const Stripe = styled.div<{ delay: number }>`
   width: 100%;
-  height: ${(p) => p.theme.rem(8)};
+  height: ${(p) => p.theme.px(8)};
   border-radius: 999px;
   background: linear-gradient(
     to left,

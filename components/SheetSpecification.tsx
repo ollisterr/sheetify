@@ -100,28 +100,29 @@ export const SheetSpecification = observer(() => {
 });
 
 const SpecsWrapper = styled.div`
+  font-size: 16px;
   margin: ${(p) => p.theme.spacing.medium};
 `;
 
 const Trademark = styled.p`
-  font-size: 0.8rem;
+  font-size: ${(p) => p.theme.absoluteRem(0.8)};
   text-align: center;
 `;
 
 const Logo = styled.img`
-  width: ${(p) => p.theme.rem(70)};
+  width: ${(p) => p.theme.absoluteRem(4.5)};
   vertical-align: middle;
-  margin-left: 10px;
+  margin-left: ${(p) => p.theme.absolutePx(10)};
   display: inline-block;
 `;
 
 const TitleInput = styled.input`
-  font-size: 2.5rem;
+  font-size: ${(p) => p.theme.absoluteRem(2.5)};
   width: 100%;
   text-align: center;
   max-width: none;
   padding: 0px;
-  margin: 10px auto;
+  margin: ${(p) => p.theme.absolutePx(10)} auto;
 `;
 
 const SettingsWrapper = styled.div`
@@ -194,6 +195,7 @@ const TransposeButton = styled.button`
   }
 
   &:focus {
-    box-shadow: 0 0 0 ${(p) => p.theme.rem(3)} ${(p) => p.theme.colors.black};
+    box-shadow: ${(p) =>
+      `0 0 0 ${p.theme.absoluteRem(0.25)} ${p.theme.colors.black}`};
   }
 `;

@@ -1,10 +1,10 @@
 import type { AppProps } from 'next/app';
-import { ThemeProvider } from 'styled-components';
 
-import theme from '../styles/theme';
 import { SheetProvider } from '../store/SheetProvider';
 import '../styles/index.css';
 import { SheetProperties } from '../store/SheetModule';
+import { GlobalStateProvider } from 'providers/GlobalStateProvider';
+import { ThemeProvider } from 'providers/ThemeProvider';
 
 const App = ({
   Component,
@@ -12,9 +12,11 @@ const App = ({
 }: AppProps<{ sheet: SheetProperties }>) => {
   return (
     <SheetProvider sheetData={pageProps.sheet}>
-      <ThemeProvider theme={theme}>
-        <Component {...pageProps} />
-      </ThemeProvider>
+      <GlobalStateProvider>
+        <ThemeProvider>
+          <Component {...pageProps} />
+        </ThemeProvider>
+      </GlobalStateProvider>
     </SheetProvider>
   );
 };

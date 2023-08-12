@@ -3,6 +3,9 @@ import styled from 'styled-components';
 import { useRouter } from 'next/router';
 import { useReactToPrint } from 'react-to-print';
 import { observer } from 'mobx-react-lite';
+import { FaEdit, FaEye } from 'react-icons/fa';
+import { AiOutlineZoomIn } from '@react-icons/all-files/ai/AiOutlineZoomIn';
+import { AiOutlineZoomOut } from '@react-icons/all-files/ai/AiOutlineZoomOut';
 
 import { PageWrapper } from '../styles';
 import { ControlBar } from './ControlBar';
@@ -12,10 +15,12 @@ import { Loading } from './Loading';
 import { useSheet } from '../store/SheetProvider';
 import { api } from '../utils/api.utils';
 import { redirect } from 'next/navigation';
+import { useGlobalState } from '../providers/GlobalStateProvider';
 
 export const SheetPage = observer(() => {
   const sheet = useSheet();
   const router = useRouter();
+  const { readMode, setReadMode, zoomOut, zoomIn } = useGlobalState();
 
   const printRef = useRef(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -47,6 +52,20 @@ export const SheetPage = observer(() => {
 
   return (
     <PageWrapper>
+      <ReadControlsWrapper>
+        <ReadControl onClick={zoomIn}>
+          <AiOutlineZoomIn />
+        </ReadControl>
+
+        <ReadControl onClick={zoomOut}>
+          <AiOutlineZoomOut />
+        </ReadControl>
+
+        <ReadControl onClick={() => setReadMode(!readMode)}>
+          {readMode ? <FaEdit /> : <FaEye />}
+        </ReadControl>
+      </ReadControlsWrapper>
+
       <SheetPaper ref={printRef}>
         <SheetSpecification />
 
@@ -63,7 +82,7 @@ export const SheetPage = observer(() => {
         </div>
       </SheetPaper>
 
-      <ControlBar saveSheet={saveSheet} printPDF={printPDF} />
+      {!readMode && <ControlBar saveSheet={saveSheet} printPDF={printPDF} />}
     </PageWrapper>
   );
 });
@@ -72,5 +91,23 @@ const SheetPaper = styled.section`
   @media print {
     padding: 1rem 2rem;
     width: 210mm;
+  }
+`;
+
+const ReadControlsWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: ${(p) => p.theme.absoluteRem(1)};
+`;
+
+const ReadControl = styled.button`
+  opacity: 0.5;
+  padding: 0;
+  transition: opacity 500ms;
+  font-size: ${(p) => p.theme.absoluteRem(1.2)};
+
+  &:hover {
+    opacity: 1;
   }
 `;

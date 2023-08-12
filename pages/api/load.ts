@@ -17,7 +17,7 @@ const getData = async (id: string) => {
 
     return sheetInstance;
   } catch (err) {
-    throw new Error('Invalid sheet ID');
+    throw `Invalid sheet ID: ${id}`;
   } finally {
     await client.close();
   }

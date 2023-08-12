@@ -3,12 +3,12 @@ import Head from 'next/head';
 import { redirect } from 'next/navigation';
 import { observer } from 'mobx-react-lite';
 
-import { SheetPage } from '../components/SheetPage';
-import { useSheet } from '../store/SheetProvider';
-import { api } from '../utils/api.utils';
-import { SheetProperties } from '../store/SheetModule';
+import { SheetPage } from '@components/SheetPage';
+import { useSheet } from '@store/SheetProvider';
+import { api } from '@utils/api.utils';
+import { SheetProperties } from '@store/SheetModule';
 
-const Page: NextPage = observer((props) => {
+const SetListPage: NextPage = observer((props) => {
   const { title } = useSheet();
 
   if ('notFound' in props) redirect('/');
@@ -44,4 +44,4 @@ export const getServerSideProps: GetServerSideProps<
   }
 };
 
-export default Page;
+export default SetListPage;

@@ -1,9 +1,10 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import { observer } from 'mobx-react-lite';
 
 import { device } from '../utils/constants';
 import { SectionModule } from '../store/SectionModule';
 import { FaPlusSquare, FaTrash } from 'react-icons/fa';
+import { useGlobalState } from 'providers/GlobalStateProvider';
 
 const sectionTags = ['A', 'B', 'C', 'Bridge', 'Intro', 'Outro'];
 
@@ -16,8 +17,12 @@ interface SectionControls {
 
 export const SectionControls = observer(
   ({ section, sections, addSection, removeSection }: SectionControls) => {
+    const { readMode } = useGlobalState();
+
     const customSectionName =
       (!sectionTags.includes(section.name ?? '') && section.name) || '';
+
+    if (readMode && !section.name) return null;
 
     return (
       <SectionControlsWrapper>
@@ -30,9 +35,14 @@ export const SectionControls = observer(
                 .indexOf(section) + 1;
 
             return (
-              <SectionTag key={i} checked={tag === section.name}>
+              <SectionTag
+                key={i}
+                checked={tag === section.name}
+                $readMode={readMode}
+              >
                 <SectionRadioButton
                   onClick={() =>
+                    !readMode &&
                     section.setName(tag === section.name ? '' : tag)
                   }
                 />
@@ -52,6 +62,7 @@ export const SectionControls = observer(
               section.setName(e.target.value)
             }
             tabIndex={-1}
+            $readMode={readMode}
           />
         </SectionTags>
 
@@ -120,11 +131,14 @@ const SectionTags = styled.div`
   }
 `;
 
-export const SectionTag = styled.label<{ checked: boolean }>`
+export const SectionTag = styled.label<{
+  checked: boolean;
+  $readMode: boolean;
+}>`
   display: flex;
   align-items: center;
-  height: 2rem;
-  padding: 0.3rem 0.6rem;
+  height: ${(p) => p.theme.rem(2)};
+  padding: ${(p) => `${p.theme.rem(0.4)} ${p.theme.rem(0.6)}`};
   border: solid 2px ${(p) => p.theme.colors[p.checked ? 'grey' : 'lightgrey']};
   color: ${(p) => p.theme.colors[p.checked ? 'grey' : 'lightgrey']};
   font-weight: bold;
@@ -133,21 +147,25 @@ export const SectionTag = styled.label<{ checked: boolean }>`
   opacity: 0;
   transition-property: opacity;
   transition-duration: 0.2s;
-  cursor: pointer;
+  ${(p) => !p.theme.readMode && 'cursor: pointer'};
 
   &::placeholder {
     color: ${(p) => p.theme.colors.lightgrey};
   }
 
-  &:hover,
-  &:focus {
-    color: white;
-    background-color: ${(p) => p.theme.colors.lightgrey};
+  ${(p) =>
+    !p.$readMode &&
+    css`
+      &:hover,
+      &:focus {
+        color: white;
+        background-color: ${(p) => p.theme.colors.lightgrey};
 
-    &::placeholder {
-      color: white;
-    }
-  }
+        &::placeholder {
+          color: white;
+        }
+      }
+    `}
 
   @media ${device.sm} {
     padding: 0 0.5rem;

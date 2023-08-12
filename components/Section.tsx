@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import { observer } from 'mobx-react-lite';
 import { FaPlus } from 'react-icons/fa';
 
@@ -6,6 +6,7 @@ import { SectionModule } from '../store/SectionModule';
 import { device } from '../utils/constants';
 import { SectionControls, SectionConfig, SectionTag } from './SectionControls';
 import { Bar } from './Bar';
+import { useGlobalState } from 'providers/GlobalStateProvider';
 
 interface Section {
   section: SectionModule;
@@ -16,8 +17,10 @@ interface Section {
 
 export const Section = observer(
   ({ section, sections, addSection, removeSection }: Section) => {
+    const { readMode } = useGlobalState();
+
     return (
-      <SectionWrapper>
+      <SectionWrapper $readMode={readMode}>
         <SectionControls
           section={section}
           sections={sections}
@@ -40,7 +43,7 @@ export const Section = observer(
                 }
               />
 
-              {i === section.bars.length - 1 && (
+              {i === section.bars.length - 1 && !readMode && (
                 <AddBarButton
                   onClick={() => section.addBar(section.bars.length)}
                 >
@@ -69,7 +72,7 @@ const calculateBarsGrid = (chordsPerBar: number) => {
   }
 };
 
-const SectionWrapper = styled.div`
+const SectionWrapper = styled.div<{ $readMode: boolean }>`
   position: relative;
   width: 100%;
   height: auto;
@@ -77,10 +80,14 @@ const SectionWrapper = styled.div`
   color: ${(p) => p.theme.colors.lightgrey};
   page-break-before: auto;
 
-  &:hover ${SectionTag}, &:hover ${SectionConfig} {
-    opacity: 1;
-    display: flex;
-  }
+  ${(p) =>
+    !p.$readMode &&
+    css`
+      &:hover ${SectionTag}, &:hover ${SectionConfig} {
+        opacity: 1;
+        display: flex;
+      }
+    `}
 
   @media ${device.sm} {
     padding-top: ${(p) => p.theme.spacing.default};
@@ -105,15 +112,15 @@ const Bars = styled.div<{ $chordsPerBar: number }>`
 
 const AddBarButton = styled.button`
   position: absolute;
-  bottom: 0.3rem;
-  right: -${(p) => p.theme.spacing.small};
+  bottom: ${(p) => p.theme.rem(0.3)};
+  right: -${(p) => p.theme.spacing.default};
   transform: translateX(100%);
 
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 2.4rem !important;
-  height: 2.4rem !important;
+  width: ${(p) => p.theme.rem(2.4)} !important;
+  height: ${(p) => p.theme.rem(2.4)} !important;
   border-radius: 100%;
   background-color: lightgrey;
   transition: 0.2s background-color;
@@ -123,13 +130,13 @@ const AddBarButton = styled.button`
   }
 
   &:focus {
-    box-shadow: 0 0 0 ${(p) => p.theme.rem(3)} ${(p) => p.theme.colors.black};
+    box-shadow: 0 0 0 ${(p) => p.theme.px(3)} ${(p) => p.theme.colors.black};
   }
 
   @media ${device.sm} {
     right: 0;
-    width: 2rem;
-    height: 2rem;
+    width: ${(p) => p.theme.rem(2)};
+    height: ${(p) => p.theme.rem(2)};
     border: solid 2px white;
     transform: translateX(43%);
   }
@@ -142,6 +149,6 @@ const AddBarButton = styled.button`
 const AddBarIcon = styled(FaPlus)`
   width: 100% !important;
   height: 100% !important;
-  font-size: 3rem;
+  font-size: ${(p) => p.theme.rem(3)};
   color: white;
 `;

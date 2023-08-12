@@ -1,5 +1,22 @@
-import { SheetPage } from '../components/SheetPage';
+import Head from 'next/head';
+import { observer } from 'mobx-react-lite';
 
-export default function IndexPage() {
-  return <SheetPage />;
-}
+import { SheetPage } from '../components/SheetPage';
+import { useSheet } from '../store/SheetProvider';
+
+const IndexPage = observer(() => {
+  const { title } = useSheet();
+
+  return (
+    <>
+      <Head>
+        <title>{title ?? 'New sheet'} | Sheetify</title>
+        <meta name="description" content="Sheet music" />
+      </Head>
+
+      <SheetPage />
+    </>
+  );
+});
+
+export default IndexPage;

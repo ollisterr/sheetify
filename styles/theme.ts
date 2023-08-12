@@ -1,38 +1,46 @@
-const theme = {
-  rem: (px: number) => `${px / 16}rem`,
-  colors: {
-    black: '#333',
-    grey: '#555',
-    lightgrey: '#aaa',
-    whitesmoke: '#ddd',
-  },
-  padding: {
-    small: '0.5rem',
-    default: '1rem',
-    medium: '1.5rem',
-    large: '2rem',
-  },
-  borderRadius: {
-    small: '0.25rem',
-    default: '0.75rem',
-    large: '1.25rem',
-    pill: '999px',
-  },
-  spacing: {
-    none: '0rem',
-    xxsmall: '0.125rem',
-    xsmall: '0.25rem',
-    small: '0.5rem',
-    default: '1rem',
-    medium: '1.5rem',
-    large: '2rem',
-    xlarge: '2.5rem',
-    xxlarge: '3rem',
-    xxxlarge: '6.5rem',
-  },
-};
+const scaleSize = <T extends number>(size: T, scale: number = 1) =>
+  `${size * scale}rem` as `${T}rem`;
 
-export type Theme = typeof theme;
+const theme = (scale: number = 1, readMode: boolean = false) =>
+  ({
+    readMode,
+    px: (px: number) => `${(px / 16) * scale}rem`,
+    rem: (rem: number) => `${rem * scale}rem`,
+    absolutePx: (px: number) => px,
+    absoluteRem: (rem: number) => `${rem * 16}px`,
+    colors: {
+      black: '#333',
+      grey: '#555',
+      lightgrey: '#aaa',
+      whitesmoke: '#ddd',
+    },
+    padding: {
+      small: scaleSize(0.5, scale),
+      default: scaleSize(1, scale),
+      medium: scaleSize(1.5, scale),
+      large: scaleSize(2, scale),
+    },
+    borderRadius: {
+      small: scaleSize(0.25, scale),
+      default: scaleSize(0.75, scale),
+      large: scaleSize(1.25, scale),
+      pill: '999px',
+    },
+    spacing: {
+      none: scaleSize(0, scale),
+      xxsmall: scaleSize(0.125, scale),
+      xsmall: scaleSize(0.25, scale),
+      small: scaleSize(0.5, scale),
+      default: scaleSize(1, scale),
+      medium: scaleSize(1.5, scale),
+      large: scaleSize(2, scale),
+      xlarge: scaleSize(2.5, scale),
+      xxlarge: scaleSize(3, scale),
+      xxxlarge: scaleSize(6.5, scale),
+    },
+  }) as const;
+
+export type Theme = ReturnType<typeof theme>;
 
 export type Color = keyof Theme['colors'];
 

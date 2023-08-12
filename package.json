@@ -4,6 +4,7 @@
   "private": true,
   "main": "src/index.tsx",
   "dependencies": {
+    "@react-icons/all-files": "^4.1.0",
     "@types/next": "^9.0.0",
     "axios": "^1.4.0",
     "file-saver": "^2.0.5",

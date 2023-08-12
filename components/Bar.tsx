@@ -1,10 +1,11 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 
 import { BarModule } from '../store/BarModule';
 import { observer } from 'mobx-react-lite';
 import { device } from '../utils/constants';
 import { FaMinus, FaPlus } from 'react-icons/fa';
 import { RepeatSign } from './icons/RepeatSign';
+import { useGlobalState } from 'providers/GlobalStateProvider';
 
 interface BarProps {
   bar: BarModule;
@@ -14,6 +15,8 @@ interface BarProps {
 }
 
 export const Bar = observer(({ bar, addBar, deleteBar }: BarProps) => {
+  const { readMode, zoom } = useGlobalState();
+
   const updateBar = (index: number, value: string) => {
     // eslint-disable-next-line max-len
     const regex =
@@ -33,44 +36,47 @@ export const Bar = observer(({ bar, addBar, deleteBar }: BarProps) => {
 
   return (
     <BarWrapper>
-      <BarControls>
-        <BarControlButton onClick={addBar}>
-          <FaPlus size="100%" />
-        </BarControlButton>
-
-        {deleteBar && (
-          <BarControlButton onClick={() => deleteBar()}>
-            <FaMinus />
+      {(bar.goal || !readMode) && (
+        <BarControls>
+          <BarControlButton onClick={addBar}>
+            <FaPlus size="100%" />
           </BarControlButton>
-        )}
 
-        <SectionGoal
-          value={bar.goal ?? ''}
-          onChange={(e) => bar.setGoal(e.target.value)}
-          placeholder="goal"
-          tabIndex={-1}
-          $isDefined={!!bar.goal}
-        />
+          {deleteBar && (
+            <BarControlButton onClick={() => deleteBar()}>
+              <FaMinus />
+            </BarControlButton>
+          )}
 
-        {bar.repeat[1] && (
-          <RepeatTag $show={(bar.repeatTimes ?? 1) > 1}>
-            <RepeatInput
-              value={bar.repeatTimes ?? 1}
-              type="number"
-              min={1}
-              dir="rtl"
-              tabIndex={-1}
-              onChange={(e) =>
-                bar.setRepeatTimes(Math.max(1, parseInt(e.target.value)))
-              }
-              onFocus={(e) => e.target.select()}
-              placeholder="Repeat times"
-            />
+          <SectionGoal
+            value={bar.goal ?? ''}
+            onChange={(e) => bar.setGoal(e.target.value)}
+            placeholder="goal"
+            tabIndex={-1}
+            $isDefined={!!bar.goal}
+            disabled={readMode}
+          />
 
-            <span>x</span>
-          </RepeatTag>
-        )}
-      </BarControls>
+          {bar.repeat[1] && (
+            <RepeatTag $show={(bar.repeatTimes ?? 1) > 1}>
+              <RepeatInput
+                value={bar.repeatTimes ?? 1}
+                type="number"
+                min={1}
+                dir="rtl"
+                tabIndex={-1}
+                onChange={(e) =>
+                  bar.setRepeatTimes(Math.max(1, parseInt(e.target.value)))
+                }
+                onFocus={(e) => e.target.select()}
+                placeholder="Repeat times"
+              />
+
+              <span>x</span>
+            </RepeatTag>
+          )}
+        </BarControls>
+      )}
 
       <BarContent>
         <RepeatSignWrapper checked={!!bar.repeat[0]} dir="right">
@@ -89,9 +95,10 @@ export const Bar = observer(({ bar, addBar, deleteBar }: BarProps) => {
             style={{
               fontSize:
                 (chord?.length ?? 0) > 7
-                  ? `${(1.5 * 8) / chord.length}rem`
+                  ? `${((1.5 * 8) / chord.length) * zoom}rem`
                   : undefined,
             }}
+            disabled={readMode}
           />
         ))}
 
@@ -142,8 +149,8 @@ const BarControlButton = styled.button`
 
   color: white;
   background-color: ${(p) => p.theme.colors.lightgrey};
-  cursor: pointer;
   overflow: hidden;
+  cursor: pointer;
 
   transition: background-color 0.15s;
 
@@ -152,7 +159,7 @@ const BarControlButton = styled.button`
   }
 
   &:focus {
-    box-shadow: 0 0 0 ${(p) => p.theme.rem(3)} ${(p) => p.theme.colors.black};
+    box-shadow: 0 0 0 ${(p) => p.theme.px(3)} ${(p) => p.theme.colors.black};
   }
 `;
 
@@ -160,7 +167,7 @@ const SectionGoal = styled.input<{ $isDefined: boolean }>`
   flex: 1;
   padding-left: ${(p) => p.theme.spacing.xsmall};
 
-  border: ${(p) => `solid ${p.theme.rem(2)} ${p.theme.colors.lightgrey}`};
+  border: ${(p) => `solid ${p.theme.px(2)} ${p.theme.colors.lightgrey}`};
   border-width: 2px 0 0 2px;
   visibility: hidden;
   transition: opacity 0.2s;
@@ -233,25 +240,25 @@ const BarContent = styled.div`
   position: relative;
   display: flex;
   align-items: stretch;
-  gap: ${(p) => p.theme.rem(3)};
+  gap: ${(p) => p.theme.spacing.xxsmall};
   width: 100%;
-  height: 3rem;
+  height: ${(p) => p.theme.spacing.xxlarge};
   box-shadow:
     -${(p) => p.theme.spacing.xsmall} 0 0 0 ${(p) => p.theme.colors.lightgrey},
     ${(p) => p.theme.spacing.xsmall} 0 0 0 ${(p) => p.theme.colors.lightgrey};
-  font-size: min(1.8rem, 1.5vw);
+  font-size: min(${(p) => p.theme.rem(1.8)}, 1.5vw);
 
   @media ${device.sm} {
-    font-size: 1.5rem;
+    font-size: ${(p) => p.theme.rem(1.5)};
   }
 
   @media print {
-    font-size: 1.2rem;
+    font-size: ${(p) => p.theme.rem(1.2)};
     gap: 0;
   }
 `;
 
-const BarBlock = styled.input`
+const BarBlock = styled.input<{ disabled: boolean }>`
   position: relative;
   display: inline-block;
   flex: 1 1 auto;
@@ -261,12 +268,16 @@ const BarBlock = styled.input`
   background: none;
   transition: box-shadow 0.1s;
 
-  &:hover,
-  &:focus {
-    box-shadow:
-      -${(p) => p.theme.rem(3)} 0px 0px 0px rgba(0, 0, 0, 0.1),
-      ${(p) => p.theme.rem(3)} 0px 0px 0px rgba(0, 0, 0, 0.1);
-  }
+  ${(p) =>
+    !p.disabled &&
+    css`
+      &:hover,
+      &:focus {
+        box-shadow:
+          -${(p) => p.theme.px(3)} 0px 0px 0px rgba(0, 0, 0, 0.1),
+          ${(p) => p.theme.px(3)} 0px 0px 0px rgba(0, 0, 0, 0.1);
+      }
+    `}
 `;
 
 const BarWrapper = styled.div`
@@ -274,25 +285,29 @@ const BarWrapper = styled.div`
   padding-top: ${(p) => p.theme.spacing.small};
   font-size: 2rem;
 
-  &:hover {
-    ${BarControls} {
-      grid-template-columns: auto auto 1fr auto;
+  ${(p) =>
+    !p.theme.readMode &&
+    css`
+      &:hover {
+        ${BarControls} {
+          grid-template-columns: auto auto 1fr auto;
 
-      > * {
-        opacity: 1;
-      }
+          > * {
+            opacity: 1;
+          }
 
-      ${`${BarControlButton}, ${RepeatTag}`} {
-        display: flex;
-      }
+          ${`${BarControlButton}, ${RepeatTag}`} {
+            display: flex;
+          }
 
-      ${SectionGoal} {
-        visibility: visible;
-      }
+          ${SectionGoal} {
+            visibility: visible;
+          }
 
-      @media (max-width: $small) {
-        max-height: $barControlHeight;
+          @media (max-width: $small) {
+            max-height: $barControlHeight;
+          }
+        }
       }
-    }
-  }
+    `}
 `;
