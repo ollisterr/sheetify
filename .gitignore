@@ -29,3 +29,4 @@ yarn-error.log*
 .next
 build/
 dist/
+.vercel
