@@ -1,11 +1,4 @@
-import {
-  ReactNode,
-  createContext,
-  useCallback,
-  useContext,
-  useMemo,
-  useState,
-} from 'react';
+import { ReactNode, createContext, useContext, useMemo, useState } from 'react';
 
 interface GlobalStateContext {
   readMode: boolean;
