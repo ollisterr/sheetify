@@ -4,7 +4,7 @@ import { SetlistProperties } from '@store/SetlistModule';
 
 export const apiClient = axios.create({
   baseURL:
-    process.env.NODE_ENV !== 'production'
+    process.env.NEXT_PUBLIC_NODE_ENV !== 'production'
       ? 'http://localhost:3000/api'
       : '/api',
 });
