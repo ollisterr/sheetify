@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { SheetModule, SheetProperties } from '../store/SheetModule';
+import { SetlistProperties } from '@store/SetlistModule';
 
 export const apiClient = axios.create({
   baseURL:
@@ -10,7 +11,11 @@ export const apiClient = axios.create({
 
 export const api = {
   save: (data: SheetModule, id?: string) =>
-    apiClient.post<{ id: string }>('/save', { data, id }),
+    apiClient.post<string>('/save', { data, id }),
   load: (id: string) =>
     apiClient.get<SheetProperties>('/load', { params: { id } }),
+  addToSetlist: (sheetId: string, setlistId?: string) =>
+    apiClient.post<string>('/add-to-setlist', { sheetId, setlistId }),
+  loadSetlist: (setlistId: string) =>
+    apiClient.get<SetlistProperties>('/setlist', { params: { id: setlistId } }),
 };

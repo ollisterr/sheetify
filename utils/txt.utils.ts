@@ -2,7 +2,7 @@ import { SheetType } from '../types';
 import FileSaver from 'file-saver';
 import { BarModule } from '../store/BarModule';
 import { SectionModule } from '../store/SectionModule';
-import { Sheet } from '../store';
+import { Sheet } from '../store/initSheet';
 
 export function longestChord(sheet: SheetType): number {
   return sheet.reduce((sum, section) => {

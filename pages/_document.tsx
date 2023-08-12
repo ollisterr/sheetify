@@ -13,22 +13,22 @@ export default function Document() {
         <link
           rel="shortcut icon"
           sizes="180x180"
-          href="/sheetify-favicon.svg"
+          href="/sheetify-favicon.png"
         />
         <link
           rel="icon"
           type="image/png"
           sizes="32x32"
-          href="/sheetify-favicon.svg"
+          href="/sheetify-favicon.png"
         />
         <link
           rel="icon"
           type="image/png"
           sizes="16x16"
-          href="/sheetify-favicon.svg"
+          href="/sheetify-favicon.png"
         />
 
-        <link rel="shortcut icon" href="/sheetify-favicon.svg" />
+        <link rel="shortcut icon" href="/sheetify-favicon.png" />
 
         <link
           href="https://fonts.googleapis.com/css?family=Gaegu:400,700"

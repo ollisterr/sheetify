@@ -3,19 +3,24 @@ import styled from 'styled-components';
 import { useRouter } from 'next/router';
 import { useReactToPrint } from 'react-to-print';
 import { observer } from 'mobx-react-lite';
-import { FaEdit, FaEye } from 'react-icons/fa';
+import { FaAndroid, FaEdit, FaEye } from 'react-icons/fa';
 import { AiOutlineZoomIn } from '@react-icons/all-files/ai/AiOutlineZoomIn';
 import { AiOutlineZoomOut } from '@react-icons/all-files/ai/AiOutlineZoomOut';
 
-import { PageWrapper } from '../styles';
+import { useSheet } from '@store/SheetProvider';
+import { api } from '@utils/api.utils';
+
 import { ControlBar } from './ControlBar';
 import { Section } from './Section';
 import { SheetSpecification } from './SheetSpecification';
 import { Loading } from './Loading';
-import { useSheet } from '../store/SheetProvider';
-import { api } from '../utils/api.utils';
-import { redirect } from 'next/navigation';
+
+import { IconButton, PageWrapper } from '../styles';
 import { useGlobalState } from '../providers/GlobalStateProvider';
+import {
+  getRouteParamFromSlug,
+  getRouteParamFromUrl,
+} from '@utils/common.utils';
 
 export const SheetPage = observer(() => {
   const sheet = useSheet();
@@ -34,36 +39,62 @@ export const SheetPage = observer(() => {
 
   const saveSheet = () => {
     const sheetId = router.query.slug;
-    if (!sheetId || Array.isArray(sheetId)) return;
+    if (Array.isArray(sheetId)) return;
 
     setIsLoading(true);
 
     api
       .save(sheet, sheetId)
       .then((res) => {
-        const { id } = res.data;
-
-        if (id && id !== sheetId) {
-          redirect(`/${id}`);
+        if (res.data && res.data !== sheetId) {
+          router.replace(`/${res.data}`);
         }
       })
+      .finally(() => setIsLoading(false));
+  };
+
+  const addToSetlist = () => {
+    let sheetId: string | undefined;
+    let setlistId: string | undefined;
+
+    const routeParams = router.query.slug;
+
+    if (router.pathname.includes('setlist')) {
+      sheetId = getRouteParamFromUrl(prompt('Sheet URL') ?? '');
+      setlistId = getRouteParamFromSlug(routeParams);
+    } else {
+      sheetId = getRouteParamFromSlug(routeParams);
+      setlistId = getRouteParamFromUrl(prompt('Setlist URL') ?? '');
+    }
+
+    if (!sheetId) return;
+
+    setIsLoading(true);
+
+    api
+      .addToSetlist(sheetId, setlistId)
+      .then((res) => router.replace(`/setlist/${res.data}`))
       .finally(() => setIsLoading(false));
   };
 
   return (
     <PageWrapper>
       <ReadControlsWrapper>
-        <ReadControl onClick={zoomIn}>
+        <IconButton onClick={addToSetlist}>
+          <FaAndroid />
+        </IconButton>
+
+        <IconButton onClick={zoomIn}>
           <AiOutlineZoomIn />
-        </ReadControl>
+        </IconButton>
 
-        <ReadControl onClick={zoomOut}>
+        <IconButton onClick={zoomOut}>
           <AiOutlineZoomOut />
-        </ReadControl>
+        </IconButton>
 
-        <ReadControl onClick={() => setReadMode(!readMode)}>
+        <IconButton onClick={() => setReadMode(!readMode)}>
           {readMode ? <FaEdit /> : <FaEye />}
-        </ReadControl>
+        </IconButton>
       </ReadControlsWrapper>
 
       <SheetPaper ref={printRef}>
@@ -99,15 +130,4 @@ const ReadControlsWrapper = styled.div`
   align-items: center;
   justify-content: flex-end;
   gap: ${(p) => p.theme.absoluteRem(1)};
-`;
-
-const ReadControl = styled.button`
-  opacity: 0.5;
-  padding: 0;
-  transition: opacity 500ms;
-  font-size: ${(p) => p.theme.absoluteRem(1.2)};
-
-  &:hover {
-    opacity: 1;
-  }
 `;

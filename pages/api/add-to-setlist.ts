@@ -1,10 +1,10 @@
 import { isAxiosError } from 'axios';
 import { NextApiHandler } from 'next';
-import { SheetProperties } from '../../store/SheetModule';
 
 import { MongoClient, ObjectId } from 'mongodb';
+import { SetlistData } from './setlist';
 
-const postData = async (sheetId: string, setlistId: string) => {
+const postData = async (sheetId: string, setlistId?: string) => {
   // eslint-disable-next-line max-len
   const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASSWORD}@cluster0.mrysz.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`;
 
@@ -15,18 +15,18 @@ const postData = async (sheetId: string, setlistId: string) => {
 
     const sheetInstance = await client
       .db(process.env.DB_NAME)
-      .collection('setlists')
+      .collection<SetlistData>('setlists')
       .updateOne(
         { _id: new ObjectId(setlistId) },
-        { $addToSet: sheetId },
+        { $addToSet: { sheets: sheetId } },
         { upsert: true },
       );
 
     // return the object identifier
-    if (sheetInstance.upsertedId) {
-      return sheetInstance.upsertedId;
-    } else {
+    if (setlistId) {
       return setlistId;
+    } else {
+      return sheetInstance.upsertedId?.toString();
     }
   } catch (err) {
     console.error(err);
@@ -42,10 +42,7 @@ const handler: NextApiHandler = async (req, res) => {
     const { sheetId, setlistId } = req.body;
     const insertedId = await postData(sheetId, setlistId);
 
-    return res
-      .status(200)
-      .setHeader('content-type', 'application/json')
-      .json({ id: insertedId });
+    return res.status(200).json(insertedId);
   } catch (err) {
     console.error(err);
 

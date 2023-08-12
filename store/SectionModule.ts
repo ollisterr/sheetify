@@ -15,11 +15,11 @@ export class SectionModule {
     }
   }
 
-  read(sectionData: Partial<SectionModule>) {
+  read(sectionData: SectionModule) {
     if (sectionData.name) this.name = sectionData.name;
     this.chordsPerBar = sectionData.chordsPerBar ?? 4;
 
-    sectionData.bars?.forEach((barData: Partial<BarModule>, i) => {
+    sectionData.bars?.forEach((barData, i) => {
       const newBar = new BarModule(this.chordsPerBar);
       newBar.read(barData);
       this.bars[i] = newBar;

@@ -25,3 +25,17 @@ export const PageWrapper = styled(Page)`
     padding-right: 1.1rem;
   }
 `;
+
+export const IconButton = styled.button`
+  display: flex;
+  align-items: center;
+  gap: ${(p) => p.theme.spacing.default};
+  opacity: 0.5;
+  padding: 0;
+  transition: opacity 500ms;
+  font-size: ${(p) => p.theme.absoluteRem(1.2)};
+
+  &:hover {
+    opacity: 1;
+  }
+`;

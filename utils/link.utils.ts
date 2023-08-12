@@ -1,4 +1,4 @@
-import { Sheet } from '../store';
+import { Sheet } from '../store/initSheet';
 import { BarModule } from '../store/BarModule';
 import { SectionModule } from '../store/SectionModule';
 import { FLAT_SCALE, SHARP_SCALE } from './chords.utils';

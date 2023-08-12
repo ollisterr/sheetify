@@ -14,7 +14,7 @@ export class BarModule {
     this.bar = new Array(chordsPerBar).fill('');
   }
 
-  read(barData: Partial<BarModule>) {
+  read(barData: BarModule) {
     if (barData.bar) this.bar = barData.bar;
     if (barData.goal) this.goal = barData.goal;
 

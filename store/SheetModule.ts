@@ -4,6 +4,7 @@ import { transposeChord } from '../utils/chords.utils';
 import { SectionModule } from './SectionModule';
 
 export interface SheetProperties {
+  _id: string;
   title: string;
   timeSignature: [number, number];
   tempo: number;
@@ -12,29 +13,31 @@ export interface SheetProperties {
 }
 
 export class SheetModule {
+  id = '';
   title = '';
   tempo = 120;
   timeSignature = [4, 4];
   key = 'C';
   sections = [new SectionModule()];
 
-  constructor() {
+  constructor(sheet?: SheetProperties) {
     makeAutoObservable(this);
+
+    if (sheet) this.read(sheet);
   }
 
-  read(sheetData: Partial<SheetProperties>) {
+  read(sheetData: SheetProperties) {
+    this.id = sheetData._id;
     this.title = sheetData.title ?? '';
     this.timeSignature = sheetData.timeSignature || [4, 4];
     this.tempo = sheetData.tempo || 120;
     this.key = sheetData.key || 'C';
 
-    sheetData.sections?.forEach(
-      (sectionData: Partial<SectionModule>, i: number) => {
-        const newSection = new SectionModule(sectionData.chordsPerBar);
-        newSection.read(sectionData);
-        this.sections[i] = newSection;
-      },
-    );
+    sheetData.sections?.forEach((sectionData, i) => {
+      const newSection = new SectionModule(sectionData.chordsPerBar);
+      newSection.read(sectionData);
+      this.sections[i] = newSection;
+    });
   }
 
   setTitle(title: string) {
