@@ -3,10 +3,7 @@ import { SheetModule, SheetProperties } from '../store/SheetModule';
 import { SetlistProperties } from '@store/SetlistModule';
 
 export const apiClient = axios.create({
-  baseURL:
-    process.env.NEXT_PUBLIC_NODE_ENV !== 'production'
-      ? 'http://localhost:3000/api'
-      : '/api',
+  baseURL: 'https://sheetify.vercel.app/api',
 });
 
 export const api = {
