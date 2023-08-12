@@ -1,7 +1,6 @@
 import { useRef, useState } from 'react';
 import styled from 'styled-components';
 import { useRouter } from 'next/router';
-import axios from 'axios';
 import { useReactToPrint } from 'react-to-print';
 import { observer } from 'mobx-react-lite';
 
@@ -11,6 +10,8 @@ import { Section } from './Section';
 import { SheetSpecification } from './SheetSpecification';
 import { Loading } from './Loading';
 import { useSheet } from '../store/SheetProvider';
+import { api } from '../utils/api.utils';
+import { redirect } from 'next/navigation';
 
 export const SheetPage = observer(() => {
   const sheet = useSheet();
@@ -19,33 +20,29 @@ export const SheetPage = observer(() => {
   const printRef = useRef(null);
   const [isLoading, setIsLoading] = useState(false);
 
-  if (isLoading) return <Loading />;
-
   const printPDF = useReactToPrint({
     content: () => printRef.current,
     documentTitle: sheet.title,
   });
 
+  if (isLoading) return <Loading />;
+
   const saveSheet = () => {
-    const path = router.asPath;
+    const sheetId = router.query.slug;
+    if (!sheetId || Array.isArray(sheetId)) return;
 
     setIsLoading(true);
 
-    axios
-      .post('/.netlify/functions/save', {
-        data: sheet,
-        id: path.length ? path : undefined,
-      })
+    api
+      .save(sheet, sheetId)
       .then((res) => {
         const { id } = res.data;
 
-        if (id && id !== path) {
-          window.location.replace(`${window.location.origin}/${id}`);
+        if (id && id !== sheetId) {
+          redirect(`/${id}`);
         }
       })
-      .finally(() => {
-        setIsLoading(false);
-      });
+      .finally(() => setIsLoading(false));
   };
 
   return (

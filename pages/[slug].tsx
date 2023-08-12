@@ -1,24 +1,19 @@
-import { useEffect } from 'react';
 import type { GetServerSideProps, NextPage } from 'next';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { observer } from 'mobx-react-lite';
 
-import { Loading } from '../components';
 import { SheetPage } from '../components/SheetPage';
 import { useSheet } from '../store/SheetProvider';
+import { api } from '../utils/api.utils';
+import { SheetProperties } from '../store/SheetModule';
+import { redirect } from 'next/navigation';
 
 const Page: NextPage = observer((props) => {
   const router = useRouter();
   const sheet = useSheet();
 
-  useEffect(() => {
-    if ('notFound' in props) {
-      router?.replace('/');
-    }
-  }, []);
-
-  if ('notFound' in props) return <Loading />;
+  if ('notFound' in props) redirect('/');
 
   return (
     <>
@@ -36,12 +31,19 @@ const Page: NextPage = observer((props) => {
 });
 
 export const getServerSideProps: GetServerSideProps<
-  { sheet: any },
+  { sheet: SheetProperties },
   { slug: string }
-> = async ({ params, preview = process.env.NODE_ENV === 'development' }) => {
+> = async ({ params, res }) => {
   try {
-    return { props: { sheet: {} } };
+    if (!params?.slug) return { notFound: true };
+
+    const { data: sheetData } = await api.load(params.slug);
+    console.log('OPENING SHEET', params.slug, sheetData);
+
+    return { props: { sheet: sheetData } };
   } catch (err) {
+    // console.error('ERROR rendering page', err);
+
     // Redirects and renders to 404
     return { notFound: true };
   }

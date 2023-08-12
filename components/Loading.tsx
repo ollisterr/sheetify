@@ -9,7 +9,9 @@ export const Loading = () => {
           <Stripe delay={x} key={x} />
         ))}
 
-        <NoteKey />
+        <NoteKey>
+          <KeyIcon style={{ height: '80%' }} />
+        </NoteKey>
       </AnimationWrapper>
 
       <span>Loading...</span>
@@ -44,6 +46,7 @@ const AnimationWrapper = styled.div`
   gap: ${(p) => p.theme.spacing.default};
   width: 100%;
   max-width: 10rem;
+  max-height: 15rem;
   padding: 1rem;
 `;
 
@@ -72,8 +75,14 @@ const Stripe = styled.div<{ delay: number }>`
   animation-iteration-count: infinite;
 `;
 
-const NoteKey = styled(KeyIcon)`
+const NoteKey = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
   position: absolute;
-  height: 75%;
   mix-blend-mode: color-burn;
 `;

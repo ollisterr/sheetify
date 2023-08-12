@@ -1,4 +1,6 @@
-export const KeyIcon = () => (
+import { HTMLAttributes } from 'react';
+
+export const KeyIcon = (props: HTMLAttributes<SVGElement>) => (
   <svg
     version="1.1"
     id="Layer_1"
@@ -9,6 +11,7 @@ export const KeyIcon = () => (
     viewBox="0 0 270.7 732.5"
     xmlSpace="preserve"
     fill="#333"
+    {...props}
   >
     <g>
       <path
