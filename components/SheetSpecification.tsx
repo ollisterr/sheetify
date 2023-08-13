@@ -28,10 +28,6 @@ export const SheetSpecification = observer(() => {
 
   return (
     <SpecsWrapper>
-      <Trademark>
-        Made with <Logo alt="Logo" src="/assets/sheetify-logo.svg" />
-      </Trademark>
-
       <TitleInput
         name="title"
         value={sheet.title}
@@ -104,18 +100,6 @@ const SpecsWrapper = styled.div`
   margin: ${(p) => p.theme.spacing.medium};
 `;
 
-const Trademark = styled.p`
-  font-size: ${(p) => p.theme.absoluteRem(0.8)};
-  text-align: center;
-`;
-
-const Logo = styled.img`
-  width: ${(p) => p.theme.absoluteRem(4.5)};
-  vertical-align: middle;
-  margin-left: ${(p) => p.theme.absolutePx(10)};
-  display: inline-block;
-`;
-
 const TitleInput = styled.input`
   font-size: ${(p) => p.theme.absoluteRem(2.5)};
   width: 100%;
@@ -123,6 +107,7 @@ const TitleInput = styled.input`
   max-width: none;
   padding: 0px;
   margin: ${(p) => p.theme.absolutePx(10)} auto;
+  margin-bottom: ${(p) => p.theme.absoluteRem(1)};
 `;
 
 const SettingsWrapper = styled.div`

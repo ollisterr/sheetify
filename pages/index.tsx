@@ -1,7 +1,7 @@
 import Head from 'next/head';
 import { observer } from 'mobx-react-lite';
 
-import { SheetPage } from '../components/SheetPage';
+import { SheetPage } from '../components/Sheet';
 import { useSheet } from '../store/SheetProvider';
 
 const IndexPage = observer(() => {

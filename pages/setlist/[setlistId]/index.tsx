@@ -3,14 +3,18 @@ import Head from 'next/head';
 import { redirect } from 'next/navigation';
 import { observer } from 'mobx-react-lite';
 
-import { SheetPage } from '@components/SheetPage';
-import { api } from '@utils/api.utils';
+import { Sheet } from '@components/Sheet';
 import { SetlistProperties } from '@store/SetlistModule';
 import { useSetSheet, useSetlist, useSheet } from '@store/SheetProvider';
 import { IconButton } from 'styles';
 import { FaChevronLeft, FaChevronRight } from 'react-icons/fa';
 import { styled } from 'styled-components';
 import { useEffect } from 'react';
+import { loadSetlist } from 'pages/api/setlist';
+
+export interface SetlistPageProps {
+  setlist: SetlistProperties;
+}
 
 const SetListPage: NextPage = observer((props) => {
   const setlist = useSetlist();
@@ -32,7 +36,7 @@ const SetListPage: NextPage = observer((props) => {
         <meta name="description" content="Sheet music" />
       </Head>
 
-      <SheetPage />
+      <Sheet />
 
       <SetlistControls>
         {setlist.previousSheet && (
@@ -73,14 +77,14 @@ const SetlistControls = styled.section`
 
 export const getServerSideProps: GetServerSideProps<
   { setlist: SetlistProperties },
-  { slug: string }
+  { setlistId: string }
 > = async ({ params }) => {
   try {
-    if (!params?.slug) {
-      return { notFound: true };
-    }
+    const setlistId = params?.setlistId;
 
-    const { data: setlistData } = await api.loadSetlist(params.slug);
+    if (!setlistId) return { notFound: true };
+
+    const setlistData = await loadSetlist(setlistId);
     console.log('OPENING SETLIST', setlistData);
 
     return { props: { setlist: setlistData } };

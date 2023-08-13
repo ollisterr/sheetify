@@ -16,7 +16,9 @@ export const loadSheet = async (id: string) => {
       .collection('sheets')
       .findOne<SheetProperties>({ _id: new ObjectId(id) });
 
-    return sheetInstance;
+    if (!sheetInstance) return null;
+
+    return { ...sheetInstance, _id: sheetInstance._id.toString() };
   } catch (err) {
     throw `Invalid sheet ID: ${id}`;
   } finally {
@@ -26,7 +28,7 @@ export const loadSheet = async (id: string) => {
 
 const handler: NextApiHandler = async (req, res) => {
   try {
-    const sheetId = req.query.id;
+    const sheetId = req.body?.id;
 
     if (!sheetId || Array.isArray(sheetId)) {
       return res.status(400).send('Bad request');

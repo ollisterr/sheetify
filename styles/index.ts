@@ -8,21 +8,21 @@ export const Page = styled.main`
   align-items: center;
   width: 100%;
   min-height: 100vh;
-  padding: 1rem;
+  padding: ${(p) => p.theme.absoluteRem(1)};
 
   > * {
     width: 100%;
-    max-width: 1000px;
+    max-width: ${(p) => p.theme.absolutePx(1000)};
   }
 `;
 
 export const PageWrapper = styled(Page)`
-  padding: 1rem;
-  padding-right: 3.5rem; // for fitting add bar icon
+  padding: ${(p) => p.theme.absoluteRem(1)};
+  padding-right: ${(p) => p.theme.absoluteRem(3.5)}; // for fitting add bar icon
 
   @media ${device.sm} {
-    padding: 0.8rem;
-    padding-right: 1.1rem;
+    padding: ${(p) => p.theme.absoluteRem(0.8)};
+    padding-right: ${(p) => p.theme.absoluteRem(1.1)};
   }
 `;
 

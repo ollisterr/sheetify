@@ -37,7 +37,8 @@ const ControlBarWrapper = styled.div`
   gap: 1rem;
   align-items: stretch;
   width: 100%;
-  padding: ${(p) => p.theme.spacing.xxxlarge} 0;
+  padding: ${(p) => p.theme.spacing.medium} 0;
+  margin-top: ${(p) => p.theme.spacing.xlarge};
 `;
 
 const SaveWrapper = styled.div`

@@ -24,7 +24,7 @@ export const SheetProvider = ({
 }: {
   children: ReactNode;
   sheetData: SheetProperties;
-  setlistData: SetlistProperties;
+  setlistData?: SetlistProperties;
 }) => {
   const setlist = useInitSetlist(setlistData);
   const [sheet, setSheet] = useState(

@@ -6,7 +6,7 @@ export const Loading = () => {
     <Wrapper>
       <AnimationWrapper>
         {[0, 1, 2, 3, 4].map((x) => (
-          <Stripe delay={x} key={x} />
+          <Stripe $delay={x} key={x} />
         ))}
 
         <NoteKey>
@@ -55,7 +55,7 @@ const animation = keyframes`
   100% { background-position: 200% 0%; }
 `;
 
-const Stripe = styled.div<{ delay: number }>`
+const Stripe = styled.div<{ $delay: number }>`
   width: 100%;
   height: ${(p) => p.theme.px(8)};
   border-radius: 999px;
@@ -71,7 +71,7 @@ const Stripe = styled.div<{ delay: number }>`
   background-position: 200% 0%;
   animation-duration: 1.5s;
   animation-timing-function: cubic-bezier(0, 0.3, 1, 0.71);
-  animation-delay: ${(p) => p.delay * 0.1}s;
+  animation-delay: ${(p) => p.$delay * 0.1}s;
   animation-iteration-count: infinite;
 `;
 

@@ -1,3 +1,5 @@
+import { isEditPathname, trimEditPathname } from '@utils/common.utils';
+import { useRouter } from 'next/router';
 import { ReactNode, createContext, useContext, useMemo, useState } from 'react';
 
 interface GlobalStateContext {
@@ -13,16 +15,29 @@ const GlobalStateContext = createContext<GlobalStateContext | null>(null);
 
 export const GlobalStateProvider = ({
   children,
+  readMode: readModeProp,
 }: {
   children: ReactNode | ((state: GlobalStateContext) => ReactNode);
+  readMode?: boolean;
 }) => {
-  const [readMode, setReadMode] = useState(true);
+  const router = useRouter();
+
+  const [readMode, setReadMode] = useState(
+    readModeProp ?? isEditPathname(router.pathname),
+  );
   const [zoom, setZoom] = useState(1);
 
   const globalState = useMemo<GlobalStateContext>(() => {
     return {
       readMode,
-      setReadMode,
+      setReadMode: (x: boolean) => {
+        router.replace(
+          trimEditPathname(router.asPath) + (!x ? '/edit' : ''),
+          undefined,
+          { shallow: true },
+        );
+        setReadMode(x);
+      },
       zoom,
       zoomOut: () => setZoom((x) => x * 0.75),
       zoomIn: () => setZoom((x) => x / 0.75),

@@ -21,8 +21,9 @@ import {
   getRouteParamFromSlug,
   getRouteParamFromUrl,
 } from '@utils/common.utils';
+import { PageContainer } from './PageContainer';
 
-export const SheetPage = observer(() => {
+export const Sheet = observer(() => {
   const sheet = useSheet();
   const router = useRouter();
   const { readMode, setReadMode, zoomOut, zoomIn } = useGlobalState();
@@ -38,7 +39,7 @@ export const SheetPage = observer(() => {
   if (isLoading) return <Loading />;
 
   const saveSheet = () => {
-    const sheetId = router.query.slug;
+    const sheetId = router.query.sheetId;
     if (Array.isArray(sheetId)) return;
 
     setIsLoading(true);
@@ -46,8 +47,8 @@ export const SheetPage = observer(() => {
     api
       .save(sheet, sheetId)
       .then((res) => {
-        if (res.data && res.data !== sheetId) {
-          router.replace(`/${res.data}`);
+        if (res && res !== sheetId) {
+          router.replace(`/${res}`);
         }
       })
       .finally(() => setIsLoading(false));
@@ -57,7 +58,7 @@ export const SheetPage = observer(() => {
     let sheetId: string | undefined;
     let setlistId: string | undefined;
 
-    const routeParams = router.query.slug;
+    const routeParams = router.query.sheetId;
 
     if (router.pathname.includes('setlist')) {
       sheetId = getRouteParamFromUrl(prompt('Sheet URL') ?? '');
@@ -65,6 +66,7 @@ export const SheetPage = observer(() => {
     } else {
       sheetId = getRouteParamFromSlug(routeParams);
       setlistId = getRouteParamFromUrl(prompt('Setlist URL') ?? '');
+      if (!setlistId) return;
     }
 
     if (!sheetId) return;
@@ -73,12 +75,12 @@ export const SheetPage = observer(() => {
 
     api
       .addToSetlist(sheetId, setlistId)
-      .then((res) => router.replace(`/setlist/${res.data}`))
+      .then((res) => router.replace(`/setlist/${res}`))
       .finally(() => setIsLoading(false));
   };
 
   return (
-    <PageWrapper>
+    <PageContainer>
       <ReadControlsWrapper>
         <IconButton onClick={addToSetlist}>
           <FaAndroid />
@@ -114,7 +116,7 @@ export const SheetPage = observer(() => {
       </SheetPaper>
 
       {!readMode && <ControlBar saveSheet={saveSheet} printPDF={printPDF} />}
-    </PageWrapper>
+    </PageContainer>
   );
 });
 

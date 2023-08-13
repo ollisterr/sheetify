@@ -6,7 +6,7 @@ const theme = (scale: number = 1, readMode: boolean = false) =>
     readMode,
     px: (px: number) => `${(px / 16) * scale}rem`,
     rem: (rem: number) => `${rem * scale}rem`,
-    absolutePx: (px: number) => px,
+    absolutePx: (px: number) => `${px}px`,
     absoluteRem: (rem: number) => `${rem * 16}px`,
     colors: {
       black: '#333',

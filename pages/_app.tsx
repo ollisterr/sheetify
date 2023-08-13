@@ -1,19 +1,22 @@
-import type { AppProps } from 'next/app';
+import type { AppProps as NextAppProps } from 'next/app';
 
 import { SheetProvider } from '../store/SheetProvider';
 import '../styles/index.css';
-import { SheetProperties } from '../store/SheetModule';
 import { GlobalStateProvider } from 'providers/GlobalStateProvider';
 import { ThemeProvider } from 'providers/ThemeProvider';
-import { SetlistProperties } from '@store/SetlistModule';
+import { SetlistPageProps } from './setlist/[setlistId]';
+import { SheetPageProps } from './[sheetId]';
 
-const App = ({
-  Component,
-  pageProps,
-}: AppProps<{ sheet: SheetProperties; setlist: SetlistProperties }>) => {
+export interface AppProps {
+  readMode: boolean;
+}
+
+type RouteProps = AppProps & Partial<SetlistPageProps> & SheetPageProps;
+
+const App = ({ Component, pageProps }: NextAppProps<RouteProps>) => {
   return (
     <SheetProvider sheetData={pageProps.sheet} setlistData={pageProps.setlist}>
-      <GlobalStateProvider>
+      <GlobalStateProvider readMode={pageProps.readMode}>
         <ThemeProvider>
           <Component {...pageProps} />
         </ThemeProvider>
