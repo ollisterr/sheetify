@@ -30,9 +30,11 @@ export const GlobalStateProvider = ({
   const router = useRouter();
 
   const isSetlistPath = !!router.query.setlistId;
+  const isSheetPath = !!router.query.sheetId;
 
   const [readMode, setReadMode] = useState(
-    readModeProp ?? (isEditPathname(router.pathname) && !isSetlistPath),
+    readModeProp ??
+      ((isEditPathname(router.pathname) || !isSheetPath) && !isSetlistPath),
   );
   const [zoom, setZoom] = useState(1);
 

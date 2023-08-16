@@ -1,7 +1,7 @@
 import Head from 'next/head';
 import { observer } from 'mobx-react-lite';
 
-import { SheetPage } from '../components/Sheet';
+import { Sheet } from '../components/Sheet';
 import { useSheet } from '../store/SheetProvider';
 
 const IndexPage = observer(() => {
@@ -14,9 +14,13 @@ const IndexPage = observer(() => {
         <meta name="description" content="Sheet music" />
       </Head>
 
-      <SheetPage />
+      <Sheet />
     </>
   );
 });
+
+export const getServerSideProps = async () => {
+  return { props: { readMode: false } };
+};
 
 export default IndexPage;
