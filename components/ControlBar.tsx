@@ -70,7 +70,7 @@ const Button = styled.button`
   gap: ${(p) => p.theme.spacing.default};
   padding: 0.4rem 1rem;
   border-radius: 5px;
-  font-size: 2rem;
+  font-size: 1.4rem;
   font-family: inherit;
   color: white;
   line-height: 1;

@@ -6,7 +6,7 @@ import { observer } from 'mobx-react-lite';
 import { Sheet } from '@components/Sheet';
 import { SetlistProperties } from '@store/SetlistModule';
 import { useSetSheet, useSetlist, useSheet } from '@store/SheetProvider';
-import { IconButton } from 'styles';
+import { Button, IconButton } from 'styles';
 import { FaChevronLeft, FaChevronRight } from 'react-icons/fa';
 import { styled } from 'styled-components';
 import { useEffect } from 'react';
@@ -40,22 +40,24 @@ const SetListPage: NextPage = observer((props) => {
 
       <SetlistControls>
         {setlist.previousSheet && (
-          <IconButton
+          <SheetControl
             disabled={!setlist.previousSheet}
             onClick={setlist.previousSheet.onClick}
+            style={{ maxWidth: '40%' }}
           >
-            <FaChevronLeft /> <label>{setlist.previousSheet.title}</label>
-          </IconButton>
+            <FaChevronLeft />{' '}
+            <SheetLabel>{setlist.previousSheet.title}</SheetLabel>
+          </SheetControl>
         )}
 
         {setlist.nextSheet && (
-          <IconButton
-            disabled={!setlist.nextSheet}
+          <SheetControl
             onClick={setlist.nextSheet.onClick}
-            style={{ marginLeft: 'auto' }}
+            style={{ marginLeft: 'auto', maxWidth: '40%' }}
           >
-            <label>{setlist.nextSheet.title}</label> <FaChevronRight />
-          </IconButton>
+            <SheetLabel>{setlist.nextSheet.title}</SheetLabel>{' '}
+            <FaChevronRight />
+          </SheetControl>
         )}
       </SetlistControls>
     </>
@@ -70,9 +72,22 @@ const SetlistControls = styled.section`
   display: flex;
   justify-content: space-between;
   width: 100%;
-  padding: ${(p) => p.theme.spacing.default};
+  padding: ${(p) => p.theme.spacing.small};
   background-color: #fff;
   z-index: 10;
+  max-width: 100%;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+`;
+
+const SheetControl = styled(Button)`
+  max-width: 40%;
+`;
+
+const SheetLabel = styled.label`
+  flex: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 `;
 
 export const getServerSideProps: GetServerSideProps<
@@ -87,7 +102,7 @@ export const getServerSideProps: GetServerSideProps<
     const setlistData = await loadSetlist(setlistId);
     console.log('OPENING SETLIST', setlistData);
 
-    return { props: { setlist: setlistData } };
+    return { props: { setlist: setlistData, readMode: true } };
   } catch (err) {
     // Redirects and renders to 404
     return { notFound: true };

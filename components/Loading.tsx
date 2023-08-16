@@ -1,7 +1,11 @@
 import styled, { keyframes } from 'styled-components';
 import { KeyIcon } from './icons';
 
-export const Loading = () => {
+interface Props {
+  message?: string;
+}
+
+export const Loading = ({ message = 'Loading...' }: Props) => {
   return (
     <Wrapper>
       <AnimationWrapper>
@@ -14,7 +18,7 @@ export const Loading = () => {
         </NoteKey>
       </AnimationWrapper>
 
-      <span>Loading...</span>
+      <span>{message}</span>
     </Wrapper>
   );
 };

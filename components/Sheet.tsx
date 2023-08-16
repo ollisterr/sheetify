@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import { useRouter } from 'next/router';
 import { useReactToPrint } from 'react-to-print';
@@ -20,13 +20,20 @@ import { useGlobalState } from '../providers/GlobalStateProvider';
 import {
   getRouteParamFromSlug,
   getRouteParamFromUrl,
+  trimEditPathname,
 } from '@utils/common.utils';
 import { PageContainer } from './PageContainer';
 
-export const Sheet = observer(() => {
+interface SheetProps {
+  showSetlistControls?: boolean;
+}
+
+export const Sheet = observer(({ showSetlistControls = false }: SheetProps) => {
   const sheet = useSheet();
   const router = useRouter();
   const { readMode, setReadMode, zoomOut, zoomIn } = useGlobalState();
+
+  const isSetlist = !!router.query.setlistId;
 
   const printRef = useRef(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -79,22 +86,51 @@ export const Sheet = observer(() => {
       .finally(() => setIsLoading(false));
   };
 
+  const editSetlist = isSetlist
+    ? () => router.push(`/setlist/${router.query.setlistId}/edit`)
+    : undefined;
+
   return (
     <PageContainer>
       <ReadControlsWrapper>
-        <IconButton onClick={addToSetlist}>
-          <FaAndroid />
-        </IconButton>
+        {editSetlist && (
+          <IconButton onClick={editSetlist} $align="right">
+            <FaEdit />
+          </IconButton>
+        )}
 
-        <IconButton onClick={zoomIn}>
-          <AiOutlineZoomIn />
-        </IconButton>
+        {!editSetlist && (
+          <IconButton onClick={addToSetlist}>
+            <FaAndroid />
+          </IconButton>
+        )}
 
-        <IconButton onClick={zoomOut}>
-          <AiOutlineZoomOut />
-        </IconButton>
+        {readMode && (
+          <>
+            <IconButton onClick={zoomIn}>
+              <AiOutlineZoomIn />
+            </IconButton>
 
-        <IconButton onClick={() => setReadMode(!readMode)}>
+            <IconButton onClick={zoomOut}>
+              <AiOutlineZoomOut />
+            </IconButton>
+          </>
+        )}
+
+        <IconButton
+          onClick={() => {
+            if (readMode && isSetlist) {
+              router.push(`/${sheet.id}/edit`);
+            } else {
+              setReadMode(!readMode);
+              router.replace(
+                trimEditPathname(router.asPath) + (readMode ? '/edit' : ''),
+                undefined,
+                { shallow: true },
+              );
+            }
+          }}
+        >
           {readMode ? <FaEdit /> : <FaEye />}
         </IconButton>
       </ReadControlsWrapper>
@@ -115,7 +151,9 @@ export const Sheet = observer(() => {
         </div>
       </SheetPaper>
 
-      {!readMode && <ControlBar saveSheet={saveSheet} printPDF={printPDF} />}
+      {!readMode && !isSetlist && (
+        <ControlBar saveSheet={saveSheet} printPDF={printPDF} />
+      )}
     </PageContainer>
   );
 });

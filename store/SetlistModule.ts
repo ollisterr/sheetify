@@ -1,5 +1,6 @@
 import { makeAutoObservable, runInAction } from 'mobx';
 import { SheetModule, SheetProperties } from './SheetModule';
+import { api } from '@utils/api.utils';
 
 export interface SetlistProperties {
   id: string;
@@ -52,5 +53,36 @@ export class SetlistModule {
 
   get sheet() {
     return this.sheets[this.activeSheet ?? 0];
+  }
+
+  async add(sheetId: string) {
+    // early exit if the sheet is already added
+    if (this.sheets.some((x) => x.id === sheetId)) return;
+
+    try {
+      // add to setlist and fetch sheet data in parallel
+      const [_, sheetData] = await Promise.all([
+        api.addToSetlist(sheetId, this.id),
+        api.load(sheetId),
+      ]);
+      this.sheets.push(new SheetModule(sheetData));
+    } catch {
+      console.error('Invalid sheet ID');
+    }
+  }
+
+  async remove(sheetId: string) {
+    const origSheets = [...this.sheets];
+    // optimistically remove sheet from setlist
+    this.sheets = this.sheets.filter((x) => x.id !== sheetId);
+
+    try {
+      await api.removeFromSetlist(sheetId, this.id);
+      console.log('Removed sheet from setlist');
+    } catch {
+      console.error('Removing sheet failed');
+      // revert sheet list
+      this.sheets = origSheets;
+    }
   }
 }

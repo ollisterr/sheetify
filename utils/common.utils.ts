@@ -21,6 +21,10 @@ export const isEditRoute = (
   return Array.isArray(slug) && slug.length === 2 && slug[1] === 'edit';
 };
 
+export const stringifyRouteParam = (
+  routeParam: string | string[] | undefined,
+) => (Array.isArray(routeParam) ? routeParam.join('/') : routeParam);
+
 export const isEditPathname = (
   pathname: string,
 ): pathname is `${string}/edit` => /^.*\/edit$/.test(pathname);

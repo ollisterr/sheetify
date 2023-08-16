@@ -1,5 +1,14 @@
+import { css } from 'styled-components';
+
 const scaleSize = <T extends number>(size: T, scale: number = 1) =>
   `${size * scale}rem` as `${T}rem`;
+
+const colors = {
+  black: '#333',
+  grey: '#555',
+  lightgrey: '#aaa',
+  whitesmoke: '#ddd',
+};
 
 const theme = (scale: number = 1, readMode: boolean = false) =>
   ({
@@ -8,12 +17,7 @@ const theme = (scale: number = 1, readMode: boolean = false) =>
     rem: (rem: number) => `${rem * scale}rem`,
     absolutePx: (px: number) => `${px}px`,
     absoluteRem: (rem: number) => `${rem * 16}px`,
-    colors: {
-      black: '#333',
-      grey: '#555',
-      lightgrey: '#aaa',
-      whitesmoke: '#ddd',
-    },
+    colors,
     padding: {
       small: scaleSize(0.5, scale),
       default: scaleSize(1, scale),
@@ -38,6 +42,11 @@ const theme = (scale: number = 1, readMode: boolean = false) =>
       xxlarge: scaleSize(3, scale),
       xxxlarge: scaleSize(6.5, scale),
     },
+    focus: css`
+      &:focus {
+        box-shadow: 0 0 0 3px ${colors.black};
+      }
+    `,
   }) as const;
 
 export type Theme = ReturnType<typeof theme>;

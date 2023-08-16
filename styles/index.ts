@@ -26,16 +26,30 @@ export const PageWrapper = styled(Page)`
   }
 `;
 
-export const IconButton = styled.button`
+export const Button = styled.button<{ $align?: 'left' | 'right' }>`
   display: flex;
   align-items: center;
   gap: ${(p) => p.theme.spacing.default};
   opacity: 0.5;
-  padding: 0;
+  padding: ${(p) => p.theme.spacing.small};
   transition: opacity 500ms;
-  font-size: ${(p) => p.theme.absoluteRem(1.2)};
+  font-size: ${(p) => p.theme.absoluteRem(1)};
+  border-radius: ${(p) => p.theme.absolutePx(4)};
+
+  ${(p) => p.$align && `margin-${p.$align}: auto;`}
 
   &:hover {
     opacity: 1;
   }
+
+  ${(p) => p.theme.focus}
+`;
+
+export const IconButton = styled(Button)`
+  justify-content: center;
+  padding: 0;
+  font-size: ${(p) => p.theme.absoluteRem(1.2)};
+  height: ${(p) => p.theme.absoluteRem(1.8)};
+  width: ${(p) => p.theme.absoluteRem(1.8)};
+  border-radius: 999px;
 `;

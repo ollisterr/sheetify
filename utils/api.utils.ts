@@ -11,10 +11,19 @@ export const apiClient = {
       },
     }).then((res) => res.json() as ResponseT);
   },
-  get: <ResponseT = any>(url: string, payload: object) => {
-    return fetch('/api' + url, {
+  get: <ResponseT = any>(url: string, payload: Record<string, unknown>) => {
+    const urlParams = new URLSearchParams();
+
+    for (const key in payload) {
+      const value = payload[key];
+
+      if (!value) continue;
+
+      urlParams.set(key, value.toString());
+    }
+
+    return fetch(`/api${url}?${urlParams.toString()}`, {
       method: 'GET',
-      body: JSON.stringify(payload),
       headers: {
         'Content-Type': 'application/json',
       },
@@ -30,4 +39,6 @@ export const api = {
     apiClient.post<string>('/add-to-setlist', { sheetId, setlistId }),
   loadSetlist: (setlistId: string) =>
     apiClient.get<SetlistProperties>('/setlist', { id: setlistId }),
+  removeFromSetlist: (sheetId: string, setlistId: string) =>
+    apiClient.post<string>('/remove-sheet', { sheetId, setlistId }),
 };

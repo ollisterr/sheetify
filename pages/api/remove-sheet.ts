@@ -5,29 +5,23 @@ import { ObjectId } from 'mongodb';
 import { SetlistData } from './setlist';
 import { dbClient } from '@utils/db.utils';
 
-const addToSetlist = async (sheetId: string, setlistId?: string) => {
+const removeSheet = async (sheetId: string, setlistId: string) => {
   try {
     await dbClient.connect();
 
     const id = new ObjectId(setlistId);
 
-    console.log('MITÄ', setlistId, id.toString());
-
     await dbClient
       .db(process.env.DB_NAME)
       .collection<SetlistData>('setlists')
-      .updateOne(
-        { _id: id },
-        { $addToSet: { sheets: sheetId } },
-        { upsert: true },
-      );
+      .updateOne({ _id: id }, { $pull: { sheets: sheetId } }, { upsert: true });
 
     // return the object identifier
     return id.toString();
   } catch (err) {
     console.error(err);
 
-    throw new Error('Removing failed');
+    throw new Error('Saving failed');
   } finally {
     await dbClient.close();
   }
@@ -36,7 +30,7 @@ const addToSetlist = async (sheetId: string, setlistId?: string) => {
 const handler: NextApiHandler = async (req, res) => {
   try {
     const { sheetId, setlistId } = req.body;
-    const insertedId = await addToSetlist(sheetId, setlistId);
+    const insertedId = await removeSheet(sheetId, setlistId);
 
     return res.status(200).json(insertedId);
   } catch (err) {

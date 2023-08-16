@@ -28,18 +28,22 @@
       "@store": ["store"],
       "@store/*": ["store/*"],
       "@utils": ["utils"],
-      "@utils/*": ["utils/*"]
+      "@utils/*": ["utils/*"],
+      "@pages/*": ["pages/*"],
+      "@api/*": ["pages/api/*"]
     }
   },
   "include": [
     "pages",
+    "app",
     "styles",
     "components",
     "store",
     "providers",
     "utils",
     "*.d.ts",
-    ".next/types/**/*.ts"
+    ".next/types/**/*.ts",
+    "app/[sheetId]"
   ],
   "exclude": ["node_modules"]
 }

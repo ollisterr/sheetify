@@ -1,5 +1,3 @@
-import type { GetServerSideProps } from 'next';
-
 export { default } from '.';
 
 import {

@@ -1,6 +1,13 @@
 import { isEditPathname, trimEditPathname } from '@utils/common.utils';
 import { useRouter } from 'next/router';
-import { ReactNode, createContext, useContext, useMemo, useState } from 'react';
+import {
+  ReactNode,
+  createContext,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react';
 
 interface GlobalStateContext {
   readMode: boolean;
@@ -22,23 +29,26 @@ export const GlobalStateProvider = ({
 }) => {
   const router = useRouter();
 
+  const isSetlistPath = !!router.query.setlistId;
+
   const [readMode, setReadMode] = useState(
-    readModeProp ?? isEditPathname(router.pathname),
+    readModeProp ?? (isEditPathname(router.pathname) && !isSetlistPath),
   );
   const [zoom, setZoom] = useState(1);
+
+  useEffect(() => {
+    // update readmode on route change
+    setReadMode(
+      readModeProp ?? (isEditPathname(router.pathname) && !isSetlistPath),
+    );
+  }, [readModeProp, isEditPathname(router.pathname) && !isSetlistPath]);
 
   const globalState = useMemo<GlobalStateContext>(() => {
     return {
       readMode,
-      setReadMode: (x: boolean) => {
-        router.replace(
-          trimEditPathname(router.asPath) + (!x ? '/edit' : ''),
-          undefined,
-          { shallow: true },
-        );
-        setReadMode(x);
-      },
-      zoom,
+      setReadMode,
+      // reset zoom in edit mode
+      zoom: readMode ? zoom : 1,
       zoomOut: () => setZoom((x) => x * 0.75),
       zoomIn: () => setZoom((x) => x / 0.75),
       resetZoom: () => setZoom(1),

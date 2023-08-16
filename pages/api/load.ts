@@ -28,7 +28,7 @@ export const loadSheet = async (id: string) => {
 
 const handler: NextApiHandler = async (req, res) => {
   try {
-    const sheetId = req.body?.id;
+    const sheetId = req.query?.id;
 
     if (!sheetId || Array.isArray(sheetId)) {
       return res.status(400).send('Bad request');

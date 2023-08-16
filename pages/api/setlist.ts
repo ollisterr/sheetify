@@ -1,12 +1,10 @@
 import { NextApiHandler } from 'next';
-import { MongoClient, ObjectId } from 'mongodb';
+import { ObjectId } from 'mongodb';
 import { SetlistProperties } from '@store/SetlistModule';
 import { SheetProperties } from '@store/SheetModule';
 import { loadSheet } from './load';
 import { MongoDbInstance } from 'types';
-
-const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASSWORD}@cluster0.mrysz.mongodb.net/?retryWrites=true&w=majority`;
-const client = new MongoClient(uri);
+import { dbClient } from '@utils/db.utils';
 
 export interface SetlistData
   extends Omit<SetlistProperties, 'sheets'>,
@@ -16,9 +14,9 @@ export interface SetlistData
 
 export const loadSetlist = async (id: string): Promise<SetlistProperties> => {
   try {
-    await client.connect();
+    await dbClient.connect();
 
-    const setlistInstance = await client
+    const setlistInstance = await dbClient
       .db(process.env.DB_NAME)
       .collection('setlists')
       .findOne<SetlistData>({ _id: new ObjectId(id) });
@@ -43,7 +41,7 @@ export const loadSetlist = async (id: string): Promise<SetlistProperties> => {
     console.error(err);
     throw `Invalid setlist ID: ${id}`;
   } finally {
-    await client.close();
+    await dbClient.close();
   }
 };
 

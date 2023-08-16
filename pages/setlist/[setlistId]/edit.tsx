@@ -1,3 +1,3 @@
-export default function () {
-  return 'well hello';
-}
+export { default } from '../index';
+
+export { getServerSideProps } from '../[setlistId]';

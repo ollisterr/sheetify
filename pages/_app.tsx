@@ -4,8 +4,8 @@ import { SheetProvider } from '../store/SheetProvider';
 import '../styles/index.css';
 import { GlobalStateProvider } from 'providers/GlobalStateProvider';
 import { ThemeProvider } from 'providers/ThemeProvider';
-import { SetlistPageProps } from './setlist/[setlistId]';
 import { SheetPageProps } from './[sheetId]';
+import { SetlistPageProps } from './setlist/[setlistId]';
 
 export interface AppProps {
   readMode: boolean;
