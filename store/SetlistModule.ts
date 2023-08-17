@@ -3,7 +3,7 @@ import { SheetModule, SheetProperties } from './SheetModule';
 import { api } from '@utils/api.utils';
 
 export interface SetlistProperties {
-  id: string;
+  _id: string;
   title: string;
   tempo: number;
   sheets: SheetProperties[];
@@ -20,8 +20,8 @@ export class SetlistModule {
     this.read(props);
   }
 
-  read({ id, title, sheets }: SetlistProperties) {
-    this.id = id;
+  read({ _id, title, sheets }: SetlistProperties) {
+    this.id = _id;
     this.title = title;
     this.activeSheet = 0;
     this.sheets = sheets.map((sheet) => new SheetModule(sheet));
@@ -86,7 +86,20 @@ export class SetlistModule {
     }
   }
 
-  setSheets(sheets: SheetModule[]) {
+  async setSheets(sheets: SheetModule[]) {
+    const originalOrder = [...this.sheets];
+
+    // optimistically update sheet order
     this.sheets = sheets;
+
+    try {
+      await api.orderSetlist(
+        this.id,
+        sheets.map(({ id }) => id),
+      );
+    } catch {
+      // revert order if updating failed
+      this.sheets = originalOrder;
+    }
   }
 }

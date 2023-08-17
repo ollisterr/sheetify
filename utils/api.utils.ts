@@ -32,13 +32,15 @@ export const apiClient = {
 };
 
 export const api = {
-  save: (data: SheetModule, id?: string) =>
-    apiClient.post<string>('/save', { data, id }),
+  save: ({ id, ...data }: SheetModule) =>
+    apiClient.post<string>('/save', { id: id || undefined, ...data }),
   load: (id: string) => apiClient.get<SheetProperties>('/load', { id }),
   addToSetlist: (sheetId: string, setlistId?: string) =>
     apiClient.post<string>('/add-to-setlist', { sheetId, setlistId }),
   loadSetlist: (setlistId: string) =>
     apiClient.get<SetlistProperties>('/setlist', { id: setlistId }),
+  orderSetlist: (setlistId: string, sheetIds: string[]) =>
+    apiClient.post<string>('/setlist', { setlistId, sheetIds }),
   removeFromSetlist: (sheetId: string, setlistId: string) =>
     apiClient.post<string>('/remove-sheet', { sheetId, setlistId }),
 };

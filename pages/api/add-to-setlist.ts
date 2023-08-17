@@ -9,19 +9,17 @@ const addToSetlist = async (sheetId: string, setlistId?: string) => {
   try {
     await dbClient.connect();
 
-    const id = new ObjectId(setlistId);
-
-    await dbClient
+    const setlistInstance = await dbClient
       .db(process.env.DB_NAME)
       .collection<SetlistData>('setlists')
       .updateOne(
-        { _id: id },
+        { _id: new ObjectId(setlistId) },
         { $addToSet: { sheets: sheetId } },
         { upsert: true },
       );
 
     // return the object identifier
-    return id.toString();
+    return setlistInstance.upsertedId?.toString() ?? setlistId;
   } catch (err) {
     console.error(err);
 
@@ -35,6 +33,8 @@ const handler: NextApiHandler = async (req, res) => {
   try {
     const { sheetId, setlistId } = req.body;
     const insertedId = await addToSetlist(sheetId, setlistId);
+
+    if (!insertedId) return res.status(400).send('Non-existent setlist');
 
     return res.status(200).json(insertedId);
   } catch (err) {

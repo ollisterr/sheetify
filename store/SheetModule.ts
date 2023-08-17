@@ -1,4 +1,5 @@
-import { makeAutoObservable, observe } from 'mobx';
+import { makeAutoObservable } from 'mobx';
+
 import { TimeSignature } from '../types';
 import { transposeChord } from '../utils/chords.utils';
 import { SectionModule } from './SectionModule';
@@ -13,7 +14,7 @@ export interface SheetProperties {
 }
 
 export class SheetModule {
-  id = '';
+  id: string | '' = '';
   title = '';
   tempo = 120;
   timeSignature = [4, 4];

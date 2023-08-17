@@ -14,7 +14,7 @@ const removeSheet = async (sheetId: string, setlistId: string) => {
     await dbClient
       .db(process.env.DB_NAME)
       .collection<SetlistData>('setlists')
-      .updateOne({ _id: id }, { $pull: { sheets: sheetId } }, { upsert: true });
+      .updateOne({ _id: new ObjectId(id) }, { $pull: { sheets: sheetId } });
 
     // return the object identifier
     return id.toString();

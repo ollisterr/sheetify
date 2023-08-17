@@ -4,7 +4,11 @@ import { SheetProperties } from '../../store/SheetModule';
 
 import { MongoClient, ObjectId } from 'mongodb';
 
-const postData = async (data: SheetProperties, id?: string) => {
+export type SheetData = Omit<SheetProperties, '_id'>;
+
+export type SavePayload = Omit<SheetProperties, 'id'> & { id?: string };
+
+const postData = async ({ id, ...data }: SavePayload) => {
   // eslint-disable-next-line max-len
   const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASSWORD}@cluster0.mrysz.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`;
 
@@ -14,7 +18,7 @@ const postData = async (data: SheetProperties, id?: string) => {
     await client.connect();
     const sheetInstance = await client
       .db(process.env.DB_NAME)
-      .collection('sheets')
+      .collection<SheetData>('sheets')
       .updateOne({ _id: new ObjectId(id) }, { $set: data }, { upsert: true });
 
     if (!id) {
@@ -34,8 +38,8 @@ const postData = async (data: SheetProperties, id?: string) => {
 
 const handler: NextApiHandler = async (req, res) => {
   try {
-    const { data, id } = req.body;
-    const insertedId = await postData(data, id);
+    const data = req.body;
+    const insertedId = await postData(data);
 
     return res.status(200).json(insertedId);
   } catch (err) {

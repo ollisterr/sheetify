@@ -6,5 +6,3 @@ export type TimeSignature = [number, number];
 export type Repeat = [boolean, boolean];
 
 export type SheetType = SectionModule[];
-
-export type MongoDbInstance = { _id: ObjectId };
