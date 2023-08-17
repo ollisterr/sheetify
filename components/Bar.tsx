@@ -82,7 +82,9 @@ export const Bar = observer(({ bar, addBar, deleteBar }: BarProps) => {
         <RepeatSignWrapper checked={!!bar.repeat[0]} dir="right">
           <RepeatSign />
 
-          <RepeatSignCheckbox onChange={() => bar.toggleRepeat(0)} />
+          <RepeatSignCheckbox
+            onChange={() => !readMode && bar.toggleRepeat(0)}
+          />
         </RepeatSignWrapper>
 
         {bar.bar.map((chord: string, i: number) => (
@@ -219,17 +221,22 @@ const RepeatSignWrapper = styled.label<{
 }>`
   height: 100%;
   opacity: ${(p) => (p.checked ? 1 : 0)};
-  transition: opacity 0.2s;
-  cursor: pointer;
   ${(p) => `padding-${p.dir}: ${p.theme.spacing.xsmall};`}
 
   > * {
     height: 100%;
   }
 
-  &:hover {
-    opacity: 0.5;
-  }
+  ${(p) =>
+    !p.theme.readMode &&
+    css`
+      transition: opacity 0.2s;
+      cursor: pointer;
+
+      &:hover {
+        opacity: 0.5;
+      }
+    `}
 
   @media print {
     ${(p) => `padding-${p.dir}: ${p.checked ? p.theme.spacing.xsmall : 0};`}
@@ -243,7 +250,7 @@ const BarContent = styled.div`
   gap: ${(p) => p.theme.spacing.xxsmall};
   width: 100%;
   height: ${(p) =>
-    p.theme.readMode ? p.theme.spacing.large : p.theme.spacing.absolute.large};
+    p.theme.readMode ? p.theme.spacing.large : p.theme.spacing.xxlarge};
   box-shadow:
     -${(p) => p.theme.spacing.xsmall} 0 0 0 ${(p) => p.theme.colors.lightgrey},
     ${(p) => p.theme.spacing.xsmall} 0 0 0 ${(p) => p.theme.colors.lightgrey};

@@ -147,8 +147,8 @@ export const SectionTag = styled.label<{
   color: ${(p) => p.theme.colors[p.checked ? 'grey' : 'lightgrey']};
   font-weight: bold;
   line-height: 1;
-
   opacity: 0;
+
   transition-property: opacity;
   transition-duration: 0.2s;
   ${(p) => !p.theme.readMode && 'cursor: pointer'};
@@ -173,7 +173,11 @@ export const SectionTag = styled.label<{
 
   @media ${device.sm} {
     padding: 0 0.5rem;
-    opacity: 1;
+    ${(p) =>
+      !p.theme.readMode &&
+      css`
+        opacity: 1;
+      `}
   }
 
   @media print {
@@ -182,17 +186,17 @@ export const SectionTag = styled.label<{
 
   ${(p) =>
     p.checked &&
-    `
-    order: -1;
-    opacity: 1;
+    css`
+      opacity: 1;
+      order: -1;
 
-    @media ${device.lg} {
-      &:hover {
-        color: white;
-        background-color: darkgrey;
+      @media ${device.lg} {
+        &:hover {
+          color: white;
+          background-color: darkgrey;
+        }
       }
-    }
-  `}
+    `}
 `;
 
 const CustomSectionTag = styled(SectionTag)`

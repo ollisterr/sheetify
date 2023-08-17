@@ -23,13 +23,13 @@ const spacing = {
   xxxlarge: 6.5,
 } as const;
 
-console.log(spacing);
-
 const absolutePx = (px: number) => `${px}px`;
 const absoluteRem = <T extends number>(rem: T) => `${rem * 16}px` as `${T}rem`;
 
-const theme = (scale: number = 1, readMode: boolean = false) =>
-  ({
+const theme = (scaler: number = 1, readMode: boolean = false) => {
+  const scale = readMode ? scaler : 1;
+
+  return {
     readMode,
     px: (px: number) => `${(px / 16) * scale}rem`,
     rem: (rem: number) => `${rem * scale}rem`,
@@ -77,7 +77,8 @@ const theme = (scale: number = 1, readMode: boolean = false) =>
         box-shadow: 0 0 0 3px ${colors.black};
       }
     `,
-  }) as const;
+  } as const;
+};
 
 export type Theme = ReturnType<typeof theme>;
 
