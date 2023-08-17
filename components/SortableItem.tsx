@@ -1,13 +1,16 @@
-import React, { ReactElement, ReactNode } from 'react';
+import React, { ReactNode } from 'react';
 import { useSortable } from '@dnd-kit/sortable';
-import { CSS } from '@dnd-kit/utilities';
-import { UniqueIdentifier, useDraggable } from '@dnd-kit/core';
+import { UniqueIdentifier } from '@dnd-kit/core';
 import { styled } from 'styled-components';
-import { Row } from 'styles';
 import { MdDragHandle } from 'react-icons/md';
 
-export interface SortableItemProps {
+import { Row } from 'styles';
+
+export interface SortableItem {
   id: UniqueIdentifier;
+}
+
+export interface SortableItemProps extends SortableItem {
   children: ReactNode;
   disabled?: boolean;
   isActive?: boolean;

@@ -85,4 +85,8 @@ export class SetlistModule {
       this.sheets = origSheets;
     }
   }
+
+  setSheets(sheets: SheetModule[]) {
+    this.sheets = sheets;
+  }
 }

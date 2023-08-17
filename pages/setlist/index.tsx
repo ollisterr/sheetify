@@ -3,7 +3,6 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 import { FaChevronLeft, FaTrash } from 'react-icons/fa';
-import { MdDragHandle } from 'react-icons/md';
 import { styled } from 'styled-components';
 
 import { Loading } from '@components';
@@ -12,7 +11,7 @@ import { useSetlist } from '@store/SheetProvider';
 import { api } from '@utils/api.utils';
 
 import { IconButton, PageWrapper, Row } from 'styles';
-import { SortableList } from '@components/SortableList';
+import { SortableItemOrderFn, SortableList } from '@components/SortableList';
 
 const NewSetlistPage = observer(() => {
   const router = useRouter();
@@ -55,6 +54,13 @@ const NewSetlistPage = observer(() => {
     }
   };
 
+  const sortSetlist = (orderFn: SortableItemOrderFn) => {
+    if (!setlist) return;
+
+    const orderedSheets = orderFn(setlist.sheets);
+    setlist.setSheets(orderedSheets);
+  };
+
   return (
     <PageWrapper>
       {isEditing && (
@@ -68,7 +74,7 @@ const NewSetlistPage = observer(() => {
       <Wrapper>
         <h3>{isEditing ? 'Edit' : 'Create new'} setlist</h3>
 
-        <SortableList setItems={console.log} disabled={!isEditing}>
+        <SortableList setItems={sortSetlist} disabled={!isEditing}>
           {[...(setlist?.sheets ?? []), ...unfetchedSheets].map((sheet) =>
             typeof sheet === 'string' ? (
               <SetlistRow id={sheet} key={sheet}>

@@ -19,23 +19,24 @@ import {
 import {
   restrictToVerticalAxis,
   restrictToWindowEdges,
-  restrictToParentElement,
 } from '@dnd-kit/modifiers';
 
 import { SortableItem, SortableItemProps } from './SortableItem';
 import { restrictToWrapper } from '@utils/draggable.utils';
 
-interface Props<T extends SortableItemProps> {
-  setItems: (x: T[] | ((items: T[]) => T[])) => void;
+export type SortableItemOrderFn = <T extends SortableItem>(items: T[]) => T[];
+
+interface Props {
+  setItems: (orderFn: SortableItemOrderFn) => void;
   children: ReactElement<SortableItemProps & any>[];
   disabled?: boolean;
 }
 
-export const SortableList = <T extends SortableItemProps>({
+export const SortableList = ({
   children,
   setItems,
   disabled = false,
-}: Props<T>) => {
+}: Props) => {
   const listRef = useRef<HTMLUListElement>(null);
 
   const [activeDrag, setActiveDrag] = useState<UniqueIdentifier>();
