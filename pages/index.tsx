@@ -10,7 +10,7 @@ const IndexPage = observer(() => {
   return (
     <>
       <Head>
-        <title>{title ?? 'New sheet'} | Sheetify</title>
+        <title>{`${title || 'New sheet'} | Sheetify`}</title>
         <meta name="description" content="Sheet music" />
       </Head>
 

@@ -53,3 +53,10 @@ export const IconButton = styled(Button)`
   width: ${(p) => p.theme.absoluteRem(1.8)};
   border-radius: 999px;
 `;
+
+export const Row = styled.div`
+  display: flex;
+  gap: ${(p) => p.theme.spacing.small};
+  width: 100%;
+  align-items: center;
+`;

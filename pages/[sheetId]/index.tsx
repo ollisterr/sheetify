@@ -21,7 +21,7 @@ const SheetPage: NextPage<SheetPageProps> = observer((props) => {
   return (
     <>
       <Head>
-        <title>{title ?? 'Untitled'} | Sheetify</title>
+        <title>{`${title || 'Untitled'} | Sheetify`}</title>
         <meta name="description" content="Sheet music" />
       </Head>
 

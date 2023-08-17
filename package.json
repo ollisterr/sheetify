@@ -4,6 +4,9 @@
   "private": true,
   "main": "src/index.tsx",
   "dependencies": {
+    "@dnd-kit/core": "^6.0.8",
+    "@dnd-kit/modifiers": "^6.0.1",
+    "@dnd-kit/sortable": "^7.0.2",
     "@react-icons/all-files": "^4.1.0",
     "@types/next": "^9.0.0",
     "axios": "^1.4.0",

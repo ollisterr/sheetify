@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 import { FaChevronLeft, FaTrash } from 'react-icons/fa';
+import { MdDragHandle } from 'react-icons/md';
 import { styled } from 'styled-components';
 
 import { Loading } from '@components';
@@ -10,7 +11,8 @@ import { LoadingSpinner } from '@components/LoadingSpinner';
 import { useSetlist } from '@store/SheetProvider';
 import { api } from '@utils/api.utils';
 
-import { IconButton, PageWrapper } from 'styles';
+import { IconButton, PageWrapper, Row } from 'styles';
+import { SortableList } from '@components/SortableList';
 
 const NewSetlistPage = observer(() => {
   const router = useRouter();
@@ -56,7 +58,7 @@ const NewSetlistPage = observer(() => {
   return (
     <PageWrapper>
       {isEditing && (
-        <Link href={`/setlist/${setlist?.id}`}>
+        <Link href={`/setlist/${setlist?.id}`} shallow>
           <IconButton>
             <FaChevronLeft />
           </IconButton>
@@ -66,25 +68,27 @@ const NewSetlistPage = observer(() => {
       <Wrapper>
         <h3>{isEditing ? 'Edit' : 'Create new'} setlist</h3>
 
-        {[...(setlist?.sheets ?? []), ...unfetchedSheets].map((sheet) =>
-          typeof sheet === 'string' ? (
-            <Row key={sheet}>
-              <SheetTitle>{sheet}</SheetTitle>
+        <SortableList setItems={console.log} disabled={!isEditing}>
+          {[...(setlist?.sheets ?? []), ...unfetchedSheets].map((sheet) =>
+            typeof sheet === 'string' ? (
+              <SetlistRow id={sheet} key={sheet}>
+                <SheetTitle>{sheet}</SheetTitle>
 
-              <LoadingSpinner />
-            </Row>
-          ) : (
-            <Row key={sheet.id}>
-              <SheetTitle>{sheet.title}</SheetTitle>
+                <LoadingSpinner />
+              </SetlistRow>
+            ) : (
+              <SetlistRow key={sheet.id} id={sheet.id}>
+                <SheetTitle>{sheet.title}</SheetTitle>
 
-              <IconButton onClick={() => setlist?.remove(sheet.id)}>
-                <FaTrash />
-              </IconButton>
-            </Row>
-          ),
-        )}
+                <IconButton onClick={() => setlist?.remove(sheet.id)}>
+                  <FaTrash />
+                </IconButton>
+              </SetlistRow>
+            ),
+          )}
+        </SortableList>
 
-        <Row>
+        <SetlistRow>
           <Input
             value={sheetLink}
             onChange={(e) => setSheetLink(e.target.value)}
@@ -92,16 +96,15 @@ const NewSetlistPage = observer(() => {
           />
 
           <Button onClick={onSubmit}>Add</Button>
-        </Row>
+        </SetlistRow>
       </Wrapper>
     </PageWrapper>
   );
 });
 
-const Row = styled.div`
-  display: flex;
-  gap: ${(p) => p.theme.spacing.small};
+const SetlistRow = styled(Row)`
   width: 100%;
+  padding: ${(p) => p.theme.spacing.small} 0;
 
   &:first-child {
     flex: 1 !important;

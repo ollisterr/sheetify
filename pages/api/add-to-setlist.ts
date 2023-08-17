@@ -11,8 +11,6 @@ const addToSetlist = async (sheetId: string, setlistId?: string) => {
 
     const id = new ObjectId(setlistId);
 
-    console.log('MITÄ', setlistId, id.toString());
-
     await dbClient
       .db(process.env.DB_NAME)
       .collection<SetlistData>('setlists')

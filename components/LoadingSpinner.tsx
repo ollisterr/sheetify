@@ -16,16 +16,16 @@ const anim3 = keyframes`
 `;
 
 export const LoadingSpinner = styled.div`
-  display: inline-block;
+  display: inline-flex;
   position: relative;
-  width: 80px;
-  height: 80px;
+  align-items: center;
+  width: ${(p) => p.theme.rem(2)};
+  width: ${(p) => p.theme.rem(2)};
 
   > div {
     position: absolute;
-    top: 33px;
-    width: 13px;
-    height: 13px;
+    width: ${(p) => p.theme.rem(1.2)};
+    width: ${(p) => p.theme.rem(1.2)};
     border-radius: 50%;
     background: #fff;
     animation-timing-function: cubic-bezier(0, 1, 1, 0);

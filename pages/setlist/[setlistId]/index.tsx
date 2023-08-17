@@ -32,7 +32,7 @@ const SetListPage: NextPage = observer((props) => {
   return (
     <>
       <Head>
-        <title>{setlist.title} | Sheetify</title>
+        <title>{`${setlist.title || 'Untitled'} | Sheetify`}</title>
         <meta name="description" content="Sheet music" />
       </Head>
 

@@ -242,7 +242,8 @@ const BarContent = styled.div`
   align-items: stretch;
   gap: ${(p) => p.theme.spacing.xxsmall};
   width: 100%;
-  height: ${(p) => p.theme.spacing.xxlarge};
+  height: ${(p) =>
+    p.theme.readMode ? p.theme.spacing.xlarge : p.theme.spacing.xxlarge};
   box-shadow:
     -${(p) => p.theme.spacing.xsmall} 0 0 0 ${(p) => p.theme.colors.lightgrey},
     ${(p) => p.theme.spacing.xsmall} 0 0 0 ${(p) => p.theme.colors.lightgrey};

@@ -3,7 +3,8 @@ import styled from 'styled-components';
 import { useRouter } from 'next/router';
 import { useReactToPrint } from 'react-to-print';
 import { observer } from 'mobx-react-lite';
-import { FaAndroid, FaEdit, FaEye } from 'react-icons/fa';
+import { LuEdit3 } from 'react-icons/lu';
+import { FaAndroid, FaEye, FaRegEdit } from 'react-icons/fa';
 import { AiOutlineZoomIn } from '@react-icons/all-files/ai/AiOutlineZoomIn';
 import { AiOutlineZoomOut } from '@react-icons/all-files/ai/AiOutlineZoomOut';
 
@@ -28,7 +29,7 @@ interface SheetProps {
   showSetlistControls?: boolean;
 }
 
-export const Sheet = observer(({ showSetlistControls = false }: SheetProps) => {
+export const Sheet = observer(({}: SheetProps) => {
   const sheet = useSheet();
   const router = useRouter();
   const { readMode, setReadMode, zoomOut, zoomIn } = useGlobalState();
@@ -55,7 +56,7 @@ export const Sheet = observer(({ showSetlistControls = false }: SheetProps) => {
       .save(sheet, sheetId)
       .then((res) => {
         if (res && res !== sheetId) {
-          router.replace(`/${res}`);
+          router.replace(`/${res}`, undefined, { shallow: true });
         }
       })
       .finally(() => setIsLoading(false));
@@ -87,7 +88,10 @@ export const Sheet = observer(({ showSetlistControls = false }: SheetProps) => {
   };
 
   const editSetlist = isSetlist
-    ? () => router.push(`/setlist/${router.query.setlistId}/edit`)
+    ? () =>
+        router.push(`/setlist/${router.query.setlistId}/edit`, undefined, {
+          shallow: true,
+        })
     : undefined;
 
   return (
@@ -95,7 +99,7 @@ export const Sheet = observer(({ showSetlistControls = false }: SheetProps) => {
       <ReadControlsWrapper>
         {editSetlist && (
           <IconButton onClick={editSetlist} $align="right">
-            <FaEdit />
+            <FaRegEdit />
           </IconButton>
         )}
 
@@ -131,7 +135,7 @@ export const Sheet = observer(({ showSetlistControls = false }: SheetProps) => {
             }
           }}
         >
-          {readMode ? <FaEdit /> : <FaEye />}
+          {readMode ? <LuEdit3 /> : <FaEye />}
         </IconButton>
       </ReadControlsWrapper>
 
