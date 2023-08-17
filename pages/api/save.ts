@@ -3,38 +3,29 @@ import { NextApiHandler } from 'next';
 import { SheetProperties } from '../../store/SheetModule';
 
 import { MongoClient, ObjectId } from 'mongodb';
+import { dbAction } from '@utils/db.utils';
 
 export type SheetData = Omit<SheetProperties, '_id'>;
 
 export type SavePayload = Omit<SheetProperties, 'id'> & { id?: string };
 
-const postData = async ({ id, ...data }: SavePayload) => {
-  // eslint-disable-next-line max-len
-  const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASSWORD}@cluster0.mrysz.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`;
+const postData = async ({ id, ...data }: SavePayload) =>
+  dbAction({
+    action: async (dbClient) => {
+      const sheetInstance = await dbClient
+        .db(process.env.DB_NAME)
+        .collection<SheetData>('sheets')
+        .updateOne({ _id: new ObjectId(id) }, { $set: data }, { upsert: true });
 
-  const client = new MongoClient(uri);
-
-  try {
-    await client.connect();
-    const sheetInstance = await client
-      .db(process.env.DB_NAME)
-      .collection<SheetData>('sheets')
-      .updateOne({ _id: new ObjectId(id) }, { $set: data }, { upsert: true });
-
-    if (!id) {
-      // return the object identifier
-      return sheetInstance.upsertedId?.toString();
-    } else {
-      return id;
-    }
-  } catch (err) {
-    console.error(err);
-
-    throw new Error('Saving failed');
-  } finally {
-    await client.close();
-  }
-};
+      if (!id) {
+        // return the object identifier
+        return sheetInstance.upsertedId?.toString();
+      } else {
+        return id;
+      }
+    },
+    errorMsg: 'Saving failed',
+  });
 
 const handler: NextApiHandler = async (req, res) => {
   try {

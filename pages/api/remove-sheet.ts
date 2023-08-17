@@ -3,29 +3,23 @@ import { NextApiHandler } from 'next';
 
 import { ObjectId } from 'mongodb';
 import { SetlistData } from './setlist';
-import { dbClient } from '@utils/db.utils';
+import { dbAction, dbClient } from '@utils/db.utils';
 
-const removeSheet = async (sheetId: string, setlistId: string) => {
-  try {
-    await dbClient.connect();
+const removeSheet = async (sheetId: string, setlistId: string) =>
+  dbAction({
+    action: async (dbClient) => {
+      const id = new ObjectId(setlistId);
 
-    const id = new ObjectId(setlistId);
+      await dbClient
+        .db(process.env.DB_NAME)
+        .collection<SetlistData>('setlists')
+        .updateOne({ _id: new ObjectId(id) }, { $pull: { sheets: sheetId } });
 
-    await dbClient
-      .db(process.env.DB_NAME)
-      .collection<SetlistData>('setlists')
-      .updateOne({ _id: new ObjectId(id) }, { $pull: { sheets: sheetId } });
-
-    // return the object identifier
-    return id.toString();
-  } catch (err) {
-    console.error(err);
-
-    throw new Error('Saving failed');
-  } finally {
-    await dbClient.close();
-  }
-};
+      // return the object identifier
+      return id.toString();
+    },
+    errorMsg: 'Saving failed',
+  });
 
 const handler: NextApiHandler = async (req, res) => {
   try {

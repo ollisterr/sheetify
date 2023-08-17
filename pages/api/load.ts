@@ -1,30 +1,21 @@
 import { NextApiHandler } from 'next';
-import { MongoClient, ObjectId } from 'mongodb';
+import { ObjectId } from 'mongodb';
 import { SheetProperties } from '@store/SheetModule';
+import { dbAction } from '@utils/db.utils';
 
-export const loadSheet = async (id: string) => {
-  // eslint-disable-next-line max-len
-  const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASSWORD}@cluster0.mrysz.mongodb.net/?retryWrites=true&w=majority`;
+export const loadSheet = async (id: string) =>
+  dbAction({
+    action: async (dbClient) => {
+      const sheetInstance = await dbClient
+        .db(process.env.DB_NAME)
+        .collection('sheets')
+        .findOne<SheetProperties>({ _id: new ObjectId(id) });
 
-  const client = new MongoClient(uri);
+      if (!sheetInstance) throw `Invalid sheet ID: ${id}`;
 
-  try {
-    await client.connect();
-
-    const sheetInstance = await client
-      .db(process.env.DB_NAME)
-      .collection('sheets')
-      .findOne<SheetProperties>({ _id: new ObjectId(id) });
-
-    if (!sheetInstance) return null;
-
-    return { ...sheetInstance, _id: sheetInstance._id.toString() };
-  } catch (err) {
-    throw `Invalid sheet ID: ${id}`;
-  } finally {
-    await client.close();
-  }
-};
+      return { ...sheetInstance, _id: sheetInstance._id.toString() };
+    },
+  });
 
 const handler: NextApiHandler = async (req, res) => {
   try {
@@ -36,7 +27,7 @@ const handler: NextApiHandler = async (req, res) => {
 
     const data = await loadSheet(sheetId);
 
-    if (!data) res.status(404);
+    if (!data) return res.status(404);
 
     return res
       .status(200)

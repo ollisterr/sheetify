@@ -3,31 +3,25 @@ import { NextApiHandler } from 'next';
 
 import { ObjectId } from 'mongodb';
 import { SetlistData } from './setlist';
-import { dbClient } from '@utils/db.utils';
+import { dbAction, dbClient } from '@utils/db.utils';
 
-const addToSetlist = async (sheetId: string, setlistId?: string) => {
-  try {
-    await dbClient.connect();
+const addToSetlist = async (sheetId: string, setlistId?: string) =>
+  dbAction({
+    errorMsg: 'Removing failed',
+    action: async (dbClient) => {
+      const setlistInstance = await dbClient
+        .db(process.env.DB_NAME)
+        .collection<SetlistData>('setlists')
+        .updateOne(
+          { _id: new ObjectId(setlistId) },
+          { $addToSet: { sheets: sheetId } },
+          { upsert: true },
+        );
 
-    const setlistInstance = await dbClient
-      .db(process.env.DB_NAME)
-      .collection<SetlistData>('setlists')
-      .updateOne(
-        { _id: new ObjectId(setlistId) },
-        { $addToSet: { sheets: sheetId } },
-        { upsert: true },
-      );
-
-    // return the object identifier
-    return setlistInstance.upsertedId?.toString() ?? setlistId;
-  } catch (err) {
-    console.error(err);
-
-    throw new Error('Removing failed');
-  } finally {
-    await dbClient.close();
-  }
-};
+      // return the object identifier
+      return setlistInstance.upsertedId?.toString() ?? setlistId;
+    },
+  });
 
 const handler: NextApiHandler = async (req, res) => {
   try {
