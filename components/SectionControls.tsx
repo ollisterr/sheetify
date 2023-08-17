@@ -55,7 +55,7 @@ export const SectionControls = observer(
 
           <CustomSectionTag
             as="input"
-            value={customSectionName}
+            value={customSectionName ?? ''}
             checked={!!customSectionName}
             placeholder="Section name..."
             onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
@@ -137,8 +137,12 @@ export const SectionTag = styled.label<{
 }>`
   display: flex;
   align-items: center;
-  height: ${(p) => p.theme.rem(2)};
-  padding: ${(p) => `${p.theme.rem(0.4)} ${p.theme.rem(0.6)}`};
+  height: ${(p) => p.theme.rem(p.theme.readMode ? 1.6 : 2)};
+  padding: ${(p) =>
+    `${p.theme.rem(p.theme.readMode ? 0.3 : 0.4)} ${p.theme.rem(
+      p.theme.readMode ? 0.5 : 0.6,
+    )}`};
+  font-size: ${(p) => p.theme.rem(p.theme.readMode ? 0.9 : 1.1)};
   border: solid 2px ${(p) => p.theme.colors[p.checked ? 'grey' : 'lightgrey']};
   color: ${(p) => p.theme.colors[p.checked ? 'grey' : 'lightgrey']};
   font-weight: bold;

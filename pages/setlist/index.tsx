@@ -48,7 +48,7 @@ const NewSetlistPage = observer(() => {
       });
     } else {
       api
-        .addToSetlist(sheetId)
+        .saveSetlist({ sheetId })
         .then((res) => router.replace(`/setlist/${res}`))
         .finally(() => setIsLoading(false));
     }
@@ -72,7 +72,15 @@ const NewSetlistPage = observer(() => {
       )}
 
       <Wrapper>
-        <h3>{isEditing ? 'Edit' : 'Create new'} setlist</h3>
+        {isEditing ? (
+          <SetlistTitleInput
+            value={setlist?.title ?? ''}
+            onChange={(e) => setlist?.setTitle(e.target.value)}
+            placeholder="Untitled setlist"
+          />
+        ) : (
+          <h3>Create new setlist</h3>
+        )}
 
         <SortableList setItems={sortSetlist} disabled={!isEditing}>
           {[...(setlist?.sheets ?? []), ...unfetchedSheets].map((sheet) =>
@@ -96,7 +104,7 @@ const NewSetlistPage = observer(() => {
 
         <SetlistRow>
           <Input
-            value={sheetLink}
+            value={sheetLink ?? ''}
             onChange={(e) => setSheetLink(e.target.value)}
             placeholder="Sheet link"
           />
@@ -110,7 +118,7 @@ const NewSetlistPage = observer(() => {
 
 const SetlistRow = styled(Row)`
   width: 100%;
-  padding: ${(p) => p.theme.spacing.small} 0;
+  padding: ${(p) => p.theme.spacing.absolute.small} 0;
 
   &:first-child {
     flex: 1 !important;
@@ -122,12 +130,17 @@ const SheetTitle = styled.label`
   font-size: ${(p) => p.theme.absoluteRem(1.4)};
 `;
 
+const SetlistTitleInput = styled.input`
+  width: 100%;
+  font-size: ${(p) => p.theme.absoluteRem(1.4)};
+`;
+
 const Wrapper = styled.div`
   flex: 1;
   display: flex;
   align-items: center;
   flex-direction: column;
-  gap: ${(p) => p.theme.spacing.medium};
+  gap: ${(p) => p.theme.spacing.absolute.medium};
   justify-content: center;
   height: 100%;
   width: 100%;
@@ -136,16 +149,18 @@ const Wrapper = styled.div`
 
 const Input = styled.input`
   border: solid 2px ${(p) => p.theme.colors.grey};
-  padding: ${(p) => p.theme.absoluteRem(0.5)} ${(p) => p.theme.absoluteRem(1)};
+  padding: ${(p) =>
+    `${p.theme.spacing.absolute.small} ${p.theme.spacing.absolute.default}`};
   border-radius: 4px;
   text-align: center;
   font-size: ${(p) => p.theme.absoluteRem(1.2)};
 `;
 
 const Button = styled.button`
-  padding: ${(p) => p.theme.absoluteRem(0.5)} ${(p) => p.theme.absoluteRem(1)};
+  padding: ${(p) =>
+    `${p.theme.spacing.absolute.small} ${p.theme.spacing.absolute.default}`};
   background-color: ${(p) => p.theme.colors.whitesmoke};
-  border-radius: 4px;
+  border-radius: ${(p) => p.theme.absolutePx(4)};
   font-size: ${(p) => p.theme.absoluteRem(1.2)};
 `;
 

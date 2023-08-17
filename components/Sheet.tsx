@@ -4,11 +4,11 @@ import { useRouter } from 'next/router';
 import { useReactToPrint } from 'react-to-print';
 import { observer } from 'mobx-react-lite';
 import { LuEdit3 } from 'react-icons/lu';
-import { FaAndroid, FaEye, FaRegEdit } from 'react-icons/fa';
+import { FaEye, FaRegEdit } from 'react-icons/fa';
 import { AiOutlineZoomIn } from '@react-icons/all-files/ai/AiOutlineZoomIn';
 import { AiOutlineZoomOut } from '@react-icons/all-files/ai/AiOutlineZoomOut';
 
-import { useSheet } from '@store/SheetProvider';
+import { useSetlist, useSheet } from '@store/SheetProvider';
 import { api } from '@utils/api.utils';
 
 import { ControlBar } from './ControlBar';
@@ -16,7 +16,7 @@ import { Section } from './Section';
 import { SheetSpecification } from './SheetSpecification';
 import { Loading } from './Loading';
 
-import { IconButton, PageWrapper } from '../styles';
+import { IconButton, Row, Subtitle } from '../styles';
 import { useGlobalState } from '../providers/GlobalStateProvider';
 import {
   getRouteParamFromSlug,
@@ -24,12 +24,15 @@ import {
   trimEditPathname,
 } from '@utils/common.utils';
 import { PageContainer } from './PageContainer';
+import { MdPlaylistAdd } from 'react-icons/md';
+import { device } from '@utils/constants';
 
 interface SheetProps {
   showSetlistControls?: boolean;
 }
 
 export const Sheet = observer(({}: SheetProps) => {
+  const setlist = useSetlist();
   const sheet = useSheet();
   const router = useRouter();
   const { readMode, setReadMode, zoomOut, zoomIn } = useGlobalState();
@@ -53,7 +56,7 @@ export const Sheet = observer(({}: SheetProps) => {
     setIsLoading(true);
 
     api
-      .save(sheet, sheetId)
+      .save(sheet)
       .then((res) => {
         if (res && res !== sheetId) {
           router.replace(`/${res}`, undefined, { shallow: true });
@@ -82,7 +85,7 @@ export const Sheet = observer(({}: SheetProps) => {
     setIsLoading(true);
 
     api
-      .addToSetlist(sheetId, setlistId)
+      .saveSetlist({ id: setlistId, sheetId })
       .then((res) => router.replace(`/setlist/${res}`))
       .finally(() => setIsLoading(false));
   };
@@ -98,14 +101,18 @@ export const Sheet = observer(({}: SheetProps) => {
     <PageContainer>
       <ReadControlsWrapper>
         {editSetlist && (
-          <IconButton onClick={editSetlist} $align="right">
-            <FaRegEdit />
-          </IconButton>
+          <SetlistControls $gap="default" $align="right">
+            <Subtitle>{setlist?.title}</Subtitle>
+
+            <IconButton onClick={editSetlist}>
+              <FaRegEdit />
+            </IconButton>
+          </SetlistControls>
         )}
 
         {!editSetlist && (
           <IconButton onClick={addToSetlist}>
-            <FaAndroid />
+            <MdPlaylistAdd />
           </IconButton>
         )}
 
@@ -169,9 +176,16 @@ const SheetPaper = styled.section`
   }
 `;
 
-const ReadControlsWrapper = styled.div`
-  display: flex;
-  align-items: center;
+const SetlistControls = styled(Row)`
+  max-width: 50%;
+`;
+
+const ReadControlsWrapper = styled(Row)`
   justify-content: flex-end;
-  gap: ${(p) => p.theme.absoluteRem(1)};
+  gap: ${(p) => p.theme.spacing.absolute.default};
+  overflow: visible;
+
+  @media ${device.sm} {
+    gap: ${(p) => p.theme.spacing.small};
+  }
 `;

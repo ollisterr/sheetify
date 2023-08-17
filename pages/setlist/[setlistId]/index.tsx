@@ -10,7 +10,7 @@ import { Button, IconButton } from 'styles';
 import { FaChevronLeft, FaChevronRight } from 'react-icons/fa';
 import { styled } from 'styled-components';
 import { useEffect } from 'react';
-import { loadSetlist } from 'pages/api/setlist';
+import { loadSetlist } from '@pages/api/setlist/load';
 
 export interface SetlistPageProps {
   setlist: SetlistProperties;
@@ -20,6 +20,23 @@ const SetListPage: NextPage = observer((props) => {
   const setlist = useSetlist();
   const sheet = useSheet();
   const setSheet = useSetSheet();
+
+  useEffect(() => {
+    const onKeyPress = (key: KeyboardEvent) => {
+      switch (key.key) {
+        case 'ArrowRight':
+          return setlist?.nextSheet?.onClick();
+        case 'ArrowLeft':
+          return setlist?.previousSheet?.onClick();
+      }
+    };
+
+    document.addEventListener('keydown', onKeyPress);
+
+    return () => {
+      document.removeEventListener('keydown', onKeyPress);
+    };
+  }, []);
 
   useEffect(() => {
     if (!setlist || setlist.sheet.id === sheet.id) return;
@@ -32,11 +49,13 @@ const SetListPage: NextPage = observer((props) => {
   return (
     <>
       <Head>
-        <title>{`${setlist.title || 'Untitled'} | Sheetify`}</title>
+        <title>{`${setlist.title || 'Untitled setlist'} | Sheetify`}</title>
         <meta name="description" content="Sheet music" />
       </Head>
 
       <Sheet />
+
+      <div style={{ height: '8rem' }} />
 
       <SetlistControls>
         {setlist.previousSheet && (
@@ -72,7 +91,7 @@ const SetlistControls = styled.section`
   display: flex;
   justify-content: space-between;
   width: 100%;
-  padding: ${(p) => p.theme.spacing.small};
+  padding: ${(p) => p.theme.spacing.absolute.small};
   background-color: #fff;
   z-index: 10;
   max-width: 100%;

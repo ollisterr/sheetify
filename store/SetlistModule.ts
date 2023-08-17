@@ -1,6 +1,9 @@
 import { makeAutoObservable, runInAction } from 'mobx';
-import { SheetModule, SheetProperties } from './SheetModule';
+import { debounce } from 'lodash';
+
 import { api } from '@utils/api.utils';
+
+import { SheetModule, SheetProperties } from './SheetModule';
 
 export interface SetlistProperties {
   _id: string;
@@ -62,7 +65,7 @@ export class SetlistModule {
     try {
       // add to setlist and fetch sheet data in parallel
       const [_, sheetData] = await Promise.all([
-        api.addToSetlist(sheetId, this.id),
+        api.saveSetlist({ sheetId, id: this.id }),
         api.load(sheetId),
       ]);
       this.sheets.push(new SheetModule(sheetData));
@@ -93,13 +96,22 @@ export class SetlistModule {
     this.sheets = sheets;
 
     try {
-      await api.orderSetlist(
-        this.id,
-        sheets.map(({ id }) => id),
-      );
+      await api.saveSetlist({
+        id: this.id,
+        sheetIds: this.sheets.map(({ id }) => id),
+      });
     } catch {
       // revert order if updating failed
       this.sheets = originalOrder;
     }
+  }
+
+  private updateTitle = debounce(async (title: string) => {
+    api.saveSetlist({ id: this.id, title });
+  }, 1000);
+
+  setTitle(title: string) {
+    this.title = title;
+    this.updateTitle(title);
   }
 }

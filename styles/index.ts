@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import { device } from '../utils/constants';
+import { Spacing } from './theme';
 
 export const Page = styled.main`
   position: relative;
@@ -29,10 +30,10 @@ export const PageWrapper = styled(Page)`
 export const Button = styled.button<{ $align?: 'left' | 'right' }>`
   display: flex;
   align-items: center;
-  gap: ${(p) => p.theme.spacing.default};
+  gap: ${(p) => p.theme.spacing.absolute.default};
   opacity: 0.5;
-  padding: ${(p) => p.theme.spacing.small};
   transition: opacity 500ms;
+  padding: ${(p) => p.theme.spacing.absolute.small};
   font-size: ${(p) => p.theme.absoluteRem(1)};
   border-radius: ${(p) => p.theme.absolutePx(4)};
 
@@ -48,15 +49,37 @@ export const Button = styled.button<{ $align?: 'left' | 'right' }>`
 export const IconButton = styled(Button)`
   justify-content: center;
   padding: 0;
+  flex: 0;
   font-size: ${(p) => p.theme.absoluteRem(1.2)};
-  height: ${(p) => p.theme.absoluteRem(1.8)};
-  width: ${(p) => p.theme.absoluteRem(1.8)};
+  min-height: ${(p) => p.theme.absoluteRem(1.8)};
+  max-height: ${(p) => p.theme.absoluteRem(1.8)};
+  max-width: ${(p) => p.theme.absoluteRem(1.8)};
+  min-width: ${(p) => p.theme.absoluteRem(1.8)};
   border-radius: 999px;
 `;
 
-export const Row = styled.div`
+export const Row = styled.div<{ $align?: 'left' | 'right'; $gap?: Spacing }>`
+  flex-shrink: 1;
   display: flex;
-  gap: ${(p) => p.theme.spacing.small};
+  gap: ${(p) => p.theme.spacing.absolute[p.$gap ?? 'small']};
   width: 100%;
   align-items: center;
+
+  ${(p) => p.$align && `margin-${p.$align}: auto;`}
+
+  @media ${device.sm} {
+    gap: ${(p) => p.theme.spacing.xsmall};
+  }
+`;
+
+export const Subtitle = styled.h3`
+  flex-shrink: 1;
+  font-size: ${(p) => p.theme.absoluteRem(1.1)};
+  color: ${(p) => p.theme.colors.grey};
+  margin: 0;
+  font-weight: 400;
+  max-width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 `;

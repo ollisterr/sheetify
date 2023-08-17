@@ -31,16 +31,23 @@ export const apiClient = {
   },
 };
 
+export type SaveSetlistOrderPayload = { id: string; sheetIds: string[] };
+export type SaveSetlistTitlePayload = { id: string; title: string };
+export type SaveSheetToSetlistPayload = { id?: string; sheetId: string };
+
+export type SaveSetlistPayload =
+  | SaveSheetToSetlistPayload
+  | SaveSetlistTitlePayload
+  | SaveSetlistOrderPayload;
+
 export const api = {
   save: ({ id, ...data }: SheetModule) =>
     apiClient.post<string>('/save', { id: id || undefined, ...data }),
   load: (id: string) => apiClient.get<SheetProperties>('/load', { id }),
-  addToSetlist: (sheetId: string, setlistId?: string) =>
-    apiClient.post<string>('/add-to-setlist', { sheetId, setlistId }),
+  saveSetlist: (payload: SaveSetlistPayload) =>
+    apiClient.post<string>('/setlist/save', payload),
   loadSetlist: (setlistId: string) =>
-    apiClient.get<SetlistProperties>('/setlist', { id: setlistId }),
-  orderSetlist: (setlistId: string, sheetIds: string[]) =>
-    apiClient.post<string>('/setlist', { setlistId, sheetIds }),
+    apiClient.get<SetlistProperties>('/setlist/load', { id: setlistId }),
   removeFromSetlist: (sheetId: string, setlistId: string) =>
-    apiClient.post<string>('/remove-sheet', { sheetId, setlistId }),
+    apiClient.post<string>('/setlist/remove', { sheetId, setlistId }),
 };

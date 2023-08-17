@@ -87,7 +87,7 @@ export const Bar = observer(({ bar, addBar, deleteBar }: BarProps) => {
 
         {bar.bar.map((chord: string, i: number) => (
           <BarBlock
-            value={chord}
+            value={chord ?? ''}
             key={i}
             onChange={(e) => updateBar(i, e.target.value)}
             autoFocus={i === 0}
@@ -168,22 +168,22 @@ const SectionGoal = styled.input<{ $isDefined: boolean }>`
   padding-left: ${(p) => p.theme.spacing.xsmall};
 
   border: ${(p) => `solid ${p.theme.px(2)} ${p.theme.colors.lightgrey}`};
-  border-width: 2px 0 0 2px;
+  border-width: ${(p) => p.theme.px(2)} 0 0 ${(p) => p.theme.px(2)};
   visibility: hidden;
   transition: opacity 0.2s;
 
   ${(p) =>
     p.$isDefined &&
-    `
-    opacity: 1;
-    visibility: visible; 
-  `}
+    css`
+      opacity: 1;
+      visibility: visible;
+    `}
 `;
 
 const RepeatTag = styled.label<{ $show: boolean }>`
   display: ${(p) => (p.$show ? 'flex' : 'none')};
-  width: 3.5rem;
-  font-size: 1.1rem;
+  width: ${(p) => p.theme.rem(3.5)};
+  font-size: ${(p) => p.theme.rem(1.1)};
   font-weight: bold;
   color: ${(p) => p.theme.colors.black};
   opacity: ${(p) => (p.$show ? 1 : 0)};
@@ -243,7 +243,7 @@ const BarContent = styled.div`
   gap: ${(p) => p.theme.spacing.xxsmall};
   width: 100%;
   height: ${(p) =>
-    p.theme.readMode ? p.theme.spacing.xlarge : p.theme.spacing.xxlarge};
+    p.theme.readMode ? p.theme.spacing.large : p.theme.spacing.absolute.large};
   box-shadow:
     -${(p) => p.theme.spacing.xsmall} 0 0 0 ${(p) => p.theme.colors.lightgrey},
     ${(p) => p.theme.spacing.xsmall} 0 0 0 ${(p) => p.theme.colors.lightgrey};
@@ -263,6 +263,7 @@ const BarBlock = styled.input<{ disabled: boolean }>`
   position: relative;
   display: inline-block;
   flex: 1 1 auto;
+  font-size: ${(p) => p.theme.rem(p.theme.readMode ? 1.2 : 1.4)};
   padding: 0;
   padding-left: ${(p) => p.theme.spacing.xsmall};
   margin: 0;
@@ -303,10 +304,6 @@ const BarWrapper = styled.div`
 
           ${SectionGoal} {
             visibility: visible;
-          }
-
-          @media (max-width: $small) {
-            max-height: $barControlHeight;
           }
         }
       }

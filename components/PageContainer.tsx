@@ -13,7 +13,7 @@ export const PageContainer = ({ children }: { children: ReactNode }) => {
         Made with{' '}
         <Logo
           width={72}
-          height={35}
+          height={25}
           alt="Logo"
           src="/assets/sheetify-logo.svg"
         />
