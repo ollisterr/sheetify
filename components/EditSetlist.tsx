@@ -49,8 +49,6 @@ export const EditSetlist = observer(() => {
         setUnfetchedSheets((sheets) => sheets.filter((x) => x !== sheetId));
       });
     } else {
-      console.log(sheetId);
-
       api.setlist
         .create({ title: '', sheets: [sheetId] })
         .then((res) => router.replace(`/setlist/${res}`))

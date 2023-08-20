@@ -1,7 +1,6 @@
 import { NextResponse } from 'next/server';
 
-import { SetlistProperties } from '@store/SetlistModule';
-import setlistApi from './api.utils';
+import setlistApi from './setlist.api';
 import { SetlistPayload } from '@utils/api.utils';
 
 export async function POST(request: Request) {

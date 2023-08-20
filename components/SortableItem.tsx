@@ -1,3 +1,5 @@
+'use client';
+
 import React, { ReactNode } from 'react';
 import { useSortable } from '@dnd-kit/sortable';
 import { UniqueIdentifier } from '@dnd-kit/core';

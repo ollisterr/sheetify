@@ -8,6 +8,7 @@ import {
   SaveSetlistPayload,
   SaveSetlistTitlePayload,
   SetlistPayload,
+  api,
 } from '@utils/api.utils';
 
 interface SetlistData extends Omit<SetlistProperties, 'sheets' | '_id'> {
@@ -26,10 +27,11 @@ const loadSetlist = async (id: string): Promise<SetlistProperties> =>
 
       const sheets: SheetProperties[] = [];
 
-      console.log('HALOO', setlistInstance);
-
       for (const sheetId of setlistInstance.sheets) {
-        const sheetData = await sheetApi.load(sheetId);
+        if (!sheetId) continue;
+
+        // use shared API so that a cached/revalidated data is fetched on sheet open
+        const sheetData = await api.sheet.load(sheetId);
 
         if (!sheetData) continue;
 

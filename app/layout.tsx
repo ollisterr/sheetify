@@ -1,7 +1,9 @@
-import App from '@pages/_app';
-import { StyledComponentsRegistry } from 'lib/StyledComponentsRegistry';
-import Script from 'next/script';
 import { PropsWithChildren } from 'react';
+import Script from 'next/script';
+
+import 'styles/index.css';
+
+import { StyledComponentsRegistry } from 'lib/StyledComponentsRegistry';
 
 export default function Document({ children }: PropsWithChildren<{}>) {
   return (
@@ -43,9 +45,7 @@ export default function Document({ children }: PropsWithChildren<{}>) {
       </head>
 
       <body>
-        <StyledComponentsRegistry>
-          <App>{children}</App>
-        </StyledComponentsRegistry>
+        <StyledComponentsRegistry>{children}</StyledComponentsRegistry>
       </body>
     </html>
   );

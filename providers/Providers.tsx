@@ -20,13 +20,10 @@ export const Providers = async ({
   setlistId,
   sheetId,
 }: ProviderProps) => {
-  console.log({ setlistId, sheetId });
   const [sheetData, setlistData] = await Promise.all([
     getSheet(sheetId),
     getSetlist(setlistId),
   ]);
-
-  console.log('SELIST DATA', setlistId, setlistData);
 
   return (
     <SheetProvider sheetData={sheetData} setlistData={setlistData}>

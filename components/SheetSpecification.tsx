@@ -1,7 +1,9 @@
+'use client';
+
 import styled from 'styled-components';
 import { observer } from 'mobx-react-lite';
-
 import { FaMinus, FaPlus } from 'react-icons/fa';
+
 import { useSheet } from '../store/SheetProvider';
 
 export const SheetSpecification = observer(() => {

@@ -30,7 +30,7 @@
       "@utils": ["utils"],
       "@utils/*": ["utils/*"],
       "@pages/*": ["pages_old/*"],
-      "@api/*": ["pages_old/api/*"]
+      "@api/*": ["app/api/*"]
     }
   },
   "include": [

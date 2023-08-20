@@ -1,7 +1,6 @@
 'use client';
 
 import type { NextPage } from 'next';
-import Head from 'next/head';
 import { observer } from 'mobx-react-lite';
 import { FaChevronLeft, FaChevronRight } from 'react-icons/fa';
 import { styled } from 'styled-components';

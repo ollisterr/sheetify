@@ -1,3 +1,5 @@
+'use client';
+
 import styled, { css } from 'styled-components';
 import { observer } from 'mobx-react-lite';
 import { FaPlus } from 'react-icons/fa';
