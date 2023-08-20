@@ -1,4 +1,3 @@
-import { ObjectId } from 'mongodb';
 import { SectionModule } from '../store/SectionModule';
 
 export type TimeSignature = [number, number];
@@ -7,9 +6,9 @@ export type Repeat = [boolean, boolean];
 
 export type SheetType = SectionModule[];
 
-export type NextPageProps<T extends object = {}> = { params: T };
+export type RouteParams<T extends object = {}> = { params: T };
 
-export type AppPageProps = NextPageProps<{
-  sheetId?: string;
-  setlistId?: string;
-}>;
+export type SetlistRouteParams = RouteParams<{ setlistId: string }>;
+export type SheetRouteParams = RouteParams<{ sheetId: string }>;
+
+export type AppPageProps = SetlistRouteParams & SheetRouteParams;

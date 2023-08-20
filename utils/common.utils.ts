@@ -35,3 +35,5 @@ export const trimEditPathname = (pathname: string) =>
 export const isServerSideProps = <T>(
   props: GetServerSidePropsResult<T>,
 ): props is { props: T } => 'props' in props;
+
+export const isDev = process.env.NODE_ENV !== 'production';

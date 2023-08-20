@@ -65,8 +65,8 @@ export class SetlistModule {
     try {
       // add to setlist and fetch sheet data in parallel
       const [_, sheetData] = await Promise.all([
-        api.saveSetlist({ sheetId, id: this.id }),
-        api.load(sheetId),
+        api.setlist.save(this.id, { sheetId }),
+        api.sheet.load(sheetId),
       ]);
       this.sheets.push(new SheetModule(sheetData));
     } catch {
