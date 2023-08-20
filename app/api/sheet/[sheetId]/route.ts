@@ -3,6 +3,7 @@ import { NextResponse } from 'next/server';
 import { sheetApi } from '../';
 import { SheetProperties } from '@store/SheetModule';
 import { RouteParams } from 'types';
+import { BadRequestResponse, NotFoundResponse } from 'app/api/api.utils';
 
 export async function GET(
   req: Request,
@@ -10,13 +11,11 @@ export async function GET(
 ) {
   const sheetId = params.sheetId;
 
-  if (!sheetId || Array.isArray(sheetId)) {
-    return new Response('Bad request', { status: 400 });
-  }
+  if (!sheetId) return BadRequestResponse();
 
   const data = await sheetApi.load(sheetId);
 
-  if (!data) return new Response('Not found', { status: 404 });
+  if (!data) return NotFoundResponse();
 
   return NextResponse.json(data);
 }

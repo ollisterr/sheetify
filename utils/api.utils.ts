@@ -51,18 +51,22 @@ export type SaveSetlistPayload =
   | SaveSetlistTitlePayload
   | SaveSetlistOrderPayload;
 
+export type SetlistPayload = Omit<SetlistProperties, 'sheets' | '_id'> & {
+  sheets: string[];
+};
+
 export const api = {
   sheet: {
     load: (id: string) => apiClient.get<SheetProperties>(`/sheet/${id}`),
     save: ({ id, ...data }: SheetModule) =>
-      id ? apiClient.post<string>(`/sheet/${id}`, data) : undefined,
+      apiClient.post<string>(`/sheet/${id}`, data),
   },
   setlist: {
-    create: (payload: SetlistProperties) => apiClient.post('/setlist', payload),
+    create: (payload: SetlistPayload) => apiClient.post('/setlist', payload),
     save: (id: string, payload: SaveSetlistPayload) =>
       apiClient.post<string>(`/setlist/${id}`, payload),
     load: (setlistId: string) =>
-      apiClient.get<SetlistProperties>('/setlist/load', { id: setlistId }),
+      apiClient.get<SetlistProperties>(`/setlist/${setlistId}`),
     remove: (sheetId: string, setlistId: string) =>
       apiClient.delete<string>('/setlist/remove', { sheetId, setlistId }),
   },

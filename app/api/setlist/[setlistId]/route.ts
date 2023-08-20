@@ -7,7 +7,7 @@ import { SaveSetlistPayload } from '@utils/api.utils';
 export async function GET(_: Request, { params }: SetlistRouteParams) {
   const setlistId = params.setlistId;
 
-  if (!setlistId || Array.isArray(setlistId)) {
+  if (!setlistId) {
     return BadRequestResponse();
   }
 

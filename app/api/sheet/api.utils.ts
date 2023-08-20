@@ -5,6 +5,8 @@ import { ObjectId } from 'mongodb';
 export const load = async (id: string) =>
   dbAction({
     action: async (dbClient) => {
+      if (!id) throw 'No sheet ID given';
+
       const sheetInstance = await dbClient
         .db(process.env.DB_NAME)
         .collection('sheets')

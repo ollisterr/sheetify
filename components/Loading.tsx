@@ -1,3 +1,5 @@
+'use client';
+
 import styled, { keyframes } from 'styled-components';
 import { KeyIcon } from './icons';
 

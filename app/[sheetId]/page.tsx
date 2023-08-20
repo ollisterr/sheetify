@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import { redirect } from 'next/navigation';
 
 import { Sheet } from '../../components/Sheet';
-import { RouteParams, SheetRouteParams } from 'types';
+import { SheetRouteParams } from 'types';
 import { Providers } from 'providers/Providers';
 import { api } from '@utils/api.utils';
 

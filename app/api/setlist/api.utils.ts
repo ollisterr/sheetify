@@ -7,6 +7,7 @@ import {
   SaveSetlistOrderPayload,
   SaveSetlistPayload,
   SaveSetlistTitlePayload,
+  SetlistPayload,
 } from '@utils/api.utils';
 
 interface SetlistData extends Omit<SetlistProperties, 'sheets' | '_id'> {
@@ -21,9 +22,11 @@ const loadSetlist = async (id: string): Promise<SetlistProperties> =>
         .collection<SetlistData>('setlists')
         .findOne({ _id: new ObjectId(id) });
 
-      if (!setlistInstance) throw 'Non existent set list';
+      if (!setlistInstance) throw 'Non-existent set list';
 
       const sheets: SheetProperties[] = [];
+
+      console.log('HALOO', setlistInstance);
 
       for (const sheetId of setlistInstance.sheets) {
         const sheetData = await sheetApi.load(sheetId);
@@ -71,7 +74,7 @@ const saveSetlist = async (id: string, payload: SaveSetlistPayload) =>
     },
   });
 
-const createSetlist = async (setlistData: SetlistProperties) =>
+const createSetlist = async (setlistData: SetlistPayload) =>
   dbAction({
     errorMsg: 'Creating failed',
     action: async (dbClient) => {
@@ -80,12 +83,7 @@ const createSetlist = async (setlistData: SetlistProperties) =>
         .collection<SetlistData>('setlists')
         .updateOne(
           { _id: new ObjectId() },
-          {
-            $set: {
-              ...setlistData,
-              sheets: setlistData.sheets.map(({ _id }) => _id),
-            },
-          },
+          { $set: setlistData },
           { upsert: true },
         );
 

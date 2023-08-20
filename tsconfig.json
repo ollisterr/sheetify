@@ -34,7 +34,6 @@
     }
   },
   "include": [
-    "pages_old",
     "app",
     "lib",
     "styles",

@@ -57,7 +57,7 @@ export const Sheet = observer(({ sheetId, setlistId }: SheetProps) => {
 
     setIsLoading(true);
 
-    api
+    api.sheet
       .save(sheet)
       .then((res) => {
         if (res && res !== sheetId) {
@@ -78,12 +78,12 @@ export const Sheet = observer(({ sheetId, setlistId }: SheetProps) => {
       if (!setlistId) return;
     }
 
-    if (!sheetId) return;
+    if (!sheetId || !setlistId) return;
 
     setIsLoading(true);
 
-    api
-      .saveSetlist({ id: setlistId, sheetId })
+    api.setlist
+      .save(setlistId, { sheetId })
       .then((res) => router.replace(`/setlist/${res}`))
       .finally(() => setIsLoading(false));
   };

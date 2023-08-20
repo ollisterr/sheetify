@@ -8,7 +8,6 @@ import { SheetModule, SheetProperties } from './SheetModule';
 export interface SetlistProperties {
   _id: string;
   title: string;
-  tempo: number;
   sheets: SheetProperties[];
 }
 
@@ -80,7 +79,7 @@ export class SetlistModule {
     this.sheets = this.sheets.filter((x) => x.id !== sheetId);
 
     try {
-      await api.removeFromSetlist(sheetId, this.id);
+      await api.setlist.remove(sheetId, this.id);
       console.log('Removed sheet from setlist');
     } catch {
       console.error('Removing sheet failed');
@@ -96,8 +95,7 @@ export class SetlistModule {
     this.sheets = sheets;
 
     try {
-      await api.saveSetlist({
-        id: this.id,
+      await api.setlist.save(this.id, {
         sheetIds: this.sheets.map(({ id }) => id),
       });
     } catch {
@@ -107,7 +105,7 @@ export class SetlistModule {
   }
 
   private updateTitle = debounce(async (title: string) => {
-    api.saveSetlist({ id: this.id, title });
+    api.setlist.save(this.id, { title });
   }, 1000);
 
   setTitle(title: string) {
