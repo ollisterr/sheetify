@@ -41,7 +41,7 @@ export const SortableItem = ({
   };
 
   return (
-    <SortableItemWrapper style={style}>
+    <SortableItemWrapper style={style} suppressHydrationWarning>
       {!disabled && (
         <DraggableWrapper {...attributes} {...listeners} ref={setNodeRef}>
           <MdDragHandle />
