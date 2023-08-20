@@ -37,3 +37,5 @@ export const isServerSideProps = <T>(
 ): props is { props: T } => 'props' in props;
 
 export const isDev = process.env.NODE_ENV !== 'production';
+
+export const formatSheetifyTitle = (title: string) => `${title} | Sheetify`;

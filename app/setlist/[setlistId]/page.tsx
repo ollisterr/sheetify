@@ -4,6 +4,7 @@ import { ViewSetlist } from '@components/ViewSetlist';
 import { Providers } from 'providers/Providers';
 import { SetlistRouteParams } from 'types';
 import { api } from '@utils/api.utils';
+import { formatSheetifyTitle } from '@utils/common.utils';
 
 export async function generateMetadata({
   params,
@@ -11,7 +12,7 @@ export async function generateMetadata({
   const setlist = await api.setlist.load(params.setlistId);
 
   return {
-    title: setlist.title,
+    title: formatSheetifyTitle(setlist.title),
   };
 }
 

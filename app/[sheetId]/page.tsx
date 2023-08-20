@@ -5,6 +5,7 @@ import { Sheet } from '../../components/Sheet';
 import { SheetRouteParams } from 'types';
 import { Providers } from 'providers/Providers';
 import { api } from '@utils/api.utils';
+import { formatSheetifyTitle } from '@utils/common.utils';
 
 export async function generateMetadata({
   params,
@@ -12,7 +13,7 @@ export async function generateMetadata({
   const sheet = await api.sheet.load(params.sheetId);
 
   return {
-    title: sheet.title,
+    title: formatSheetifyTitle(sheet.title),
   };
 }
 
