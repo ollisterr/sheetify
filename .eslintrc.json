@@ -8,7 +8,8 @@
     "prettier",
     "eslint:recommended",
     "plugin:@typescript-eslint/eslint-recommended",
-    "plugin:@typescript-eslint/recommended"
+    "plugin:@typescript-eslint/recommended",
+    "plugin:@next/next/recommended"
   ],
   "globals": {
     "Atomics": "readonly",
@@ -28,7 +29,7 @@
     "linebreak-style": ["error", "unix"],
     "quotes": ["error", "single"],
     "semi": ["error", "always"],
-    "max-len": ["error", { "code": 80 }],
+    "max-len": ["warn", { "code": 80 }],
     "no-console": "off",
     "no-unused-vars": "off",
     "@typescript-eslint/explicit-module-boundary-types": "off",

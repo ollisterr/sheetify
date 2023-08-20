@@ -16,14 +16,12 @@ export async function generateMetadata({
   };
 }
 
-const SheetPage = ({ params, readMode = true }: SheetRouteParams) => {
+export default function SheetPage({ params }: SheetRouteParams) {
   if (!params.sheetId) redirect('/');
 
   return (
-    <Providers sheetId={params.sheetId} readMode={readMode}>
+    <Providers sheetId={params.sheetId} readMode>
       <Sheet />
     </Providers>
   );
-};
-
-export default SheetPage;
+}

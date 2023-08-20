@@ -10,7 +10,6 @@ enableStaticRendering(isSSR);
 let setlist: SetlistModule;
 
 const initSetlist = (setlistData?: SetlistProperties) => {
-  // check if we already declare store (client Store), otherwise create one
   let store: SetlistModule | undefined;
 
   // hydrate to store if receive initial data

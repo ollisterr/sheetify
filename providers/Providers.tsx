@@ -16,7 +16,7 @@ export interface ProviderProps {
 
 export const Providers = async ({
   children,
-  readMode,
+  readMode = false,
   setlistId,
   sheetId,
 }: ProviderProps) => {

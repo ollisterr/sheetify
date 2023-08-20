@@ -30,7 +30,7 @@ export type SortableItemOrderFn = <T extends SortableItem>(items: T[]) => T[];
 
 interface Props {
   setItems: (orderFn: SortableItemOrderFn) => void;
-  children: ReactElement<SortableItemProps & any>[];
+  children: ReactElement<SortableItemProps>[];
   disabled?: boolean;
 }
 

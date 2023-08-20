@@ -1,8 +1,9 @@
+import { ObjectId } from 'mongodb';
+
 import { SetlistProperties } from '@store/SetlistModule';
 import { SheetProperties } from '@store/SheetModule';
 import { dbAction } from '@utils/db.utils';
-import { ObjectId } from 'mongodb';
-import { sheetApi } from '../sheet';
+
 import {
   SaveSetlistOrderPayload,
   SaveSetlistPayload,

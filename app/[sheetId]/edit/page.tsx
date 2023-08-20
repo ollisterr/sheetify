@@ -1,8 +1,16 @@
 export * from '../page';
 
+import { Sheet } from '@components/Sheet';
+import { redirect } from 'next/navigation';
+import { Providers } from 'providers/Providers';
 import { SheetRouteParams } from 'types';
-import SheetPage from '../page';
 
-export default (props: SheetRouteParams) => (
-  <SheetPage {...props} readMode={false} />
-);
+export default function EditSheetPage({ params }: SheetRouteParams) {
+  if (!params.sheetId) redirect('/');
+
+  return (
+    <Providers sheetId={params.sheetId}>
+      <Sheet />
+    </Providers>
+  );
+}

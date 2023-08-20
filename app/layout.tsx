@@ -1,11 +1,11 @@
-import { PropsWithChildren } from 'react';
+import { ReactNode } from 'react';
 import Script from 'next/script';
 
 import 'styles/index.css';
 
 import { StyledComponentsRegistry } from 'lib/StyledComponentsRegistry';
 
-export default function Document({ children }: PropsWithChildren<{}>) {
+export default function Document({ children }: { children: ReactNode }) {
   return (
     <html lang="en">
       <head>

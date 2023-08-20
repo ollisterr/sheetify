@@ -9,7 +9,6 @@ enableStaticRendering(isSSR);
 let sheet: SheetModule;
 
 const initSheet = (sheetData?: SheetProperties) => {
-  // check if we already declare store (client Store), otherwise create one
   const store = new SheetModule();
 
   // hydrate to store if receive initial data
