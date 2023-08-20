@@ -1,7 +1,7 @@
 'use client';
 
 import { isEditPathname } from '@utils/common.utils';
-import { useRouter, usePathname } from 'next/navigation';
+import { usePathname } from 'next/navigation';
 import {
   ReactNode,
   createContext,
@@ -11,6 +11,7 @@ import {
   useState,
 } from 'react';
 import { ProviderProps } from './Providers';
+import { StorageKey, store } from '@utils/storage.utils';
 
 interface GlobalStateContext {
   readMode: boolean;
@@ -31,7 +32,6 @@ export const GlobalStateProvider = ({
 }: ProviderProps & {
   children: ReactNode | ((props: GlobalStateContext) => ReactNode);
 }) => {
-  const router = useRouter();
   const pathname = usePathname();
 
   const isSetlistPath = !!setlistId;
@@ -44,6 +44,14 @@ export const GlobalStateProvider = ({
   const [zoom, setZoom] = useState(1);
 
   useEffect(() => {
+    const previousZoom = store.getItem(StorageKey.ZOOM);
+
+    if (previousZoom && !isNaN(Number(previousZoom))) {
+      setZoom(Number(previousZoom));
+    }
+  }, []);
+
+  useEffect(() => {
     // update readmode on route change
     setReadMode(readModeProp ?? (isEditPathname(pathname) && !isSetlistPath));
   }, [readModeProp, isEditPathname(pathname) && !isSetlistPath]);
@@ -54,9 +62,23 @@ export const GlobalStateProvider = ({
       setReadMode,
       // reset zoom in edit mode
       zoom: readMode ? zoom : 1,
-      zoomOut: () => setZoom((x) => x * 0.75),
-      zoomIn: () => setZoom((x) => x / 0.75),
-      resetZoom: () => setZoom(1),
+      zoomOut: () => {
+        setZoom((x) => {
+          const newValue = x * 0.75;
+          store.setItem(StorageKey.ZOOM, newValue.toString());
+          return newValue;
+        });
+      },
+      zoomIn: () =>
+        setZoom((x) => {
+          const newValue = x / 0.75;
+          store.setItem(StorageKey.ZOOM, newValue.toString());
+          return newValue;
+        }),
+      resetZoom: () => {
+        setZoom(1);
+        store.setItem(StorageKey.ZOOM, '1');
+      },
     };
   }, [readMode, zoom]);
 
