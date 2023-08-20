@@ -46,7 +46,7 @@ export const Sheet = observer(({ sheetId, setlistId }: SheetProps) => {
 
   const printPDF = useReactToPrint({
     content: () => printRef.current,
-    documentTitle: sheet.title,
+    documentTitle: sheet?.title || 'Untitled sheet',
   });
 
   const isSetlist = !!setlistId;
@@ -54,8 +54,6 @@ export const Sheet = observer(({ sheetId, setlistId }: SheetProps) => {
   if (isLoading) return <Loading />;
 
   const saveSheet = () => {
-    if (Array.isArray(sheetId)) return;
-
     setIsLoading(true);
 
     api.sheet
@@ -122,20 +120,22 @@ export const Sheet = observer(({ sheetId, setlistId }: SheetProps) => {
           </>
         )}
 
-        <IconButton
-          onClick={() => {
-            if (readMode && isSetlist) {
-              router.push(`/${sheet.id}/edit`);
-            } else {
-              setReadMode(!readMode);
-              router.replace(
-                trimEditPathname(pathname ?? '') + (readMode ? '/edit' : ''),
-              );
-            }
-          }}
-        >
-          {readMode ? <LuEdit3 /> : <FaEye />}
-        </IconButton>
+        {!!sheet.id && (
+          <IconButton
+            onClick={() => {
+              if (readMode && isSetlist) {
+                router.push(`/${sheet.id}/edit`);
+              } else {
+                setReadMode(!readMode);
+                router.replace(
+                  trimEditPathname(pathname ?? '') + (readMode ? '/edit' : ''),
+                );
+              }
+            }}
+          >
+            {readMode ? <LuEdit3 /> : <FaEye />}
+          </IconButton>
+        )}
       </ReadControlsWrapper>
 
       <SheetPaper ref={printRef}>
