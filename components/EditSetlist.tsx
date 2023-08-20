@@ -66,7 +66,7 @@ export const EditSetlist = observer(() => {
   return (
     <PageWrapper>
       {isEditing && (
-        <Link href={`/setlist/${setlist?.id}`} shallow>
+        <Link href={`/setlist/${setlist?.id}`} shallow prefetch>
           <IconButton>
             <FaChevronLeft />
           </IconButton>

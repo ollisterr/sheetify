@@ -1,6 +1,7 @@
 'use client';
 
 import { useRef, useState } from 'react';
+import Link from 'next/link';
 import styled from 'styled-components';
 import { useRouter, usePathname } from 'next/navigation';
 import { useReactToPrint } from 'react-to-print';
@@ -88,24 +89,22 @@ export const Sheet = observer(({ sheetId, setlistId }: SheetProps) => {
       .finally(() => setIsLoading(false));
   };
 
-  const editSetlist = isSetlist
-    ? () => router.push(`/setlist/${setlistId}/edit`)
-    : undefined;
-
   return (
     <PageContainer>
       <ReadControlsWrapper>
-        {editSetlist && (
+        {isSetlist && (
           <SetlistControls $gap="default" $align="right">
             <Subtitle>{setlist?.title}</Subtitle>
 
-            <IconButton onClick={editSetlist}>
-              <FaRegEdit />
-            </IconButton>
+            <Link href={`/setlist/${setlistId}/edit`} prefetch>
+              <IconButton>
+                <FaRegEdit />
+              </IconButton>
+            </Link>
           </SetlistControls>
         )}
 
-        {!editSetlist && (
+        {!isSetlist && (
           <IconButton onClick={addToSetlist}>
             <MdPlaylistAdd />
           </IconButton>
