@@ -2,17 +2,13 @@ import type { Metadata } from 'next';
 import { redirect } from 'next/navigation';
 
 import { Sheet } from '../../components/Sheet';
-import { RouteParams } from 'types';
+import { RouteParams, SheetRouteParams } from 'types';
 import { Providers } from 'providers/Providers';
 import { api } from '@utils/api.utils';
 
-interface Props {
-  sheetId: string;
-}
-
 export async function generateMetadata({
   params,
-}: RouteParams<Props>): Promise<Metadata> {
+}: SheetRouteParams): Promise<Metadata> {
   const sheet = await api.sheet.load(params.sheetId);
 
   return {
@@ -20,11 +16,11 @@ export async function generateMetadata({
   };
 }
 
-const SheetPage = ({ params }: RouteParams<Props>) => {
+const SheetPage = ({ params, readMode = true }: SheetRouteParams) => {
   if (!params.sheetId) redirect('/');
 
   return (
-    <Providers sheetId={params.sheetId} readMode={true}>
+    <Providers sheetId={params.sheetId} readMode={readMode}>
       <Sheet />
     </Providers>
   );
