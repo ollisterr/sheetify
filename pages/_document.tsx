@@ -8,7 +8,6 @@ import Document, {
 } from 'next/document';
 import Script from 'next/script';
 
-import { StyledComponentsRegistry } from '../lib/StyledComponentsRegistry';
 import { ServerStyleSheet } from 'styled-components';
 
 export default class DocumentPage extends Document {

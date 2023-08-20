@@ -6,7 +6,7 @@ import { observer } from 'mobx-react-lite';
 import { Sheet } from '@components/Sheet';
 import { SetlistProperties } from '@store/SetlistModule';
 import { useSetSheet, useSetlist, useSheet } from '@store/SheetProvider';
-import { Button, IconButton } from 'styles';
+import { Button } from 'styles';
 import { FaChevronLeft, FaChevronRight } from 'react-icons/fa';
 import { styled } from 'styled-components';
 import { useEffect } from 'react';
