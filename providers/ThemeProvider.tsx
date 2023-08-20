@@ -1,3 +1,5 @@
+'use client';
+
 import { ReactNode } from 'react';
 import { ThemeProvider as StyledThemeProvider } from 'styled-components';
 

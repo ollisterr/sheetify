@@ -1,6 +1,8 @@
-import { useEffect, useRef, useState } from 'react';
+'use client';
+
+import { useRef, useState } from 'react';
 import styled from 'styled-components';
-import { useRouter } from 'next/router';
+import { useRouter, usePathname } from 'next/navigation';
 import { useReactToPrint } from 'react-to-print';
 import { observer } from 'mobx-react-lite';
 import { LuEdit3 } from 'react-icons/lu';
@@ -18,26 +20,25 @@ import { Loading } from './Loading';
 
 import { IconButton, Row, Subtitle } from '../styles';
 import { useGlobalState } from '../providers/GlobalStateProvider';
-import {
-  getRouteParamFromSlug,
-  getRouteParamFromUrl,
-  trimEditPathname,
-} from '@utils/common.utils';
+import { getRouteParamFromUrl, trimEditPathname } from '@utils/common.utils';
 import { PageContainer } from './PageContainer';
 import { MdPlaylistAdd } from 'react-icons/md';
 import { device } from '@utils/constants';
 
 interface SheetProps {
-  showSetlistControls?: boolean;
+  sheetId?: string;
+  setlistId?: string;
+  readMode?: boolean;
 }
 
-export const Sheet = observer(({}: SheetProps) => {
+export const Sheet = observer(({ sheetId, setlistId }: SheetProps) => {
   const setlist = useSetlist();
   const sheet = useSheet();
-  const router = useRouter();
-  const { readMode, setReadMode, zoomOut, zoomIn } = useGlobalState();
 
-  const isSetlist = !!router.query.setlistId;
+  const router = useRouter();
+  const pathname = usePathname();
+
+  const { readMode, setReadMode, zoomOut, zoomIn } = useGlobalState();
 
   const printRef = useRef(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -47,10 +48,11 @@ export const Sheet = observer(({}: SheetProps) => {
     documentTitle: sheet.title,
   });
 
+  const isSetlist = !!setlistId;
+
   if (isLoading) return <Loading />;
 
   const saveSheet = () => {
-    const sheetId = router.query.sheetId;
     if (Array.isArray(sheetId)) return;
 
     setIsLoading(true);
@@ -59,7 +61,7 @@ export const Sheet = observer(({}: SheetProps) => {
       .save(sheet)
       .then((res) => {
         if (res && res !== sheetId) {
-          router.replace(`/${res}`, undefined, { shallow: true });
+          router.replace(`/${res}`);
         }
       })
       .finally(() => setIsLoading(false));
@@ -69,13 +71,9 @@ export const Sheet = observer(({}: SheetProps) => {
     let sheetId: string | undefined;
     let setlistId: string | undefined;
 
-    const routeParams = router.query.sheetId;
-
-    if (router.pathname.includes('setlist')) {
+    if (isSetlist) {
       sheetId = getRouteParamFromUrl(prompt('Sheet URL') ?? '');
-      setlistId = getRouteParamFromSlug(routeParams);
     } else {
-      sheetId = getRouteParamFromSlug(routeParams);
       setlistId = getRouteParamFromUrl(prompt('Setlist URL') ?? '');
       if (!setlistId) return;
     }
@@ -91,10 +89,7 @@ export const Sheet = observer(({}: SheetProps) => {
   };
 
   const editSetlist = isSetlist
-    ? () =>
-        router.push(`/setlist/${router.query.setlistId}/edit`, undefined, {
-          shallow: true,
-        })
+    ? () => router.push(`/setlist/${setlistId}/edit`)
     : undefined;
 
   return (
@@ -135,9 +130,7 @@ export const Sheet = observer(({}: SheetProps) => {
             } else {
               setReadMode(!readMode);
               router.replace(
-                trimEditPathname(router.asPath) + (readMode ? '/edit' : ''),
-                undefined,
-                { shallow: true },
+                trimEditPathname(pathname ?? '') + (readMode ? '/edit' : ''),
               );
             }
           }}

@@ -1,11 +1,14 @@
 import type { AppProps as NextAppProps } from 'next/app';
 
+import { useRouter, usePathname, useSearchParams } from 'next/navigation';
+
 import { SheetProvider } from '../store/SheetProvider';
 import '../styles/index.css';
 import { GlobalStateProvider } from 'providers/GlobalStateProvider';
 import { ThemeProvider } from 'providers/ThemeProvider';
 import { SheetPageProps } from './[sheetId]';
 import { SetlistPageProps } from './setlist/[setlistId]';
+import { PropsWithChildren } from 'react';
 
 export interface AppProps {
   readMode: boolean;
@@ -13,15 +16,11 @@ export interface AppProps {
 
 type RouteProps = AppProps & Partial<SetlistPageProps> & SheetPageProps;
 
-const App = ({ Component, pageProps }: NextAppProps<RouteProps>) => {
+const App = ({ children }: PropsWithChildren<{}>) => {
   return (
-    <SheetProvider sheetData={pageProps.sheet} setlistData={pageProps.setlist}>
-      <GlobalStateProvider readMode={pageProps.readMode}>
-        <ThemeProvider>
-          <Component {...pageProps} />
-        </ThemeProvider>
-      </GlobalStateProvider>
-    </SheetProvider>
+    <GlobalStateProvider readMode={false}>
+      <ThemeProvider>{children}</ThemeProvider>
+    </GlobalStateProvider>
   );
 };
 

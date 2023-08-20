@@ -6,3 +6,10 @@ export type TimeSignature = [number, number];
 export type Repeat = [boolean, boolean];
 
 export type SheetType = SectionModule[];
+
+export type NextPageProps<T extends object = {}> = { params: T };
+
+export type AppPageProps = NextPageProps<{
+  sheetId?: string;
+  setlistId?: string;
+}>;

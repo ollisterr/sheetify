@@ -1,5 +1,7 @@
-import { isEditPathname, trimEditPathname } from '@utils/common.utils';
-import { useRouter } from 'next/router';
+'use client';
+
+import { isEditPathname } from '@utils/common.utils';
+import { useRouter, usePathname } from 'next/navigation';
 import {
   ReactNode,
   createContext,
@@ -8,6 +10,7 @@ import {
   useMemo,
   useState,
 } from 'react';
+import { ProviderProps } from './Providers';
 
 interface GlobalStateContext {
   readMode: boolean;
@@ -23,27 +26,27 @@ const GlobalStateContext = createContext<GlobalStateContext | null>(null);
 export const GlobalStateProvider = ({
   children,
   readMode: readModeProp,
-}: {
-  children: ReactNode | ((state: GlobalStateContext) => ReactNode);
-  readMode?: boolean;
+  setlistId,
+  sheetId,
+}: ProviderProps & {
+  children: ReactNode | ((props: GlobalStateContext) => ReactNode);
 }) => {
   const router = useRouter();
+  const pathname = usePathname();
 
-  const isSetlistPath = !!router.query.setlistId;
-  const isSheetPath = !!router.query.sheetId;
+  const isSetlistPath = !!setlistId;
+  const isSheetPath = !!sheetId;
 
   const [readMode, setReadMode] = useState(
     readModeProp ??
-      ((isEditPathname(router.pathname) || !isSheetPath) && !isSetlistPath),
+      ((isEditPathname(pathname) || !isSheetPath) && !isSetlistPath),
   );
   const [zoom, setZoom] = useState(1);
 
   useEffect(() => {
     // update readmode on route change
-    setReadMode(
-      readModeProp ?? (isEditPathname(router.pathname) && !isSetlistPath),
-    );
-  }, [readModeProp, isEditPathname(router.pathname) && !isSetlistPath]);
+    setReadMode(readModeProp ?? (isEditPathname(pathname) && !isSetlistPath));
+  }, [readModeProp, isEditPathname(pathname) && !isSetlistPath]);
 
   const globalState = useMemo<GlobalStateContext>(() => {
     return {

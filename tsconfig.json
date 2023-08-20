@@ -29,13 +29,14 @@
       "@store/*": ["store/*"],
       "@utils": ["utils"],
       "@utils/*": ["utils/*"],
-      "@pages/*": ["pages/*"],
-      "@api/*": ["pages/api/*"]
+      "@pages/*": ["pages_old/*"],
+      "@api/*": ["pages_old/api/*"]
     }
   },
   "include": [
-    "pages",
+    "pages_old",
     "app",
+    "lib",
     "styles",
     "components",
     "store",
@@ -43,7 +44,8 @@
     "utils",
     "*.d.ts",
     ".next/types/**/*.ts",
-    "app/[sheetId]"
+    "server",
+    "next-env.d.ts"
   ],
   "exclude": ["node_modules"]
 }

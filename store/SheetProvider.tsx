@@ -1,10 +1,6 @@
-import {
-  ReactNode,
-  createContext,
-  useContext,
-  useEffect,
-  useState,
-} from 'react';
+'use client';
+
+import { PropsWithChildren, createContext, useContext, useState } from 'react';
 
 import { useInitSheet } from './initSheet';
 import { SheetModule, SheetProperties } from './SheetModule';
@@ -18,14 +14,13 @@ const SheetContext = createContext<{
 } | null>(null);
 
 export const SheetProvider = ({
-  children,
   sheetData,
   setlistData,
-}: {
-  children: ReactNode;
-  sheetData: SheetProperties;
+  children,
+}: PropsWithChildren<{
+  sheetData?: SheetProperties;
   setlistData?: SetlistProperties;
-}) => {
+}>) => {
   const setlist = useInitSetlist(setlistData);
   const [sheet, setSheet] = useState(
     useInitSheet(setlistData?.sheets[0] ?? sheetData),
