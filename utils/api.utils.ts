@@ -1,5 +1,3 @@
-import { revalidateTag } from 'next/cache';
-
 import { SheetModule, SheetProperties } from '../store/SheetModule';
 import { SetlistProperties } from '@store/SetlistModule';
 
@@ -25,7 +23,7 @@ const getCacheOptions = ({
 });
 
 export const apiClient = {
-  post: <ResponseT = any>(
+  post: <ResponseT>(
     url: string,
     payload?: object,
     cacheOptions: CacheOptions = {},
@@ -39,7 +37,7 @@ export const apiClient = {
       ...getCacheOptions(cacheOptions),
     }).then((res) => res.json() as ResponseT);
   },
-  get: <ResponseT = any>(
+  get: <ResponseT>(
     url: string,
     payload?: Record<string, unknown>,
     cacheOptions: CacheOptions = {},
@@ -62,7 +60,7 @@ export const apiClient = {
       ...getCacheOptions(cacheOptions),
     }).then((res) => res.json() as ResponseT);
   },
-  delete: <ResponseT = any>(
+  delete: <ResponseT>(
     url: string,
     payload?: object,
     cacheOptions: CacheOptions = {},

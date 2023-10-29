@@ -1,12 +1,12 @@
 import { NextResponse } from 'next/server';
 
-import { sheetApi } from '../';
 import { SheetProperties } from '@store/SheetModule';
+import { BadRequestResponse, NotFoundResponse } from '@api/api.utils';
+import { sheetApi } from '@api/sheet';
 import { RouteParams } from 'types';
-import { BadRequestResponse, NotFoundResponse } from 'app/api/api.utils';
 
 export async function GET(
-  req: Request,
+  _: Request,
   { params }: RouteParams<{ sheetId: string }>,
 ) {
   const sheetId = params.sheetId;
