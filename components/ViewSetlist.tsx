@@ -43,7 +43,7 @@ export const ViewSetlist: NextPage = observer(() => {
 
   return (
     <>
-      <Sheet setlistId={setlist.id} />
+      <Sheet />
 
       <div style={{ height: '8rem' }} />
 
