@@ -7,6 +7,5 @@ export const getSheet = async (sheetId: string | undefined) => {
 
   if (!sheetData) return undefined;
 
-  console.log('OPENING SHEET', sheetId, sheetData);
   return sheetData;
 };

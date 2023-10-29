@@ -22,6 +22,8 @@ export const dbAction = async <ReturnT>({
 
     return await action(client);
   } catch (err) {
+    console.error('> DB ERROR', err);
+
     throw errorMsg ?? err;
   } finally {
     await client.close();

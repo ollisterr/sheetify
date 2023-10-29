@@ -95,10 +95,12 @@ export const api = {
       apiClient.get<SheetProperties>(`/sheet/${id}`, undefined, {
         tags: [createSheetTag(id)],
       }),
-    save: ({ id, ...data }: SheetModule) =>
-      apiClient.post<string>(`/sheet/${id}`, data, {
-        tags: [createSheetTag(id)],
+    save: (data: Omit<SheetModule, 'id'> & { id: string }) =>
+      apiClient.post<string>(`/sheet/${data.id}`, data, {
+        tags: [createSheetTag(data.id)],
       }),
+    create: (data: Omit<SheetModule, 'id'>) =>
+      apiClient.post<string>('/sheet', data),
   },
   setlist: {
     create: (payload: SetlistPayload) => apiClient.post('/setlist', payload),

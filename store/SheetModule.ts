@@ -5,7 +5,7 @@ import { transposeChord } from '../utils/chords.utils';
 import { SectionModule } from './SectionModule';
 
 export interface SheetProperties {
-  _id: string;
+  id: string;
   title: string;
   timeSignature: [number, number];
   tempo: number;
@@ -13,8 +13,12 @@ export interface SheetProperties {
   sections: SectionModule[];
 }
 
+export const isExistingSheet = (
+  sheet: SheetModule,
+): sheet is Omit<SheetModule, 'id'> & { id: string } => !!sheet.id;
+
 export class SheetModule {
-  id: string | '' = '';
+  id = '';
   title = '';
   tempo = 120;
   timeSignature = [4, 4];
@@ -28,7 +32,7 @@ export class SheetModule {
   }
 
   read(sheetData: SheetProperties) {
-    this.id = sheetData._id;
+    this.id = sheetData.id;
     this.title = sheetData.title ?? '';
     this.timeSignature = sheetData.timeSignature || [4, 4];
     this.tempo = sheetData.tempo || 120;

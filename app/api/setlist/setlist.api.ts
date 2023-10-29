@@ -31,7 +31,8 @@ const loadSetlist = async (id: string): Promise<SetlistProperties> =>
       for (const sheetId of setlistInstance.sheets) {
         if (!sheetId) continue;
 
-        // use shared API so that a cached/revalidated data is fetched on sheet open
+        // use shared API so that a cached/revalidated data is
+        // fetched on sheet open
         const sheetData = await api.sheet.load(sheetId);
 
         if (!sheetData) continue;

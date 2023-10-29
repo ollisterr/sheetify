@@ -1,7 +1,11 @@
 import { NextResponse } from 'next/server';
 
 import { SheetProperties } from '@store/SheetModule';
-import { BadRequestResponse, NotFoundResponse } from '@api/api.utils';
+import {
+  BadRequestResponse,
+  NotFoundResponse,
+  revalidateSheet,
+} from '@api/api.utils';
 import { sheetApi } from '@api/sheet';
 import { RouteParams } from 'types';
 
@@ -22,7 +26,12 @@ export async function GET(
 
 export async function POST(req: Request) {
   const data: SheetProperties = await req.json();
-  const insertedId = await sheetApi.save(data);
+  const updatedId = await sheetApi.save(data);
 
-  return NextResponse.json(insertedId);
+  if (!updatedId) return BadRequestResponse();
+
+  // revalidate cache after updating sheet data
+  revalidateSheet(updatedId);
+
+  return NextResponse.json(updatedId);
 }

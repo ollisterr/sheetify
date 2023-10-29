@@ -1,6 +1,6 @@
 'use client';
 
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import styled from 'styled-components';
 import { useRouter, usePathname } from 'next/navigation';
@@ -25,14 +25,9 @@ import { getRouteParamFromUrl, trimEditPathname } from '@utils/common.utils';
 import { PageContainer } from './PageContainer';
 import { MdPlaylistAdd } from 'react-icons/md';
 import { device } from '@utils/constants';
+import { isExistingSheet } from '@store/SheetModule';
 
-interface SheetProps {
-  sheetId?: string;
-  setlistId?: string;
-  readMode?: boolean;
-}
-
-export const Sheet = observer(({ sheetId, setlistId }: SheetProps) => {
+export const Sheet = observer(() => {
   const setlist = useSetlist();
   const sheet = useSheet();
 
@@ -49,21 +44,32 @@ export const Sheet = observer(({ sheetId, setlistId }: SheetProps) => {
     documentTitle: sheet?.title || 'Untitled sheet',
   });
 
-  const isSetlist = !!setlistId;
+  const isSetlist = !!setlist;
+
+  useEffect(() => {
+    // reset loading on page open, i.e. after navigating
+    // to page after API call
+    setIsLoading(false);
+  }, []);
 
   if (isLoading) return <Loading />;
 
   const saveSheet = () => {
     setIsLoading(true);
 
-    api.sheet
-      .save(sheet)
-      .then((res) => {
-        if (res && res !== sheetId) {
-          router.replace(`/${res}`);
-        }
-      })
-      .finally(() => setIsLoading(false));
+    if (isExistingSheet(sheet)) {
+      api.sheet
+        .save(sheet)
+        .then((res) => {
+          if (sheet.id === res) return;
+
+          // sheet ID was updated (should not happen)
+          router.replace(`/${res}${readMode ? '' : '/edit'}`);
+        })
+        .finally(() => setIsLoading(false));
+    } else {
+      api.sheet.create(sheet).then((res) => router.replace(`/${res}/edit`));
+    }
   };
 
   const addToSetlist = () => {
@@ -94,7 +100,7 @@ export const Sheet = observer(({ sheetId, setlistId }: SheetProps) => {
           <SetlistControls $gap="default" $align="right">
             <Subtitle>{setlist?.title}</Subtitle>
 
-            <Link href={`/setlist/${setlistId}/edit`} prefetch>
+            <Link href={`/setlist/${setlist.id}/edit`} prefetch>
               <IconButton>
                 <FaRegEdit />
               </IconButton>

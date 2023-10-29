@@ -1,8 +1,14 @@
 'use client';
 
-import { PropsWithChildren, createContext, useContext, useState } from 'react';
+import {
+  PropsWithChildren,
+  createContext,
+  useContext,
+  useEffect,
+  useState,
+} from 'react';
 
-import { useInitSheet } from './initSheet';
+import { initSheet } from './initSheet';
 import { SheetModule, SheetProperties } from './SheetModule';
 import { SetlistModule, SetlistProperties } from './SetlistModule';
 import { useInitSetlist } from './initSetlist';
@@ -23,8 +29,14 @@ export const SheetProvider = ({
 }>) => {
   const setlist = useInitSetlist(setlistData);
   const [sheet, setSheet] = useState(
-    useInitSheet(setlistData?.sheets[0] ?? sheetData),
+    initSheet(setlistData?.sheets[0] ?? sheetData),
   );
+
+  useEffect(() => {
+    if (sheetData?.id === sheet.id) return;
+
+    setSheet(new SheetModule(sheetData));
+  }, [sheetData?.id]);
 
   return (
     <SheetContext.Provider

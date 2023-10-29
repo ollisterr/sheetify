@@ -1,9 +1,10 @@
-// we need to enable static rendering for prevent rerender on server side and leaking memory
 import { enableStaticRendering } from 'mobx-react-lite';
-import { SheetModule, SheetProperties } from './SheetModule';
+
 import { isSSR } from '../utils/common.utils';
 import { SetlistModule, SetlistProperties } from './SetlistModule';
 
+// we need to enable static rendering to
+// prevent rerender on server side and leaking memory
 // enable static rendering ONLY on server
 enableStaticRendering(isSSR);
 
